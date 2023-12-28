@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="1" author="minhbdph24887">
+        <createTable tableName="accounts">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="full_name" type="varchar(255)"/>
+            <column name="number_phone" type="varchar(255)"/>
+            <column name="email" type="varchar(255)"/>
+            <column name="birthday" type="date"/>
+            <column name="gender" type="boolean"/>
+            <column name="encryption_password" type="varchar(255)"/>
+            <column name="address" type="varchar(255)"/>
+            <column name="status" type="integer"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="minhbdph24887">
+        <createTable tableName="roles">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="note" type="varchar(255)"/>
+            <column name="status" type="integer"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="minhbdph24887">
+        <createTable tableName="authentication">
+            <column name="id_account" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_role" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="minhbdph24887">
+        <addForeignKeyConstraint constraintName="fk_account"
+                                 baseTableName="authentication" baseColumnNames="id_account"
+                                 referencedTableName="accounts" referencedColumnNames="id"/>
+        <addForeignKeyConstraint constraintName="fk_role"
+                                 baseTableName="authentication" baseColumnNames="id_role"
+                                 referencedTableName="roles" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="5" author="minhbdph24887">
+        <insert tableName="accounts">
+            <column name="full_name" value="Bui Duc Minh"/>
+            <column name="number_phone" value="0388598451"/>
+            <column name="email" value="minhbdph24887@gmail.com"/>
+            <column name="birthday" value="2003-03-09"/>
+            <column name="gender" value="true"/>
+            <column name="encryption_password" value="$2a$12$Uq0QleikFO.vcr5CNrYZ8enhz/LwxOxH1filK74N3B32oVWXjVHw."/>
+            <column name="address" value="Ha Noi"/>
+            <column name="status" value="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="6" author="minhbdph24887">
+        <insert tableName="roles">
+            <column name="name" value="ROLE_ADMIN"/>
+            <column name="note" value="Quan Tri Vien"/>
+            <column name="status" value="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="7" author="minhbdph24887">
+        <insert tableName="roles">
+            <column name="name" value="ROLE_USER"/>
+            <column name="note" value="Nguoi Dung"/>
+            <column name="status" value="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="8" author="minhbdph24887">
+        <insert tableName="roles">
+            <column name="name" value="ROLE_STAFF"/>
+            <column name="note" value="Nhan Vien"/>
+            <column name="status" value="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="9" author="minhbdph24887">
+        <sql>
+            insert into authentication (id_account, id_role)
+            select accounts.id, roles.id
+            from accounts,
+                 roles
+            where accounts.email = 'minhbdph24887@gmail.com'
+              and roles.name = 'ROLE_ADMIN'
+        </sql>
+    </changeSet>
+
+    <changeSet id="10" author="minhbdph24887">
+        <sql>
+            update accounts set encryption_password = '$2a$10$PHxDESHhw3vqCyPX4ph3TuNKktT15ez8BfbuR7qobH6THTjqjGMtm' where id= 1
+        </sql>
+    </changeSet>
+</databaseChangeLog>
+        
