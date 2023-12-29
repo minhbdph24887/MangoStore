@@ -68,4 +68,21 @@ public class LoginController {
             return loginService.refreshPassword(email, passwordRefresh);
         }
     }
+
+    @GetMapping(value = "signup")
+    public String signUpAccount() {
+        return "login/SignUp";
+    }
+
+    @PostMapping(value = "signup/success")
+    public String signUpAccountSuccess(@RequestParam("fullName") String fullName,
+                                       @RequestParam("email") String email,
+                                       @RequestParam("passwordRefresh") String passwordRefresh,
+                                       @RequestParam("passwordRefreshRE") String passwordRefreshRE) {
+        if (!Objects.equals(passwordRefresh, passwordRefreshRE)) {
+            return "login/SignUp";
+        }else{
+            return loginService.signUpAccount(fullName, email, passwordRefresh);
+        }
+    }
 }

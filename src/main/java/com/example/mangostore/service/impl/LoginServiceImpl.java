@@ -117,7 +117,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public String authenticationCode(String codeForgot, HttpSession session) {
-        String email = (String) session.getAttribute("forgotEmail");
+        String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/login/forgot";
         } else {
@@ -136,5 +136,28 @@ public class LoginServiceImpl implements LoginService {
         detailAccount.setEncryptionPassword(encoder.encode(passwordRefresh));
         accountRepository.save(detailAccount);
         return "redirect:/mangostore/home";
+    }
+
+    @Override
+    public String signUpAccount(String fullName, String email, String passwordRefresh) {
+        Account detailAccount = accountRepository.detailAccountByEmail(email);
+        if (detailAccount == null) {
+            Account newAccount = new Account();
+            newAccount.setFullName(fullName);
+            newAccount.setEmail(email);
+            newAccount.setEncryptionPassword(encoder.encode(passwordRefresh));
+            newAccount.setStatus(1);
+
+            Role roleUser = roleRepository.getAllRoleByUser();
+            Set<Role> rolesUser = new HashSet<>();
+            rolesUser.add(roleUser);
+            newAccount.setRoles(rolesUser);
+
+            accountRepository.save(newAccount);
+            return "redirect:/mangostore/login/from";
+
+        } else {
+            return "redirect:/mangostore/login/signup";
+        }
     }
 }
