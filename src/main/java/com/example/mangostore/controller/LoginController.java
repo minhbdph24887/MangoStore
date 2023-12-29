@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Controller
 @RequestMapping(value = "/mangostore/login/")
@@ -41,7 +42,7 @@ public class LoginController {
     @PostMapping(value = "code")
     public String veryCodeEmail(@RequestParam("forgotEmail") String email,
                                 HttpSession session) {
-        session.setAttribute("forgotEmail", email);
+        session.setAttribute("loginEmail", email);
         return loginService.forgotEmail(email);
     }
 
@@ -54,5 +55,17 @@ public class LoginController {
     @GetMapping(value = "password/refresh")
     public String refreshPassword() {
         return "login/NewPassword";
+    }
+
+    @PostMapping(value = "refresh/success")
+    public String refreshPasswordSuccess(@RequestParam("passwordRefresh") String passwordRefresh,
+                                         @RequestParam("passwordRefreshRE") String passwordRefreshRE,
+                                         HttpSession session) {
+        String email = (String) session.getAttribute("loginEmail");
+        if (!Objects.equals(passwordRefresh, passwordRefreshRE)) {
+            return "login/NewPassword";
+        } else {
+            return loginService.refreshPassword(email, passwordRefresh);
+        }
     }
 }

@@ -77,7 +77,7 @@ public class LoginServiceImpl implements LoginService {
         }
         HttpSession session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
         session.setAttribute("loginEmail", existUser.getEmail());
-        response.sendRedirect("/mangostore/home");
+        response.sendRedirect("/mangostore/login/password/refresh");
     }
 
     public String generateVerificationCode() {
@@ -128,5 +128,13 @@ public class LoginServiceImpl implements LoginService {
                 return "redirect:/mangostore/login/forgot";
             }
         }
+    }
+
+    @Override
+    public String refreshPassword(String email, String passwordRefresh) {
+        Account detailAccount = accountRepository.detailAccountByEmail(email);
+        detailAccount.setEncryptionPassword(encoder.encode(passwordRefresh));
+        accountRepository.save(detailAccount);
+        return "redirect:/mangostore/home";
     }
 }
