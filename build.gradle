@@ -25,6 +25,7 @@ dependencies {
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 
 	implementation 'org.liquibase:liquibase-core:4.3.3'
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'

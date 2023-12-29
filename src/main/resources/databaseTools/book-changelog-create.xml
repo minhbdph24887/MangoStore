@@ -16,6 +16,7 @@
             <column name="birthday" type="date"/>
             <column name="gender" type="boolean"/>
             <column name="encryption_password" type="varchar(255)"/>
+            <column name="very_code" type="varchar(255)"/>
             <column name="address" type="varchar(255)"/>
             <column name="status" type="integer"/>
         </createTable>
@@ -102,7 +103,9 @@
 
     <changeSet id="10" author="minhbdph24887">
         <sql>
-            update accounts set encryption_password = '$2a$10$PHxDESHhw3vqCyPX4ph3TuNKktT15ez8BfbuR7qobH6THTjqjGMtm' where id= 1
+            update accounts
+            set encryption_password = '$2a$10$PHxDESHhw3vqCyPX4ph3TuNKktT15ez8BfbuR7qobH6THTjqjGMtm'
+            where id = 1
         </sql>
     </changeSet>
 </databaseChangeLog>

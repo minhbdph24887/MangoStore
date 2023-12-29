@@ -10,4 +10,8 @@ public interface LoginService {
     String loginAccount(String email, String password, HttpSession session) throws IOException;
 
     void checkLoginGoogleAccount(HttpServletResponse response, Authentication authentication) throws IOException;
+
+    String forgotEmail(String email);
+
+    String authenticationCode(String codeForgot, HttpSession session);
 }

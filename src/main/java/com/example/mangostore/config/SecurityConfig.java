@@ -1,6 +1,7 @@
 package com.example.mangostore.config;
 
 import com.example.mangostore.service.LoginService;
+import com.example.mangostore.service.impl.UserServiceImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,9 +25,12 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableWebSecurity
 public class SecurityConfig {
     private final LoginService loginService;
+    private final UserServiceImpl userService;
 
-    public SecurityConfig(@Lazy LoginService loginService) {
+    public SecurityConfig(@Lazy LoginService loginService,
+                          UserServiceImpl userService) {
         this.loginService = loginService;
+        this.userService = userService;
     }
 
     @Bean
@@ -55,6 +59,10 @@ public class SecurityConfig {
                         loginService.checkLoginGoogleAccount(response, authentication);
                     }
                 }));
+
+        http.rememberMe(rem -> rem
+                .userDetailsService(userService)
+                .rememberMeParameter("remember"));
 
         return http.build();
     }

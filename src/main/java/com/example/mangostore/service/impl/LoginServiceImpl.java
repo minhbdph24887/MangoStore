@@ -7,6 +7,8 @@ import com.example.mangostore.repository.RoleRepository;
 import com.example.mangostore.service.LoginService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
@@ -16,6 +18,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -23,13 +26,16 @@ public class LoginServiceImpl implements LoginService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder encoder;
     private final RoleRepository roleRepository;
+    private final JavaMailSender mailSender;
 
     public LoginServiceImpl(AccountRepository accountRepository,
                             PasswordEncoder encoder,
-                            RoleRepository roleRepository) {
+                            RoleRepository roleRepository,
+                            JavaMailSender mailSender) {
         this.accountRepository = accountRepository;
         this.encoder = encoder;
         this.roleRepository = roleRepository;
+        this.mailSender = mailSender;
     }
 
     @Override
@@ -59,6 +65,7 @@ public class LoginServiceImpl implements LoginService {
             Account newAccount = new Account();
             newAccount.setEmail(email);
             newAccount.setFullName(fullName);
+            newAccount.setStatus(1);
 
             Role roleUser = roleRepository.getAllRoleByUser();
             Set<Role> rolesUser = new HashSet<>();
@@ -71,5 +78,55 @@ public class LoginServiceImpl implements LoginService {
         HttpSession session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
         session.setAttribute("loginEmail", existUser.getEmail());
         response.sendRedirect("/mangostore/home");
+    }
+
+    public String generateVerificationCode() {
+        int code = (int) ((Math.random() * 900000) + 100000);
+        return String.valueOf(code);
+    }
+
+    public void saveVerificationCode(String email, String verificationCode) {
+        Account account = accountRepository.detailAccountByEmail(email);
+        if (account != null) {
+            account.setVeryCode(verificationCode);
+            accountRepository.save(account);
+        }
+    }
+
+    public void sendEmail(String to, String subject, String verificationCode) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        String content = "Code để bạn đặt lại mật khẩu là: " + verificationCode;
+        message.setText(content);
+        mailSender.send(message);
+    }
+
+    @Override
+    public String forgotEmail(String email) {
+        Account detailAccount = accountRepository.detailAccountByEmail(email);
+        if (detailAccount == null) {
+            return "redirect:/mangostore/login/forgot";
+        } else {
+            String verificationCode = generateVerificationCode();
+            saveVerificationCode(email, verificationCode);
+            sendEmail(email, "Đặt lại mật khẩu", verificationCode);
+            return "redirect:/mangostore/login/forgot";
+        }
+    }
+
+    @Override
+    public String authenticationCode(String codeForgot, HttpSession session) {
+        String email = (String) session.getAttribute("forgotEmail");
+        if (email == null) {
+            return "redirect:/mangostore/login/forgot";
+        } else {
+            Account detailAccount = accountRepository.detailAccountByEmail(email);
+            if (Objects.equals(codeForgot, detailAccount.getVeryCode())) {
+                return "redirect:/mangostore/login/password/refresh";
+            } else {
+                return "redirect:/mangostore/login/forgot";
+            }
+        }
     }
 }

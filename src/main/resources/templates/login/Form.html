@@ -5,8 +5,8 @@
 <main>
     <div class="row align-items-center">
         <div class="header-text mb-4">
-            <h2>Hello,Again</h2>
-            <p>We are happy to have you back.</p>
+            <h2>Hello, Mango Store</h2>
+            <p>Please log in to use the website.</p>
         </div>
         <form th:action="@{/mangostore/login/success}" method="post">
             <div class="input-group mb-3">
@@ -19,12 +19,12 @@
             </div>
             <div class="input-group mb-5 d-flex justify-content-between">
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="formCheck">
+                    <input type="checkbox" class="form-check-input" id="formCheck" name="remember">
                     <label for="formCheck" class="form-check-label text-secondary"><small>Remember
                         Me</small></label>
                 </div>
                 <div class="forgot">
-                    <small><a href="#">Forgot Password?</a></small>
+                    <small><a th:href="@{/mangostore/login/forgot}" style="text-decoration: none">Forgot Password?</a></small>
                 </div>
             </div>
             <div class="input-group mb-3">

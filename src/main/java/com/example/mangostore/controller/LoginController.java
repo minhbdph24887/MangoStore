@@ -28,8 +28,31 @@ public class LoginController {
 
     @PostMapping(value = "success")
     public String loginSuccess(@RequestParam("email") String email,
-                                @RequestParam("password") String password,
-                                HttpSession session) throws IOException {
+                               @RequestParam("password") String password,
+                               HttpSession session) throws IOException {
         return loginService.loginAccount(email, password, session);
+    }
+
+    @GetMapping(value = "forgot")
+    public String viewForgot() {
+        return "login/ForgotPassword";
+    }
+
+    @PostMapping(value = "code")
+    public String veryCodeEmail(@RequestParam("forgotEmail") String email,
+                                HttpSession session) {
+        session.setAttribute("forgotEmail", email);
+        return loginService.forgotEmail(email);
+    }
+
+    @PostMapping(value = "forgot/password")
+    public String authenticationPassword(@RequestParam("codeForgot") String codeForgot,
+                                         HttpSession session) {
+        return loginService.authenticationCode(codeForgot, session);
+    }
+
+    @GetMapping(value = "password/refresh")
+    public String refreshPassword() {
+        return "login/NewPassword";
     }
 }

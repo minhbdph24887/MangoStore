@@ -20,6 +20,7 @@ public class Account implements UserDetails {
     private LocalDate birthday;
     private Boolean gender;
     private String encryptionPassword;
+    private String veryCode;
     private String address;
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(name = "authentication",
@@ -28,7 +29,17 @@ public class Account implements UserDetails {
     private Set<Role> roles = new HashSet<>();
     private Integer status;
 
-    public Account(Long id, String fullName, String numberPhone, String email, LocalDate birthday, Boolean gender, String encryptionPassword, String address, Set<Role> roles, Integer status) {
+    public Account(Long id,
+                   String fullName,
+                   String numberPhone,
+                   String email,
+                   LocalDate birthday,
+                   Boolean gender,
+                   String encryptionPassword,
+                   String veryCode,
+                   String address,
+                   Set<Role> roles,
+                   Integer status) {
         this.id = id;
         this.fullName = fullName;
         this.numberPhone = numberPhone;
@@ -36,6 +47,7 @@ public class Account implements UserDetails {
         this.birthday = birthday;
         this.gender = gender;
         this.encryptionPassword = encryptionPassword;
+        this.veryCode = veryCode;
         this.address = address;
         this.roles = roles;
         this.status = status;
@@ -98,6 +110,14 @@ public class Account implements UserDetails {
 
     public void setEncryptionPassword(String encryptionPassword) {
         this.encryptionPassword = encryptionPassword;
+    }
+
+    public String getVeryCode() {
+        return veryCode;
+    }
+
+    public void setVeryCode(String veryCode) {
+        this.veryCode = veryCode;
     }
 
     public String getAddress() {
