@@ -77,7 +77,11 @@ public class LoginServiceImpl implements LoginService {
         }
         HttpSession session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
         session.setAttribute("loginEmail", existUser.getEmail());
-        response.sendRedirect("/mangostore/login/password/refresh");
+        if (existUser.getEncryptionPassword() == null) {
+            response.sendRedirect("/mangostore/login/password/refresh");
+        } else {
+            response.sendRedirect("/mangostore/home");
+        }
     }
 
     public String generateVerificationCode() {
@@ -159,5 +163,12 @@ public class LoginServiceImpl implements LoginService {
         } else {
             return "redirect:/mangostore/login/signup";
         }
+    }
+
+    @Override
+    public String logOutWebsite(HttpSession session) {
+        session.removeAttribute("loginEmail");
+        session.invalidate();
+        return "redirect:/mangostore/home";
     }
 }

@@ -68,7 +68,7 @@
 
     <changeSet id="6" author="minhbdph24887">
         <insert tableName="roles">
-            <column name="name" value="ROLE_ADMIN"/>
+            <column name="name" value="ADMIN"/>
             <column name="note" value="Quan Tri Vien"/>
             <column name="status" value="1"/>
         </insert>
@@ -76,7 +76,7 @@
 
     <changeSet id="7" author="minhbdph24887">
         <insert tableName="roles">
-            <column name="name" value="ROLE_USER"/>
+            <column name="name" value="USER"/>
             <column name="note" value="Nguoi Dung"/>
             <column name="status" value="1"/>
         </insert>
@@ -84,7 +84,7 @@
 
     <changeSet id="8" author="minhbdph24887">
         <insert tableName="roles">
-            <column name="name" value="ROLE_STAFF"/>
+            <column name="name" value="STAFF"/>
             <column name="note" value="Nhan Vien"/>
             <column name="status" value="1"/>
         </insert>
@@ -97,7 +97,7 @@
             from accounts,
                  roles
             where accounts.email = 'minhbdph24887@gmail.com'
-              and roles.name = 'ROLE_ADMIN'
+              and roles.name = 'ADMIN'
         </sql>
     </changeSet>
 

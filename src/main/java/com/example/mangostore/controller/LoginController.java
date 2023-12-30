@@ -81,8 +81,13 @@ public class LoginController {
                                        @RequestParam("passwordRefreshRE") String passwordRefreshRE) {
         if (!Objects.equals(passwordRefresh, passwordRefreshRE)) {
             return "login/SignUp";
-        }else{
+        } else {
             return loginService.signUpAccount(fullName, email, passwordRefresh);
         }
+    }
+
+    @GetMapping(value = "clear")
+    public String logOutWebsite(HttpSession session) {
+        return loginService.logOutWebsite(session);
     }
 }

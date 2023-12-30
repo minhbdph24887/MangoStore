@@ -29,17 +29,7 @@ public class Account implements UserDetails {
     private Set<Role> roles = new HashSet<>();
     private Integer status;
 
-    public Account(Long id,
-                   String fullName,
-                   String numberPhone,
-                   String email,
-                   LocalDate birthday,
-                   Boolean gender,
-                   String encryptionPassword,
-                   String veryCode,
-                   String address,
-                   Set<Role> roles,
-                   Integer status) {
+    public Account(Long id, String fullName, String numberPhone, String email, LocalDate birthday, Boolean gender, String encryptionPassword, String veryCode, String address, Set<Role> roles, Integer status) {
         this.id = id;
         this.fullName = fullName;
         this.numberPhone = numberPhone;

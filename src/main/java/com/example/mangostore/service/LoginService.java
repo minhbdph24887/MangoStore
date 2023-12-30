@@ -18,4 +18,6 @@ public interface LoginService {
     String refreshPassword(String email, String passwordRefresh);
 
     String signUpAccount(String fullName, String email, String passwordRefresh);
+
+    String logOutWebsite(HttpSession session);
 }

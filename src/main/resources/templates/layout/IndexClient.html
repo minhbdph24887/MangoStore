@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" th:fragment="dynamic(main)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{|/css/Client.css|}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Mango Store</title>
+</head>
+<body>
+<div th:replace="/layout/MenuClient.html"></div>
+<div th:replace="${main}"></div>
+<div th:replace="/layout/Footer.html"></div>
+<script th:src="@{|/javascript/IndexClient.js|}"></script>
+</body>
+</html>

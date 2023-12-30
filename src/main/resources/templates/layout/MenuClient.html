@@ -1,0 +1,35 @@
+<div class="header" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="container">
+        <div class="navbar">
+            <div class="logo">
+                <a th:href="@{/mangostore/home}"><img th:src="@{|/image/logoMangoStore1.png|}" width="125px" alt=""></a>
+            </div>
+            <nav>
+                <ul id="MenuItems">
+                    <li><a th:href="@{/mangostore/home}">Home</a></li>
+                    <li><a th:href="@{/mangostore/product}">Products</a></li>
+                    <th:block th:if="${checkAuthentication != null}">
+                        <li><a th:href="@{/mangostore/admin/home}">Product Management</a></li>
+                    </th:block>
+                    <li><a href="">Orders</a></li>
+                    <li class="dropdown-parent menu">
+                        <a href="#" th:if="${nameAccount != null}">Welcome To: [[${nameAccount}]]</a>
+                        <a href="#" th:unless="${nameAccount != null}">Welcome To: Guest</a>
+                        <ul class="dropdown">
+                            <li><a href="#">Account</a></li>
+                            <th:block th:unless="${session.loginEmail}">
+                                <li><a th:href="@{/mangostore/login/from}">Login</a></li>
+                            </th:block>
+                            <th:block th:if="${session.loginEmail}">
+                                <li><a th:href="@{/mangostore/login/clear}">Log Out</a></li>
+                            </th:block>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <a th:href="@{/mangostore/cart}"><img th:src="@{|/image/cart.png|}" width="30px" height="30px" alt=""></a>
+            <img th:src="@{|/image/menu.png|}" class="menu-icon"
+                 onclick="menutoggle()" alt="">
+        </div>
+    </div>
+</div>
