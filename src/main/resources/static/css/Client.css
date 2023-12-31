@@ -85,7 +85,7 @@ p {
 }
 
 .header {
-    background: radial-gradient(#fff, #ffd6d6);
+    background: radial-gradient(#fff, #fff);
 
 }
 
@@ -612,8 +612,8 @@ form a {
     position: absolute;
     top: 100%;
     min-width: 200px; /* Độ rộng tối thiểu */
-    background-color: #ffd6d6; /* Màu nền */
-    border: 1px solid #ffd6d6; /* Viền */
+    background-color: #fff; /* Màu nền */
+    border: 1px solid #fff; /* Viền */
 }
 
 /* Hiển thị dropdown khi hover */
@@ -636,5 +636,5 @@ form a {
 
 /* Màu nền khi di chuột qua các mục trong dropdown */
 .dropdown li a:hover {
-    background-color: #ffd6d6;
+    background-color: #fff;
 }

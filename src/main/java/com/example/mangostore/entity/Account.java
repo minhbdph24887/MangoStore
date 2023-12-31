@@ -19,6 +19,7 @@ public class Account implements UserDetails {
     private String email;
     private LocalDate birthday;
     private Boolean gender;
+    private String images;
     private String encryptionPassword;
     private String veryCode;
     private String address;
@@ -29,13 +30,14 @@ public class Account implements UserDetails {
     private Set<Role> roles = new HashSet<>();
     private Integer status;
 
-    public Account(Long id, String fullName, String numberPhone, String email, LocalDate birthday, Boolean gender, String encryptionPassword, String veryCode, String address, Set<Role> roles, Integer status) {
+    public Account(Long id, String fullName, String numberPhone, String email, LocalDate birthday, Boolean gender, String images, String encryptionPassword, String veryCode, String address, Set<Role> roles, Integer status) {
         this.id = id;
         this.fullName = fullName;
         this.numberPhone = numberPhone;
         this.email = email;
         this.birthday = birthday;
         this.gender = gender;
+        this.images = images;
         this.encryptionPassword = encryptionPassword;
         this.veryCode = veryCode;
         this.address = address;
@@ -92,6 +94,14 @@ public class Account implements UserDetails {
 
     public void setGender(Boolean gender) {
         this.gender = gender;
+    }
+
+    public String getImages() {
+        return images;
+    }
+
+    public void setImages(String images) {
+        this.images = images;
     }
 
     public String getEncryptionPassword() {

@@ -10,14 +10,15 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="full_name" type="varchar(255)"/>
+            <column name="full_name" type="nvarchar(255)"/>
             <column name="number_phone" type="varchar(255)"/>
             <column name="email" type="varchar(255)"/>
             <column name="birthday" type="date"/>
             <column name="gender" type="boolean"/>
+            <column name="images" type="varchar(255)"/>
             <column name="encryption_password" type="varchar(255)"/>
             <column name="very_code" type="varchar(255)"/>
-            <column name="address" type="varchar(255)"/>
+            <column name="address" type="nvarchar(255)"/>
             <column name="status" type="integer"/>
         </createTable>
     </changeSet>
@@ -60,6 +61,7 @@
             <column name="email" value="minhbdph24887@gmail.com"/>
             <column name="birthday" value="2003-03-09"/>
             <column name="gender" value="true"/>
+            <column name="images" value="face1.jpg"/>
             <column name="encryption_password" value="$2a$12$Uq0QleikFO.vcr5CNrYZ8enhz/LwxOxH1filK74N3B32oVWXjVHw."/>
             <column name="address" value="Ha Noi"/>
             <column name="status" value="1"/>

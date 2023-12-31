@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+      th:replace="~{/layout/IndexAdmin :: dynamic(~{:: main})}">
+<body>
+<main>
+    <div class="home-tab">
+        <div class="d-sm-flex align-items-center justify-content-between border-bottom">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active ps-0" id="home-tab" data-bs-toggle="tab"
+                       href="#tab1" role="tab"
+                       aria-controls="tab1" aria-selected="true">Active Account</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab2"
+                       aria-controls="tab2" role="tab"
+                       aria-selected="false">Account Inactive</a>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-content tab-content-basic">
+            <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1">
+                <div class="col-lg-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">List Account Active</h4>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Full Name</th>
+                                        <th>Number Phone</th>
+                                        <th>Email</th>
+                                        <th>Birthday</th>
+                                        <th>Gender</th>
+                                        <th>Images</th>
+                                        <th>Address</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="listAccount, stat : ${listAccount}">
+                                        <td th:text="${stat.count}"></td>
+                                        <td>
+                                            <a th:href="@{|/mangostore/admin/account/detail/${listAccount.id}|}"
+                                               th:text="${listAccount.fullName}" style="text-decoration: none"></a>
+                                        </td>
+                                        <td th:text="${listAccount.numberPhone}"></td>
+                                        <td th:text="${listAccount.email}"></td>
+                                        <td th:text="${#temporals.format(listAccount.birthday, 'dd/MM/yyyy')}"></td>
+                                        <td th:if="${listAccount.gender != null}"
+                                            th:text="${listAccount.gender == true ? 'Nam' : 'Nu'}"></td>
+                                        <td th:unless="${listAccount.gender != null}"></td>
+                                        <td th:if="${listAccount.images != null}">
+                                            <img th:src="@{|/image/profile/${listAccount.images}|}" alt="image">
+                                        </td>
+                                        <td th:unless="${listAccount.images != null}"></td>
+                                        <td th:text="${listAccount.address}"></td>
+                                        <td th:if="${listAccount.status == 1}">
+                                            <label class="badge badge-success">Active</label>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <nav aria-label="Page navigation example" th:if="${listAccountInactive.totalPages > 0}">
+                            <ul class="pagination justify-content-center pagination-sm">
+                                <li th:each="i : ${#numbers.sequence(0, listAccount.totalPages - 1)}"
+                                    th:class="${i == page ? 'active' : ''}"
+                                    class="page-item">
+                                    <a th:href="@{/mangostore/admin/account(page=${i})}" class="page-link"
+                                       th:text="${i + 1}"></a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="tab2" role="tabpanel"
+                 aria-labelledby="tab2">
+                <div class="col-lg-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">List Account Inactive</h4>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Full Name</th>
+                                        <th>Number Phone</th>
+                                        <th>Email</th>
+                                        <th>Birthday</th>
+                                        <th>Gender</th>
+                                        <th>Images</th>
+                                        <th>Address</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="listAccountInactive, stat : ${listAccountInactive}">
+                                        <td th:text="${stat.count}"></td>
+                                        <td>
+                                            <a th:href="@{|/mangostore/admin/account/restore/${listAccountInactive.id}|}"
+                                               th:text="${listAccountInactive.fullName}"
+                                               style="text-decoration: none"></a>
+                                        </td>
+                                        <td th:text="${listAccountInactive.numberPhone}"></td>
+                                        <td th:text="${listAccountInactive.email}"></td>
+                                        <td th:text="${#temporals.format(listAccountInactive.birthday, 'dd/MM/yyyy')}"></td>
+                                        <td th:if="${listAccountInactive.gender != null}"
+                                            th:text="${listAccountInactive.gender == true ? 'Nam' : 'Nu'}"></td>
+                                        <td th:unless="${listAccountInactive.gender != null}"></td>
+                                        <td th:if="${listAccountInactive.images != null}">
+                                            <img th:src="@{|/image/profile/${listAccountInactive.images}|}" alt="image">
+                                        </td>
+                                        <td th:unless="${listAccountInactive.images != null}"></td>
+                                        <td th:text="${listAccountInactive.address}"></td>
+                                        <td th:if="${listAccountInactive.status == 0}">
+                                            <label class="badge badge-danger">Inactive</label>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <nav aria-label="Page navigation example" th:if="${listAccountInactive.totalPages > 0}">
+                            <ul class="pagination justify-content-center pagination-sm">
+                                <li th:each="i : ${#numbers.sequence(0, listAccountInactive.totalPages - 1)}"
+                                    th:class="${i == page ? 'active' : ''}"
+                                    class="page-item">
+                                    <a th:href="@{/mangostore/admin/account(page=${i})}" class="page-link"
+                                       th:text="${i + 1}"></a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
