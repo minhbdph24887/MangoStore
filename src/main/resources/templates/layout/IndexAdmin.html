@@ -14,7 +14,11 @@
     <link rel="stylesheet" th:href="@{|/css/admin/dataTables.bootstrap4.css|}">
     <link rel="stylesheet" type="text/css" th:href="@{|/css/admin/select.dataTables.min.css|}">
     <link rel="stylesheet" th:href="@{|/css/admin/style.css|}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    <link rel="stylesheet"
+          th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css}">
+
+    <link rel="stylesheet" th:href="@{|/css/admin/detailAccount.css|}">
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css}" rel="stylesheet">
 </head>
 
 <body class="with-welcome-text">
@@ -70,6 +74,12 @@
 <script th:src="@{|/javascript/admin/jquery.cookie.js|}" type="text/javascript"></script>
 <script th:src="@{|/javascript/admin/dashboard.js|}"></script>
 <script th:src="@{|/javascript/admin/proBanner.js|}"></script>
+
+<script data-cfasync="false" th:src="@{|/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js|}"></script>
+<script th:src="@{|https://code.jquery.com/jquery-1.10.2.min.js|}"></script>
+<script th:src="@{|https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js|}"></script>
+<script th:src="@{|/javascript/admin/showImages.js|}"></script>
+
 </body>
 
 </html>
