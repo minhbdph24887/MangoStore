@@ -55,4 +55,9 @@ public class ProfileController {
     public String deleteAccount(@PathVariable("id") Long idAccount) {
         return profileService.deleteAccount(idAccount);
     }
+
+    @PostMapping(value = "account/add")
+    public String addAccount(Account addProfile) {
+        return profileService.addAccount(addProfile);
+    }
 }

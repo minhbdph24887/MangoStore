@@ -24,6 +24,138 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">List Account Active</h4>
+                            <button type="button" class="btn btn-info btn-lg" data-toggle="modal"
+                                    data-target="#myModal">Add Account
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="myModal" role="dialog">
+                                <div class="modal-dialog" style="max-width: 100%; margin: 0; padding: 0;">
+
+                                    <!-- Modal content-->
+                                    <div class="modal-content" style="height: 100vh;">
+                                        <div class="modal-body">
+                                            <form th:action="@{/mangostore/admin/account/add}" th:object="${addProfile}"
+                                                  method="post">
+                                                <div class="row justify-content-center">
+                                                    <div class="col-lg-10 col-md-12">
+                                                        <div class="wrapper">
+                                                            <div class="row no-gutters">
+                                                                <div class="col-md-7 d-flex align-items-stretch">
+                                                                    <div class="contact-wrap w-100 p-md-5 p-4">
+                                                                        <h3 class="mb-4">Add Account</h3>
+                                                                        <div id="form-message-warning"
+                                                                             class="mb-4"></div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-6">
+                                                                                <div class="form-group">
+                                                                                    <input type="text"
+                                                                                           class="form-control"
+                                                                                           name="fullName"
+                                                                                           placeholder="Enter Full Name">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <div class="form-group">
+                                                                                    <input type="email"
+                                                                                           class="form-control"
+                                                                                           name="email"
+                                                                                           placeholder="Enter The Email">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-8">
+                                                                                <div class="form-group">
+                                                                                    <input type="date"
+                                                                                           class="form-control"
+                                                                                           name="birthday"/>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <div class="form-control">
+                                                                                        <label>
+                                                                                            <input type="radio"
+                                                                                                   name="gender"
+                                                                                                   value="true"
+                                                                                                   th:text="Nam"
+                                                                                                   checked="">
+                                                                                        </label>&nbsp;
+                                                                                        <label>
+                                                                                            <input type="radio"
+                                                                                                   name="gender"
+                                                                                                   value="false"
+                                                                                                   th:text="Nu">
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-7">
+                                                                                <div class="form-group">
+                                                                                    <input type="password"
+                                                                                           class="form-control"
+                                                                                           name="encryptionPassword"
+                                                                                           placeholder="Enter Password"/>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-5">
+                                                                                <div class="form-group">
+                                                                                    <input type="text"
+                                                                                           class="form-control"
+                                                                                           name="address"
+                                                                                           placeholder="Enter The Address"/>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-12">
+                                                                                <div class="form-group">
+                                                                                    <input type="submit"
+                                                                                           value="Save"
+                                                                                           class="btn btn-primary">
+                                                                                    <div class="submitting"></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-5 d-flex align-items-stretch">
+                                                                    <div class="info-wrap bg-primary w-100 p-lg-5 p-4">
+                                                                        <div class="form-group">
+                                                                            <img id="previewImage"
+                                                                                 style="width: 200px; height: 200px; object-fit: cover;"
+                                                                                 alt=""
+                                                                                 src=""/>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <div class="media-body ml-4">
+                                                                                <label class="btn btn-outline-primary">
+                                                                                    Upload new photo
+                                                                                    <input type="file"
+                                                                                           class="account-settings-fileinput"
+                                                                                           id="imageInput"
+                                                                                           name="images"
+                                                                                           accept="image/profile/*">
+                                                                                </label> &nbsp;
+                                                                                <button type="button"
+                                                                                        class="btn btn-default md-btn-flat">
+                                                                                    Reset
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
                             <div class="table-responsive">
                                 <table class="table table-striped">
                                     <thead>
@@ -61,11 +193,16 @@
                                             <label class="badge badge-success">Active</label>
                                         </td>
                                     </tr>
+                                    <tr th:if="${listAccount.isEmpty()}">
+                                        <td colspan="9" style="text-align: center; color: red; font-size: larger;">
+                                            Account is entity
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        <nav aria-label="Page navigation example" th:if="${listAccountInactive.totalPages > 0}">
+                        <nav aria-label="Page navigation example" th:if="${listAccount.totalPages > 0}">
                             <ul class="pagination justify-content-center pagination-sm">
                                 <li th:each="i : ${#numbers.sequence(0, listAccount.totalPages - 1)}"
                                     th:class="${i == page ? 'active' : ''}"
@@ -121,6 +258,11 @@
                                         <td th:text="${listAccountInactive.address}"></td>
                                         <td th:if="${listAccountInactive.status == 0}">
                                             <label class="badge badge-danger">Inactive</label>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${listAccountInactive.isEmpty()}">
+                                        <td colspan="9" style="text-align: center; color: red; font-size: larger;">
+                                            Account Inactive is entity
                                         </td>
                                     </tr>
                                     </tbody>

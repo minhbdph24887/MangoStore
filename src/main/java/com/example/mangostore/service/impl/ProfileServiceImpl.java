@@ -14,6 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class ProfileServiceImpl implements ProfileService {
@@ -58,6 +60,8 @@ public class ProfileServiceImpl implements ProfileService {
             model.addAttribute("listAccountInactive", itemsAccountInactive);
 
             model.addAttribute("currentPage", page);
+
+            model.addAttribute("addProfile", new Account());
             return "admin/account/IndexAccount";
         }
     }
@@ -132,6 +136,28 @@ public class ProfileServiceImpl implements ProfileService {
         assert detailAccount != null;
         detailAccount.setStatus(0);
         accountRepository.save(detailAccount);
+        return "redirect:/mangostore/admin/account";
+    }
+
+    @Override
+    public String addAccount(Account addProfile) {
+        Account newAccount = new Account();
+        newAccount.setFullName(addProfile.getFullName());
+        newAccount.setNumberPhone(addProfile.getNumberPhone());
+        newAccount.setEmail(addProfile.getEmail());
+        newAccount.setBirthday(addProfile.getBirthday());
+        newAccount.setGender(addProfile.getGender());
+        newAccount.setImages(addProfile.getImages());
+        newAccount.setEncryptionPassword(encoder.encode(addProfile.getPassword()));
+        newAccount.setAddress(addProfile.getAddress());
+
+        Role roleUser = roleRepository.getAllRoleByUser();
+        Set<Role> rolesUser = new HashSet<>();
+        rolesUser.add(roleUser);
+        newAccount.setRoles(rolesUser);
+
+        newAccount.setStatus(1);
+        accountRepository.save(newAccount);
         return "redirect:/mangostore/admin/account";
     }
 }

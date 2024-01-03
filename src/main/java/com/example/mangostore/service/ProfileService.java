@@ -15,4 +15,6 @@ public interface ProfileService {
     String updateAccount(String newPassword, MultipartFile imageFile, Account account);
 
     String deleteAccount(Long idAccount);
+
+    String addAccount(Account addProfile);
 }
