@@ -11,7 +11,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -67,11 +69,16 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public String restoreAccount(Long idAccount) {
+    public String restoreAccount(RedirectAttributes redirectAttributes, Long idAccount) {
         Account detailAccount = accountRepository.findById(idAccount).orElse(null);
         if (detailAccount != null) {
             detailAccount.setStatus(1);
             accountRepository.save(detailAccount);
+            redirectAttributes.addFlashAttribute("message", "Restore Account Successfully");
+            redirectAttributes.addFlashAttribute("cssClass", "alert alert-success");
+        } else {
+            redirectAttributes.addFlashAttribute("message", "Restore Account Fail");
+            redirectAttributes.addFlashAttribute("cssClass", "alert alert-danger");
         }
         return "redirect:/mangostore/admin/account";
     }
@@ -107,57 +114,78 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public String updateAccount(String newPassword, MultipartFile imageFile, Account account) {
-        Account detailAccount = accountRepository.findById(account.getId()).orElse(null);
-        detailAccount.setFullName(account.getFullName());
-        detailAccount.setNumberPhone(account.getNumberPhone());
-        detailAccount.setEmail(account.getEmail());
-        detailAccount.setBirthday(account.getBirthday());
-        detailAccount.setGender(account.getGender());
-
-        String oldImagePath = accountRepository.findById(account.getId()).get().getImages();
-        if (imageFile.isEmpty()) {
-            detailAccount.setImages(oldImagePath);
+    public String updateAccount(RedirectAttributes redirectAttributes, BindingResult result, String newPassword, MultipartFile imageFile, Account account) {
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("message", "Update Account Fail");
+            redirectAttributes.addFlashAttribute("cssClass", "alert alert-danger");
         } else {
-            String fileName = imageFile.getOriginalFilename();
-            detailAccount.setImages(fileName);
+            Account detailAccount = accountRepository.findById(account.getId()).orElse(null);
+            detailAccount.setFullName(account.getFullName());
+            detailAccount.setNumberPhone(account.getNumberPhone());
+            detailAccount.setEmail(account.getEmail());
+            detailAccount.setBirthday(account.getBirthday());
+            detailAccount.setGender(account.getGender());
+
+            String oldImagePath = accountRepository.findById(account.getId()).get().getImages();
+            if (imageFile.isEmpty()) {
+                detailAccount.setImages(oldImagePath);
+            } else {
+                String fileName = imageFile.getOriginalFilename();
+                detailAccount.setImages(fileName);
+            }
+
+            detailAccount.setEncryptionPassword(newPassword == null ? detailAccount.getEncryptionPassword() : encoder.encode(newPassword));
+            detailAccount.setAddress(account.getAddress());
+            detailAccount.setStatus(account.getStatus());
+            accountRepository.save(detailAccount);
+            redirectAttributes.addFlashAttribute("message", "Update Account Successfully");
+            redirectAttributes.addFlashAttribute("cssClass", "alert alert-success");
         }
-
-        detailAccount.setEncryptionPassword(newPassword == null ? detailAccount.getEncryptionPassword() : encoder.encode(newPassword));
-        detailAccount.setAddress(account.getAddress());
-        detailAccount.setStatus(account.getStatus());
-        accountRepository.save(detailAccount);
         return "redirect:/mangostore/admin/account";
     }
 
     @Override
-    public String deleteAccount(Long idAccount) {
-        Account detailAccount = accountRepository.findById(idAccount).orElse(null);
-        assert detailAccount != null;
-        detailAccount.setStatus(0);
-        accountRepository.save(detailAccount);
+    public String deleteAccount(RedirectAttributes redirectAttributes, Long idAccount) {
+        try {
+            Account detailAccount = accountRepository.findById(idAccount).orElse(null);
+            assert detailAccount != null;
+            detailAccount.setStatus(0);
+            accountRepository.save(detailAccount);
+            redirectAttributes.addFlashAttribute("message", "Delete Account Successfully");
+            redirectAttributes.addFlashAttribute("cssClass", "alert alert-success");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("message", "Delete Account Fail");
+            redirectAttributes.addFlashAttribute("cssClass", "alert alert-danger");
+        }
         return "redirect:/mangostore/admin/account";
     }
 
     @Override
-    public String addAccount(Account addProfile) {
-        Account newAccount = new Account();
-        newAccount.setFullName(addProfile.getFullName());
-        newAccount.setNumberPhone(addProfile.getNumberPhone());
-        newAccount.setEmail(addProfile.getEmail());
-        newAccount.setBirthday(addProfile.getBirthday());
-        newAccount.setGender(addProfile.getGender());
-        newAccount.setImages(addProfile.getImages());
-        newAccount.setEncryptionPassword(encoder.encode(addProfile.getPassword()));
-        newAccount.setAddress(addProfile.getAddress());
+    public String addAccount(RedirectAttributes redirectAttributes, BindingResult result, Account addProfile) {
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("message", "Add Account Fail");
+            redirectAttributes.addFlashAttribute("cssClass", "alert alert-danger");
+        } else {
+            Account newAccount = new Account();
+            newAccount.setFullName(addProfile.getFullName());
+            newAccount.setNumberPhone(addProfile.getNumberPhone());
+            newAccount.setEmail(addProfile.getEmail());
+            newAccount.setBirthday(addProfile.getBirthday());
+            newAccount.setGender(addProfile.getGender());
+            newAccount.setImages(addProfile.getImages());
+            newAccount.setEncryptionPassword(encoder.encode(addProfile.getPassword()));
+            newAccount.setAddress(addProfile.getAddress());
 
-        Role roleUser = roleRepository.getAllRoleByUser();
-        Set<Role> rolesUser = new HashSet<>();
-        rolesUser.add(roleUser);
-        newAccount.setRoles(rolesUser);
+            Role roleUser = roleRepository.getAllRoleByUser();
+            Set<Role> rolesUser = new HashSet<>();
+            rolesUser.add(roleUser);
+            newAccount.setRoles(rolesUser);
 
-        newAccount.setStatus(1);
-        accountRepository.save(newAccount);
+            newAccount.setStatus(1);
+            accountRepository.save(newAccount);
+            redirectAttributes.addFlashAttribute("message", "Add Account Successfully");
+            redirectAttributes.addFlashAttribute("cssClass", "alert alert-success");
+        }
         return "redirect:/mangostore/admin/account";
     }
 }

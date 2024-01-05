@@ -10,3 +10,7 @@ document.getElementById('imageInput').addEventListener('change', function (e) {
 document.querySelector('.btn.btn-default.md-btn-flat').addEventListener('click', function () {
     document.getElementById('previewImage').src = originalImageSrc;
 });
+
+setTimeout(function () {
+    document.getElementById('messageDiv').style.display = 'none';
+}, 5000);

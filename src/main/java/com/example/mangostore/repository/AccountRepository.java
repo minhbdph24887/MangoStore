@@ -15,9 +15,9 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @Query(value = "select * from accounts where email= :email ", nativeQuery = true)
     Account detailAccountByEmail(@Param("email") String email);
 
-    @Query(value = "select * from accounts where status= 1", nativeQuery = true)
+    @Query(value = "select * from accounts where status= 1 order by id desc", nativeQuery = true)
     Page<Account> getAllAccountByStatus1(Pageable pageable);
 
-    @Query(value = "select * from accounts where status= 0", nativeQuery = true)
+    @Query(value = "select * from accounts where status= 0 order by id desc", nativeQuery = true)
     Page<Account> getAllAccountByStatus0(Pageable pageable);
 }

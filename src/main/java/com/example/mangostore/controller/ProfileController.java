@@ -3,10 +3,13 @@ package com.example.mangostore.controller;
 import com.example.mangostore.entity.Account;
 import com.example.mangostore.service.ProfileService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Objects;
 
@@ -27,8 +30,9 @@ public class ProfileController {
     }
 
     @GetMapping(value = "account/restore/{id}")
-    public String restoreAccount(@PathVariable("id") Long idAccount) {
-        return profileService.restoreAccount(idAccount);
+    public String restoreAccount(RedirectAttributes redirectAttributes,
+                                 @PathVariable("id") Long idAccount) {
+        return profileService.restoreAccount(redirectAttributes, idAccount);
     }
 
     @GetMapping(value = "account/detail/{id}")
@@ -39,25 +43,30 @@ public class ProfileController {
     }
 
     @PostMapping(value = "account/update")
-    public String updateAccount(@RequestParam("newPassword") String newPassword,
+    public String updateAccount(@Valid Account account,
+                                @RequestParam("newPassword") String newPassword,
                                 @RequestParam("rePassword") String rePassword,
                                 @RequestParam("imageFile") MultipartFile imageFile,
                                 @RequestParam("id") Long idAccount,
-                                Account account) {
+                                BindingResult result,
+                                RedirectAttributes redirectAttributes) {
         if (!Objects.equals(newPassword, rePassword)) {
             return "redirect:/mangostore/admin/account/detail/" + idAccount;
         } else {
-            return profileService.updateAccount(newPassword, imageFile, account);
+            return profileService.updateAccount(redirectAttributes, result, newPassword, imageFile, account);
         }
     }
 
     @GetMapping(value = "account/delete/{id}")
-    public String deleteAccount(@PathVariable("id") Long idAccount) {
-        return profileService.deleteAccount(idAccount);
+    public String deleteAccount(@PathVariable("id") Long idAccount,
+                                RedirectAttributes redirectAttributes) {
+        return profileService.deleteAccount(redirectAttributes, idAccount);
     }
 
     @PostMapping(value = "account/add")
-    public String addAccount(Account addProfile) {
-        return profileService.addAccount(addProfile);
+    public String addAccount(@Valid Account addProfile,
+                             BindingResult result,
+                             RedirectAttributes redirectAttributes) {
+        return profileService.addAccount(redirectAttributes, result, addProfile);
     }
 }

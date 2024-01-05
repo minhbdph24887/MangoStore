@@ -28,11 +28,9 @@
                                     data-target="#myModal">Add Account
                             </button>
 
-                            <!-- Modal -->
                             <div class="modal fade" id="myModal" role="dialog">
                                 <div class="modal-dialog" style="max-width: 100%; margin: 0; padding: 0;">
 
-                                    <!-- Modal content-->
                                     <div class="modal-content" style="height: 100vh;">
                                         <div class="modal-body">
                                             <form th:action="@{/mangostore/admin/account/add}" th:object="${addProfile}"
@@ -153,10 +151,10 @@
                                             </button>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                             <div class="table-responsive">
+                                <div id="messageDiv" th:if="${message}" th:class="${cssClass}" th:text="${message}"></div>
                                 <table class="table table-striped">
                                     <thead>
                                     <tr>

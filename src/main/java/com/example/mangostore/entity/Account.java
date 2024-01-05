@@ -1,6 +1,7 @@
 package com.example.mangostore.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,15 +16,20 @@ public class Account implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank(message = "FullName Is Not Entity")
     private String fullName;
     private String numberPhone;
+    @Email(message = "Invalid email format")
     private String email;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
     private Boolean gender;
     private String images;
     private String encryptionPassword;
     private String veryCode;
+    @NotBlank(message = "Address Is Not Entity")
     private String address;
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(name = "authentication",
