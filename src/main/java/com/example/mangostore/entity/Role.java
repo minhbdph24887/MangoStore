@@ -1,6 +1,10 @@
 package com.example.mangostore.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+
+import java.util.List;
 
 @Entity
 @Table(name = "roles")
@@ -8,15 +12,21 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Pattern(regexp = "[A-Z]+", message = "Name must be in uppercase letters")
     private String name;
+    @NotBlank(message = "Note cannot be empty")
     private String note;
     private Integer status;
 
-    public Role(Long id, String name, String note, Integer status) {
+    @OneToMany(mappedBy = "role")
+    List<Authentication> authentications;
+
+    public Role(Long id, String name, String note, Integer status, List<Authentication> authentications) {
         this.id = id;
         this.name = name;
         this.note = note;
         this.status = status;
+        this.authentications = authentications;
     }
 
     public Role() {
@@ -52,5 +62,13 @@ public class Role {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public List<Authentication> getAuthentications() {
+        return authentications;
+    }
+
+    public void setAuthentications(List<Authentication> authentications) {
+        this.authentications = authentications;
     }
 }

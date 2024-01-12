@@ -3,6 +3,7 @@ package com.example.mangostore.service.impl;
 import com.example.mangostore.entity.Account;
 import com.example.mangostore.entity.Role;
 import com.example.mangostore.repository.AccountRepository;
+import com.example.mangostore.repository.AuthenticationRepository;
 import com.example.mangostore.repository.RoleRepository;
 import com.example.mangostore.service.LoginService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,9 +18,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Service
 public class LoginServiceImpl implements LoginService {
@@ -27,15 +26,18 @@ public class LoginServiceImpl implements LoginService {
     private final PasswordEncoder encoder;
     private final RoleRepository roleRepository;
     private final JavaMailSender mailSender;
+    private final AuthenticationRepository authenticationRepository;
 
     public LoginServiceImpl(AccountRepository accountRepository,
                             PasswordEncoder encoder,
                             RoleRepository roleRepository,
-                            JavaMailSender mailSender) {
+                            JavaMailSender mailSender,
+                            AuthenticationRepository authenticationRepository) {
         this.accountRepository = accountRepository;
         this.encoder = encoder;
         this.roleRepository = roleRepository;
         this.mailSender = mailSender;
+        this.authenticationRepository = authenticationRepository;
     }
 
     @Override
@@ -66,13 +68,14 @@ public class LoginServiceImpl implements LoginService {
             newAccount.setEmail(email);
             newAccount.setFullName(fullName);
             newAccount.setStatus(1);
+            accountRepository.save(newAccount);
 
             Role roleUser = roleRepository.getAllRoleByUser();
-            Set<Role> rolesUser = new HashSet<>();
-            rolesUser.add(roleUser);
-            newAccount.setRoles(rolesUser);
+            com.example.mangostore.entity.Authentication newAuthentication = new com.example.mangostore.entity.Authentication();
+            newAuthentication.setAccount(newAccount);
+            newAuthentication.setRole(roleUser);
+            authenticationRepository.save(newAuthentication);
 
-            accountRepository.save(newAccount);
             existUser = newAccount;
         }
         HttpSession session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
@@ -151,13 +154,14 @@ public class LoginServiceImpl implements LoginService {
             newAccount.setEmail(email);
             newAccount.setEncryptionPassword(encoder.encode(passwordRefresh));
             newAccount.setStatus(1);
+            accountRepository.save(newAccount);
 
             Role roleUser = roleRepository.getAllRoleByUser();
-            Set<Role> rolesUser = new HashSet<>();
-            rolesUser.add(roleUser);
-            newAccount.setRoles(rolesUser);
+            com.example.mangostore.entity.Authentication newAuthentication = new com.example.mangostore.entity.Authentication();
+            newAuthentication.setAccount(newAccount);
+            newAuthentication.setRole(roleUser);
+            authenticationRepository.save(newAuthentication);
 
-            accountRepository.save(newAccount);
             return "redirect:/mangostore/login/from";
 
         } else {

@@ -1,14 +1,17 @@
 package com.example.mangostore.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "accounts")
@@ -29,16 +32,13 @@ public class Account implements UserDetails {
     private String images;
     private String encryptionPassword;
     private String veryCode;
-    @NotBlank(message = "Address Is Not Entity")
+
     private String address;
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    @JoinTable(name = "authentication",
-            joinColumns = @JoinColumn(name = "id_account", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "id"))
-    private Set<Role> roles = new HashSet<>();
+    @OneToMany(mappedBy = "account")
+    List<Authentication> authentications;
     private Integer status;
 
-    public Account(Long id, String fullName, String numberPhone, String email, LocalDate birthday, Boolean gender, String images, String encryptionPassword, String veryCode, String address, Set<Role> roles, Integer status) {
+    public Account(Long id, String fullName, String numberPhone, String email, LocalDate birthday, Boolean gender, String images, String encryptionPassword, String veryCode, String address, List<Authentication> authentications, Integer status) {
         this.id = id;
         this.fullName = fullName;
         this.numberPhone = numberPhone;
@@ -49,7 +49,7 @@ public class Account implements UserDetails {
         this.encryptionPassword = encryptionPassword;
         this.veryCode = veryCode;
         this.address = address;
-        this.roles = roles;
+        this.authentications = authentications;
         this.status = status;
     }
 
@@ -136,12 +136,12 @@ public class Account implements UserDetails {
         this.address = address;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public List<Authentication> getAuthentications() {
+        return authentications;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setAuthentications(List<Authentication> authentications) {
+        this.authentications = authentications;
     }
 
     public Integer getStatus() {
@@ -155,7 +155,7 @@ public class Account implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        roles.forEach(items -> authorities.add(new SimpleGrantedAuthority(items.getName())));
+        authentications.forEach(items -> authorities.add(new SimpleGrantedAuthority(items.getRole().getName())));
         return List.of(new SimpleGrantedAuthority(authorities.toString()));
     }
 

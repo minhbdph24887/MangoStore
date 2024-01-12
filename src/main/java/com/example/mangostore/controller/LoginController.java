@@ -1,8 +1,6 @@
 package com.example.mangostore.controller;
 
-import com.example.mangostore.entity.Account;
 import com.example.mangostore.service.LoginService;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

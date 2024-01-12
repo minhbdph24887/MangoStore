@@ -29,13 +29,16 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(255)"/>
-            <column name="note" type="varchar(255)"/>
+            <column name="note" type="nvarchar(255)"/>
             <column name="status" type="integer"/>
         </createTable>
     </changeSet>
 
     <changeSet id="3" author="minhbdph24887">
         <createTable tableName="authentication">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
             <column name="id_account" type="bigint">
                 <constraints nullable="false"/>
             </column>
@@ -56,13 +59,13 @@
 
     <changeSet id="5" author="minhbdph24887">
         <insert tableName="accounts">
-            <column name="full_name" value="Bui Duc Minh"/>
+            <column name="full_name" value="Bùi Đức Minh"/>
             <column name="number_phone" value="0388598451"/>
             <column name="email" value="minhbdph24887@gmail.com"/>
             <column name="birthday" value="2003-03-09"/>
             <column name="gender" value="true"/>
             <column name="images" value="face1.jpg"/>
-            <column name="encryption_password" value="$2a$12$Uq0QleikFO.vcr5CNrYZ8enhz/LwxOxH1filK74N3B32oVWXjVHw."/>
+            <column name="encryption_password" value="$2a$10$PHxDESHhw3vqCyPX4ph3TuNKktT15ez8BfbuR7qobH6THTjqjGMtm"/>
             <column name="address" value="Ha Noi"/>
             <column name="status" value="1"/>
         </insert>
@@ -71,7 +74,7 @@
     <changeSet id="6" author="minhbdph24887">
         <insert tableName="roles">
             <column name="name" value="ADMIN"/>
-            <column name="note" value="Quan Tri Vien"/>
+            <column name="note" value="Quản Trị Viên"/>
             <column name="status" value="1"/>
         </insert>
     </changeSet>
@@ -79,7 +82,7 @@
     <changeSet id="7" author="minhbdph24887">
         <insert tableName="roles">
             <column name="name" value="USER"/>
-            <column name="note" value="Nguoi Dung"/>
+            <column name="note" value="Người Dùng"/>
             <column name="status" value="1"/>
         </insert>
     </changeSet>
@@ -87,28 +90,16 @@
     <changeSet id="8" author="minhbdph24887">
         <insert tableName="roles">
             <column name="name" value="STAFF"/>
-            <column name="note" value="Nhan Vien"/>
+            <column name="note" value="Nhân Viên"/>
             <column name="status" value="1"/>
         </insert>
     </changeSet>
 
     <changeSet id="9" author="minhbdph24887">
-        <sql>
-            insert into authentication (id_account, id_role)
-            select accounts.id, roles.id
-            from accounts,
-                 roles
-            where accounts.email = 'minhbdph24887@gmail.com'
-              and roles.name = 'ADMIN'
-        </sql>
-    </changeSet>
-
-    <changeSet id="10" author="minhbdph24887">
-        <sql>
-            update accounts
-            set encryption_password = '$2a$10$PHxDESHhw3vqCyPX4ph3TuNKktT15ez8BfbuR7qobH6THTjqjGMtm'
-            where id = 1
-        </sql>
+        <insert tableName="authentication">
+            <column name="id_account" value="1"/>
+            <column name="id_role" value="1"/>
+        </insert>
     </changeSet>
 </databaseChangeLog>
         

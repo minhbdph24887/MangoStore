@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
@@ -20,4 +20,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     @Query(value = "select * from accounts where status= 0 order by id desc", nativeQuery = true)
     Page<Account> getAllAccountByStatus0(Pageable pageable);
+
+    @Query(value = "select a.* from accounts a join authentication b on a.id = b.id_account join roles r on b.id_role = r.id where r.id= :idRole", nativeQuery = true)
+    List<Account> getAllAccountByRole(@Param("idRole") Long idRole);
 }

@@ -1,8 +1,10 @@
 package com.example.mangostore.service.impl;
 
 import com.example.mangostore.entity.Account;
+import com.example.mangostore.entity.Authentication;
 import com.example.mangostore.entity.Role;
 import com.example.mangostore.repository.AccountRepository;
+import com.example.mangostore.repository.AuthenticationRepository;
 import com.example.mangostore.repository.RoleRepository;
 import com.example.mangostore.service.ProfileService;
 import jakarta.servlet.http.HttpSession;
@@ -16,22 +18,22 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Service
 public class ProfileServiceImpl implements ProfileService {
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
-
     private final PasswordEncoder encoder;
+    private final AuthenticationRepository authenticationRepository;
 
     public ProfileServiceImpl(AccountRepository accountRepository,
                               RoleRepository roleRepository,
-                              PasswordEncoder encoder) {
+                              PasswordEncoder encoder,
+                              AuthenticationRepository authenticationRepository) {
         this.accountRepository = accountRepository;
         this.roleRepository = roleRepository;
         this.encoder = encoder;
+        this.authenticationRepository = authenticationRepository;
     }
 
     @Override
@@ -175,14 +177,15 @@ public class ProfileServiceImpl implements ProfileService {
             newAccount.setImages(addProfile.getImages());
             newAccount.setEncryptionPassword(encoder.encode(addProfile.getPassword()));
             newAccount.setAddress(addProfile.getAddress());
-
-            Role roleUser = roleRepository.getAllRoleByUser();
-            Set<Role> rolesUser = new HashSet<>();
-            rolesUser.add(roleUser);
-            newAccount.setRoles(rolesUser);
-
             newAccount.setStatus(1);
             accountRepository.save(newAccount);
+
+            Role roleUser = roleRepository.getAllRoleByUser();
+            Authentication newAuthentication = new Authentication();
+            newAuthentication.setAccount(newAccount);
+            newAuthentication.setRole(roleUser);
+            authenticationRepository.save(newAuthentication);
+
             redirectAttributes.addFlashAttribute("message", "Add Account Successfully");
             redirectAttributes.addFlashAttribute("cssClass", "alert alert-success");
         }

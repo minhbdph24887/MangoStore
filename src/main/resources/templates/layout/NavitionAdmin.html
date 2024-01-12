@@ -7,7 +7,7 @@
             </button>
         </div>
         <div>
-            <a class="navbar-brand brand-logo" th:href="@{/mangostore/admin/home}">
+            <a class="navbar-brand brand-logo" th:href="@{/mangostore/home}">
                 <img th:src="@{|/image/logoMangoStore1.png|}" alt="logo"/>
             </a>
             <a class="navbar-brand brand-logo-mini" th:href="@{/mangostore/admin/home}">
@@ -83,7 +83,7 @@
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item preview-item">
                         <div class="preview-thumbnail">
-                            <img src="../assets/images/faces/face10.jpg" alt="image" class="img-sm profile-pic">
+                            <img th:src="@{|/image/profile/face10.jpg|}" alt="image" class="img-sm profile-pic">
                         </div>
                         <div class="preview-item-content flex-grow py-2">
                             <p class="preview-subject ellipsis font-weight-medium text-dark">Marian Garner </p>
@@ -92,7 +92,7 @@
                     </a>
                     <a class="dropdown-item preview-item">
                         <div class="preview-thumbnail">
-                            <img src="../assets/images/faces/face12.jpg" alt="image" class="img-sm profile-pic">
+                            <img th:src="@{|/image/profile/face12.jpg|}" alt="image" class="img-sm profile-pic">
                         </div>
                         <div class="preview-item-content flex-grow py-2">
                             <p class="preview-subject ellipsis font-weight-medium text-dark">David Grey </p>
@@ -101,7 +101,7 @@
                     </a>
                     <a class="dropdown-item preview-item">
                         <div class="preview-thumbnail">
-                            <img src="../assets/images/faces/face1.jpg" alt="image" class="img-sm profile-pic">
+                            <img th:src="@{|/image/profile/face1.jpg|}" alt="image" class="img-sm profile-pic">
                         </div>
                         <div class="preview-item-content flex-grow py-2">
                             <p class="preview-subject ellipsis font-weight-medium text-dark">Travis Jenkins </p>

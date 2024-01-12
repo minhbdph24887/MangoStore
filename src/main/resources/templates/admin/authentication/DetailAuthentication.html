@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+      th:replace="~{/layout/IndexAdmin :: dynamic(~{:: main})}">
+<body>
+<main>
+    <div class="row">
+        <div th:replace="~{/admin/authentication/IndexAuthentication :: detailAuthentication}"></div>
+        <div class="col-lg-7 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Detail Authentication</h4>
+                    <form th:action="@{/mangostore/admin/authentication/update}" th:object="${detailAuthentication}"
+                          method="post">
+                        <input type="hidden" th:field="*{id}" th:value="${detailAuthentication.id}">
+                        <div class="form-group">
+                            <label class="form-label">Name Account:</label>
+                            <div class="form-control" th:text="${detailAuthentication.account.fullName}"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Name Role:</label>
+                            <select name="role" class="form-control">
+                                <option th:each="listRole : ${listRole}"
+                                        th:value="${listRole.id}"
+                                        th:text="${listRole.name}"
+                                        th:selected="${detailAuthentication.role.id == listRole.id}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="text-right mt-3">
+                            <button type="submit" class="btn btn-primary">Save As</button>&nbsp;
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

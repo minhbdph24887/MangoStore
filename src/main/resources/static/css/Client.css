@@ -592,49 +592,41 @@ form a {
     }
 }
 
-/* CSS cho dropdown */
 
-/* Thiết lập kiểu danh sách và loại bỏ các đường viền và đệm mặc định */
 .menu ul {
     padding: 0;
     margin: 0;
     list-style: none;
 }
 
-/* Thiết lập dropdown-parent là vị trí tương đối để dropdown có thể được định vị tuyệt đối */
 .dropdown-parent {
     position: relative;
 }
 
-/* Thiết lập dropdown để ẩn ban đầu */
 .dropdown {
     display: none;
     position: absolute;
     top: 100%;
-    min-width: 200px; /* Độ rộng tối thiểu */
-    background-color: #fff; /* Màu nền */
-    border: 1px solid #fff; /* Viền */
+    min-width: 200px;
+    background-color: #fff;
+    border: 1px solid #fff;
 }
 
-/* Hiển thị dropdown khi hover */
 .dropdown-parent:hover .dropdown {
     display: block;
 }
 
-/* Thiết lập cho các mục trong dropdown */
 .dropdown li {
     display: block;
 }
 
-/* Tùy chỉnh các mục trong dropdown */
 .dropdown li a {
     display: block;
     padding: 8px 15px;
     text-decoration: none;
-    color: #333; /* Màu chữ */
+    color: #333;
 }
 
-/* Màu nền khi di chuột qua các mục trong dropdown */
 .dropdown li a:hover {
     background-color: #fff;
 }
