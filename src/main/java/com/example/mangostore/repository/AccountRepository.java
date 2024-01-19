@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
-    @Query(value = "select * from accounts where email= :email ", nativeQuery = true)
+    @Query(value = "select * from accounts where email= :email", nativeQuery = true)
     Account detailAccountByEmail(@Param("email") String email);
 
     @Query(value = "select * from accounts where status= 1 order by id desc", nativeQuery = true)
@@ -23,4 +23,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     @Query(value = "select a.* from accounts a join authentication b on a.id = b.id_account join roles r on b.id_role = r.id where r.id= :idRole", nativeQuery = true)
     List<Account> getAllAccountByRole(@Param("idRole") Long idRole);
+
+    @Query(value = "select case when count(*) > 0 then 1 else 0 end from accounts where email = :email", nativeQuery = true)
+    int existsByEmail(@Param("email") String email);
 }

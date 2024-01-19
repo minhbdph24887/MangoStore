@@ -96,8 +96,9 @@ public class ProfileController {
     @GetMapping(value = "role/detail/{id}")
     public String detailRole(Model model,
                              HttpSession session,
-                             @PathVariable("id") Long idRole) {
-        return roleService.detailRole(model, session, idRole);
+                             @PathVariable("id") Long idRole,
+                             @RequestParam(defaultValue = "0") int page) {
+        return roleService.detailRole(model, session, idRole, page);
     }
 
     @PostMapping(value = "role/update")

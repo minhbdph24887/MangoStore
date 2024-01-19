@@ -42,15 +42,16 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public String loginAccount(String email, String password, HttpSession session) throws IOException {
-        System.out.println("aaaaaaaaaaaaaaaaa " + email);
-        System.out.println("bbbbbbbbbbbbbbbbb " + password);
-        System.out.println("ccccccccccccccccc " + encoder.encode(password));
         Account detailAccount = accountRepository.detailAccountByEmail(email);
         if (detailAccount == null || !encoder.matches(password, detailAccount.getEncryptionPassword())) {
             return "redirect:/mangostore/login/from";
         } else {
-            session.setAttribute("loginEmail", email);
-            return "redirect:/mangostore/home";
+            if (detailAccount.getStatus() == 0) {
+                return "redirect:/mangostore/login/from";
+            } else {
+                session.setAttribute("loginEmail", email);
+                return "redirect:/mangostore/home";
+            }
         }
     }
 
@@ -77,13 +78,26 @@ public class LoginServiceImpl implements LoginService {
             authenticationRepository.save(newAuthentication);
 
             existUser = newAccount;
-        }
-        HttpSession session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
-        session.setAttribute("loginEmail", existUser.getEmail());
-        if (existUser.getEncryptionPassword() == null) {
-            response.sendRedirect("/mangostore/login/password/refresh");
+
+            HttpSession session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
+            session.setAttribute("loginEmail", existUser.getEmail());
+            if (existUser.getEncryptionPassword() == null) {
+                response.sendRedirect("/mangostore/login/password/refresh");
+            } else {
+                response.sendRedirect("/mangostore/home");
+            }
         } else {
-            response.sendRedirect("/mangostore/home");
+            if (existUser.getStatus() == 0) {
+                response.sendRedirect("/mangostore/login/from");
+            } else {
+                HttpSession session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
+                session.setAttribute("loginEmail", existUser.getEmail());
+                if (existUser.getEncryptionPassword() == null) {
+                    response.sendRedirect("/mangostore/login/password/refresh");
+                } else {
+                    response.sendRedirect("/mangostore/home");
+                }
+            }
         }
     }
 
@@ -163,7 +177,6 @@ public class LoginServiceImpl implements LoginService {
             authenticationRepository.save(newAuthentication);
 
             return "redirect:/mangostore/login/from";
-
         } else {
             return "redirect:/mangostore/login/signup";
         }

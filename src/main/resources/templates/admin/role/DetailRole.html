@@ -1,108 +1,205 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
       th:replace="~{/layout/IndexAdmin :: dynamic(~{:: main})}">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
 <body>
 <main>
-    <div class="container light-style flex-grow-1 container-p-y">
-        <h4 class="font-weight-bold py-3 mb-4">
-            Detail Role, [[${detailRole.getNote()}]]
-        </h4>
-        <form th:action="@{/mangostore/admin/role/update}" th:object="${detailRole}" method="post">
-            <input type="hidden" th:field="*{id}" th:value="${detailRole.id}">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label class="form-label">Code Role</label>
-                        <input type="text"
-                               class="form-control"
-                               name="name" th:field="*{name}" readonly/>
-                    </div>
+    <div class="home-tab">
+        <div class="d-sm-flex align-items-center justify-content-between border-bottom">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active ps-0" id="home-tab" data-bs-toggle="tab"
+                       href="#tab1" role="tab"
+                       aria-controls="tab1" aria-selected="true">Active Role</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab2"
+                       aria-controls="tab2" role="tab"
+                       aria-selected="false">Role Inactive</a>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-content tab-content-basic">
+            <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1">
+                <div>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/mangostore/admin/role}">Index Role</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Detail Role</li>
+                    </ul>
                 </div>
-                <div class="col-md-9">
-                    <div class="form-group">
-                        <label class="form-label">Name Role</label>
-                        <input type="text"
-                               class="form-control"
-                               name="note" th:field="*{note}"/>
+                <div class="row">
+                    <div class="col-lg-5 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Detail Role</h4>
+                                <div class="table-responsive">
+                                    <div class="form-group">
+                                        ID Role: <span style="color: red">[[${detailRole.getId()}]]</span>
+                                    </div>
+                                    <div class="form-group">
+                                        Code Role: <span style="color: red;">[[${detailRole.getName()}]]</span>
+                                    </div>
+                                    <div class="form-group">
+                                        Name Role: <span style="color: red">[[${detailRole.getNote()}]]</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label class="form-label">Status</label>
-                        <select name="status" class="custom-select">
-                            <option value="1" th:selected="${detailRole.status == 1}">
-                                Online
-                            </option>
-                            <option value="0" th:selected="${detailRole.status == 0}">
-                                Offline
-                            </option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <h3>List Account By Role</h3>
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Full Name</th>
-                                <th>Number Phone</th>
-                                <th>Email</th>
-                                <th>Birthday</th>
-                                <th>Gender</th>
-                                <th>Images</th>
-                                <th>Address</th>
-                                <th>Status</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="listAccountByRole, stat : ${listAccountByRole}">
-                                <td th:text="${stat.count}"></td>
-                                <td th:text="${listAccountByRole.fullName}"></td>
-                                <td th:text="${listAccountByRole.numberPhone}"></td>
-                                <td th:text="${listAccountByRole.email}"></td>
-                                <td th:text="${#temporals.format(listAccountByRole.birthday, 'dd/MM/yyyy')}"></td>
-                                <td th:if="${listAccountByRole.gender != null}"
-                                    th:text="${listAccountByRole.gender == true ? 'Nam' : 'Nu'}"></td>
-                                <td th:unless="${listAccountByRole.gender != null}"></td>
-                                <td th:if="${listAccountByRole.images != null}">
-                                    <img th:src="@{|/image/profile/${listAccountByRole.images}|}" alt="image">
-                                </td>
-                                <td th:unless="${listAccountByRole.images != null}"></td>
-                                <td th:text="${listAccountByRole.address}"></td>
-                                <td th:if="${listAccountByRole.status == 1}">
-                                    <label class="badge badge-success">Active</label>
-                                </td>
-                                <td th:if="${listAccountByRole.status == 0}">
-                                    <label class="badge badge-danger">Inactive</label>
-                                </td>
+                    <div class="col-lg-7 grid-margin stretch-card" id="async-detail-container">
+                        <div class="container light-style flex-grow-1 container-p-y">
+                            <h4 class="font-weight-bold py-3 mb-4">
+                                Update Role, [[${detailRole.getNote()}]]
+                            </h4>
+                            <form th:action="@{/mangostore/admin/role/update}" th:object="${detailRole}" method="post"
+                                  onsubmit="return update()">
+                                <input type="hidden" th:field="*{id}" th:value="${detailRole.id}">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Code Role</label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   name="name" th:field="*{name}" readonly/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="form-group">
+                                            <label class="form-label">Name Role</label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   name="note" th:field="*{note}"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">Status</label>
+                                            <select name="status" class="custom-select">
+                                                <option value="1" th:selected="${detailRole.status == 1}">
+                                                    Online
+                                                </option>
+                                                <option value="0" th:selected="${detailRole.status == 0}">
+                                                    Offline
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <h3>List Account By Role</h3>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th>Full Name</th>
+                                                    <th>Number Phone</th>
+                                                    <th>Email</th>
+                                                    <th>Birthday</th>
+                                                    <th>Gender</th>
+                                                    <th>Images</th>
+                                                    <th>Address</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr th:each="listAccountByRole, stat : ${listAccountByRole}">
+                                                    <td th:text="${stat.count}"></td>
+                                                    <td th:text="${listAccountByRole.fullName}"></td>
+                                                    <td th:text="${listAccountByRole.numberPhone}"></td>
+                                                    <td th:text="${listAccountByRole.email}"></td>
+                                                    <td th:text="${#temporals.format(listAccountByRole.birthday, 'dd/MM/yyyy')}"></td>
+                                                    <td th:if="${listAccountByRole.gender != null}"
+                                                        th:text="${listAccountByRole.gender == true ? 'Nam' : 'Nu'}"></td>
+                                                    <td th:unless="${listAccountByRole.gender != null}"></td>
+                                                    <td th:if="${listAccountByRole.images != null}">
+                                                        <img th:src="@{|/image/profile/${listAccountByRole.images}|}"
+                                                             alt="image">
+                                                    </td>
+                                                    <td th:unless="${listAccountByRole.images != null}"></td>
+                                                    <td th:text="${listAccountByRole.address}"></td>
+                                                    <td th:if="${listAccountByRole.status == 1}">
+                                                        <label class="badge badge-success">Active</label>
+                                                    </td>
+                                                    <td th:if="${listAccountByRole.status == 0}">
+                                                        <label class="badge badge-danger">Inactive</label>
+                                                    </td>
 
-                            </tr>
-                            <tr th:if="${listAccountByRole.isEmpty()}">
-                                <td colspan="9" style="text-align: center; color: red; font-size: larger;">
-                                    Account By Role is entity
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                                                </tr>
+                                                <tr th:if="${listAccountByRole.isEmpty()}">
+                                                    <td colspan="9"
+                                                        style="text-align: center; color: red; font-size: larger;">
+                                                        Account By Role is entity
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-right mt-3">
+                                    <button type="submit" class="btn btn-primary">Save As</button>&nbsp;
+                                    <a th:href="@{/mangostore/admin/role/delete/{id}(id=${detailRole.id})}">
+                                        <button type="button" class="btn btn-danger" onclick="return remove()">Delete
+                                        </button>
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="text-right mt-3">
-                <button type="submit" class="btn btn-primary">Save As</button>&nbsp;
-                <a th:href="@{/mangostore/admin/role/delete/{id}(id=${detailRole.id})}">
-                    <button type="button" class="btn btn-danger">Delete</button>
-                </a>
-                <a th:href="@{/mangostore/admin/role}">
-                    <button type="button" class="btn btn-default">Cancel</button>
-                </a>
+
+            <div class="tab-pane fade" id="tab2" role="tabpanel"
+                 aria-labelledby="tab2">
+                <div class="col-lg-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">List Role Inactive</h4>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Code</th>
+                                        <th>Name Role</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="listRoleInactive, stat : ${listRoleInactive}">
+                                        <td th:text="${stat.count}"></td>
+                                        <td>
+                                            <a th:href="@{|/mangostore/admin/role/restore/${listRoleInactive.id}|}"
+                                               th:text="${listRoleInactive.name}"
+                                               style="text-decoration: none"></a>
+                                        </td>
+                                        <td th:text="${listRoleInactive.note}"></td>
+                                        <td th:if="${listRoleInactive.status == 0}">
+                                            <label class="badge badge-danger">Inactive</label>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${listRoleInactive.isEmpty()}">
+                                        <td colspan="9" style="text-align: center; color: red; font-size: larger;">
+                                            Role Inactive is entity
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <nav aria-label="Page navigation example" th:if="${listRoleInactive.totalPages > 0}">
+                            <ul class="pagination justify-content-center pagination-sm">
+                                <li th:each="i : ${#numbers.sequence(0, listRoleInactive.totalPages - 1)}"
+                                    th:class="${i == page ? 'active' : ''}"
+                                    class="page-item">
+                                    <a th:href="@{/mangostore/admin/role(page=${i})}" class="page-link"
+                                       th:text="${i + 1}"></a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
 </main>
 </body>

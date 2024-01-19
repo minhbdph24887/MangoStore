@@ -4,13 +4,31 @@
 <body>
 <main>
     <div class="row">
-        <div th:replace="~{/admin/authentication/IndexAuthentication :: detailAuthentication}"></div>
+        <div class="col-lg-5 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Detail Role</h4>
+                    <div class="table-responsive">
+                        <div class="form-group">
+                            ID Code Authentication: <span style="color: red">[[${detailAuthentication.getId()}]]</span>
+                        </div>
+                        <div class="form-group">
+                            Account Information: <span style="color: red;">[[${detailAuthentication.getAccount().getFullName()}]]</span>
+                        </div>
+                        <div class="form-group">
+                            Account Rights: <span
+                                style="color: red">[[${detailAuthentication.getRole().getName()}]]</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="col-lg-7 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Detail Authentication</h4>
+                    <h4 class="card-title">Update Authentication</h4>
                     <form th:action="@{/mangostore/admin/authentication/update}" th:object="${detailAuthentication}"
-                          method="post">
+                          method="post" onsubmit="return update()">
                         <input type="hidden" th:field="*{id}" th:value="${detailAuthentication.id}">
                         <div class="form-group">
                             <label class="form-label">Name Account:</label>

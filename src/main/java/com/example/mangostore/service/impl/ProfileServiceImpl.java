@@ -65,7 +65,15 @@ public class ProfileServiceImpl implements ProfileService {
 
             model.addAttribute("currentPage", page);
 
-            model.addAttribute("addProfile", new Account());
+            Role detailRole = roleRepository.getRoleByEmail(email);
+            if (detailRole.getName().equals("ADMIN")) {
+                model.addAttribute("checkIndexAccount", true);
+                model.addAttribute("checkMenuAdmin", true);
+                model.addAttribute("addProfile", new Account());
+            }else{
+                model.addAttribute("checkIndexAccount", false);
+                model.addAttribute("checkMenuAdmin", false);
+            }
             return "admin/account/IndexAccount";
         }
     }
@@ -111,6 +119,15 @@ public class ProfileServiceImpl implements ProfileService {
 
             String accountRole = roleRepository.getRoleByEmail(detailProfile.getEmail()).getName();
             model.addAttribute("accountRole", accountRole);
+
+            Role detailRole = roleRepository.getRoleByEmail(email);
+            if (detailRole.getName().equals("ADMIN")) {
+                model.addAttribute("checkDetailAccount", true);
+                model.addAttribute("checkMenuAdmin", true);
+            }else{
+                model.addAttribute("checkDetailAccount", false);
+                model.addAttribute("checkMenuAdmin", false);
+            }
             return "admin/account/DetailAccount";
         }
     }
@@ -168,26 +185,32 @@ public class ProfileServiceImpl implements ProfileService {
             redirectAttributes.addFlashAttribute("message", "Add Account Fail");
             redirectAttributes.addFlashAttribute("cssClass", "alert alert-danger");
         } else {
-            Account newAccount = new Account();
-            newAccount.setFullName(addProfile.getFullName());
-            newAccount.setNumberPhone(addProfile.getNumberPhone());
-            newAccount.setEmail(addProfile.getEmail());
-            newAccount.setBirthday(addProfile.getBirthday());
-            newAccount.setGender(addProfile.getGender());
-            newAccount.setImages(addProfile.getImages());
-            newAccount.setEncryptionPassword(encoder.encode(addProfile.getPassword()));
-            newAccount.setAddress(addProfile.getAddress());
-            newAccount.setStatus(1);
-            accountRepository.save(newAccount);
+            int checkEmailExists = accountRepository.existsByEmail(addProfile.getEmail());
+            if (checkEmailExists == 1) {
+                redirectAttributes.addFlashAttribute("message", "Email already exists. Add Account Failed.");
+                redirectAttributes.addFlashAttribute("cssClass", "alert alert-danger");
+            } else {
+                Account newAccount = new Account();
+                newAccount.setFullName(addProfile.getFullName());
+                newAccount.setNumberPhone(addProfile.getNumberPhone());
+                newAccount.setEmail(addProfile.getEmail());
+                newAccount.setBirthday(addProfile.getBirthday());
+                newAccount.setGender(addProfile.getGender());
+                newAccount.setImages(addProfile.getImages());
+                newAccount.setEncryptionPassword(encoder.encode(addProfile.getPassword()));
+                newAccount.setAddress(addProfile.getAddress());
+                newAccount.setStatus(1);
+                accountRepository.save(newAccount);
 
-            Role roleUser = roleRepository.getAllRoleByUser();
-            Authentication newAuthentication = new Authentication();
-            newAuthentication.setAccount(newAccount);
-            newAuthentication.setRole(roleUser);
-            authenticationRepository.save(newAuthentication);
+                Role roleUser = roleRepository.getAllRoleByUser();
+                Authentication newAuthentication = new Authentication();
+                newAuthentication.setAccount(newAccount);
+                newAuthentication.setRole(roleUser);
+                authenticationRepository.save(newAuthentication);
 
-            redirectAttributes.addFlashAttribute("message", "Add Account Successfully");
-            redirectAttributes.addFlashAttribute("cssClass", "alert alert-success");
+                redirectAttributes.addFlashAttribute("message", "Add Account Successfully");
+                redirectAttributes.addFlashAttribute("cssClass", "alert alert-success");
+            }
         }
         return "redirect:/mangostore/admin/account";
     }

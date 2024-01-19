@@ -12,9 +12,7 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Pattern(regexp = "[A-Z]+", message = "Name must be in uppercase letters")
     private String name;
-    @NotBlank(message = "Note cannot be empty")
     private String note;
     private Integer status;
 

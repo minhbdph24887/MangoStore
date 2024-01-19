@@ -56,6 +56,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             model.addAttribute("listAuthentication", itemsAuthentication);
 
             model.addAttribute("currentPage", page);
+
+            model.addAttribute("checkMenuAdmin", true);
             return "admin/authentication/IndexAuthentication";
         }
     }
@@ -81,16 +83,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 model.addAttribute("dates", "Evening");
             }
 
-            Page<Authentication> itemsAuthentication = authenticationRepository.findAll(PageRequest.of(page, 4));
-            model.addAttribute("listAuthentication", itemsAuthentication);
-
-            model.addAttribute("currentPage", page);
-
             Authentication detailAuthentication = authenticationRepository.findById(idAuthentication).orElse(null);
             model.addAttribute("detailAuthentication", detailAuthentication);
 
             List<Role> itemsRole = roleRepository.getAllRole();
             model.addAttribute("listRole", itemsRole);
+
+            model.addAttribute("checkMenuAdmin", true);
             return "admin/authentication/DetailAuthentication";
         }
     }

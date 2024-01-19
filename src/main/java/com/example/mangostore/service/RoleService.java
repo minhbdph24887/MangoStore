@@ -11,7 +11,7 @@ public interface RoleService {
 
     String restoreRole(RedirectAttributes redirectAttributes, Long idRole);
 
-    String detailRole(Model model, HttpSession session, Long idRole);
+    String detailRole(Model model, HttpSession session, Long idRole, int page);
 
     String updateRole(RedirectAttributes redirectAttributes, BindingResult result, Long idRole, Role role);
 

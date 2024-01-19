@@ -8,6 +8,8 @@ import com.example.mangostore.service.RoleService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -48,15 +50,17 @@ public class RoleServiceImpl implements RoleService {
                 model.addAttribute("dates", "Evening");
             }
 
-            Page<Role> itemsRole = roleRepository.getAllRoleByStatus1(PageRequest.of(page, 4));
+            Page<Role> itemsRole = roleRepository.getAllRoleByStatus1(PageRequest.of(page, 5));
             model.addAttribute("listRole", itemsRole);
 
-            Page<Role> itemsRoleInactive = roleRepository.getAllRoleByStatus0(PageRequest.of(page, 4));
+            Page<Role> itemsRoleInactive = roleRepository.getAllRoleByStatus0(PageRequest.of(page, 5));
             model.addAttribute("listRoleInactive", itemsRoleInactive);
 
             model.addAttribute("currentPage", page);
 
             model.addAttribute("addRole", new Role());
+
+            model.addAttribute("checkMenuAdmin", true);
             return "admin/role/IndexRole";
         }
     }
@@ -77,7 +81,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public String detailRole(Model model, HttpSession session, Long idRole) {
+    public String detailRole(Model model, HttpSession session, Long idRole, int page) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -97,11 +101,17 @@ public class RoleServiceImpl implements RoleService {
                 model.addAttribute("dates", "Evening");
             }
 
+            Page<Role> itemsRoleInactive = roleRepository.getAllRoleByStatus0(PageRequest.of(page, 4));
+            model.addAttribute("listRoleInactive", itemsRoleInactive);
+            model.addAttribute("currentPage", page);
+
             Role detailRole = roleRepository.findById(idRole).orElse(null);
             model.addAttribute("detailRole", detailRole);
 
             List<Account> itemsAccount = accountRepository.getAllAccountByRole(idRole);
             model.addAttribute("listAccountByRole", itemsAccount);
+
+            model.addAttribute("checkMenuAdmin", true);
             return "admin/role/DetailRole";
         }
     }

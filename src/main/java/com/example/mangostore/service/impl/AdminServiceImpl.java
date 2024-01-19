@@ -1,7 +1,9 @@
 package com.example.mangostore.service.impl;
 
 import com.example.mangostore.entity.Account;
+import com.example.mangostore.entity.Role;
 import com.example.mangostore.repository.AccountRepository;
+import com.example.mangostore.repository.RoleRepository;
 import com.example.mangostore.service.AdminService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
@@ -12,9 +14,12 @@ import java.time.LocalDateTime;
 @Service
 public class AdminServiceImpl implements AdminService {
     private final AccountRepository accountRepository;
+    private final RoleRepository roleRepository;
 
-    public AdminServiceImpl(AccountRepository accountRepository) {
+    public AdminServiceImpl(AccountRepository accountRepository,
+                            RoleRepository roleRepository) {
         this.accountRepository = accountRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -36,6 +41,13 @@ public class AdminServiceImpl implements AdminService {
                 model.addAttribute("dates", "Afternoon");
             } else {
                 model.addAttribute("dates", "Evening");
+            }
+
+            Role detailRole = roleRepository.getRoleByEmail(email);
+            if (detailRole.getName().equals("ADMIN")) {
+                model.addAttribute("checkMenuAdmin", true);
+            } else {
+                model.addAttribute("checkMenuAdmin", false);
             }
             return "admin/Index";
         }
