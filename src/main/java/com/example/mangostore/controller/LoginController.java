@@ -40,7 +40,7 @@ public class LoginController {
     @PostMapping(value = "code")
     public String veryCodeEmail(@RequestParam("forgotEmail") String email,
                                 HttpSession session) {
-        session.setAttribute("loginEmail", email);
+        session.setAttribute("loginEmailForgot", email);
         return loginService.forgotEmail(email);
     }
 
@@ -59,11 +59,11 @@ public class LoginController {
     public String refreshPasswordSuccess(@RequestParam("passwordRefresh") String passwordRefresh,
                                          @RequestParam("passwordRefreshRE") String passwordRefreshRE,
                                          HttpSession session) {
-        String email = (String) session.getAttribute("loginEmail");
+        String email = (String) session.getAttribute("loginEmailForgot");
         if (!Objects.equals(passwordRefresh, passwordRefreshRE)) {
             return "login/NewPassword";
         } else {
-            return loginService.refreshPassword(email, passwordRefresh);
+            return loginService.refreshPassword(email, passwordRefresh, session);
         }
     }
 

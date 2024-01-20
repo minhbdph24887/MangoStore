@@ -38,7 +38,18 @@ public class Account implements UserDetails {
     List<Authentication> authentications;
     private Integer status;
 
-    public Account(Long id, String fullName, String numberPhone, String email, LocalDate birthday, Boolean gender, String images, String encryptionPassword, String veryCode, String address, List<Authentication> authentications, Integer status) {
+    public Account(Long id,
+                   String fullName,
+                   String numberPhone,
+                   String email,
+                   LocalDate birthday,
+                   Boolean gender,
+                   String images,
+                   String encryptionPassword,
+                   String veryCode,
+                   String address,
+                   List<Authentication> authentications,
+                   Integer status) {
         this.id = id;
         this.fullName = fullName;
         this.numberPhone = numberPhone;

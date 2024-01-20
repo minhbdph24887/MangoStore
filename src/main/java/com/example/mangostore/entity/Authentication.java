@@ -17,7 +17,9 @@ public class Authentication {
     @JoinColumn(name = "id_role", referencedColumnName = "id")
     private Role role;
 
-    public Authentication(Long id, Account account, Role role) {
+    public Authentication(Long id,
+                          Account account,
+                          Role role) {
         this.id = id;
         this.account = account;
         this.role = role;

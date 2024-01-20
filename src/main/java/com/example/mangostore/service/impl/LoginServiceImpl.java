@@ -1,5 +1,6 @@
 package com.example.mangostore.service.impl;
 
+import com.example.mangostore.config.Gender;
 import com.example.mangostore.entity.Account;
 import com.example.mangostore.entity.Role;
 import com.example.mangostore.repository.AccountRepository;
@@ -8,8 +9,6 @@ import com.example.mangostore.repository.RoleRepository;
 import com.example.mangostore.service.LoginService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
@@ -25,19 +24,19 @@ public class LoginServiceImpl implements LoginService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder encoder;
     private final RoleRepository roleRepository;
-    private final JavaMailSender mailSender;
     private final AuthenticationRepository authenticationRepository;
+    private final Gender gender;
 
     public LoginServiceImpl(AccountRepository accountRepository,
                             PasswordEncoder encoder,
                             RoleRepository roleRepository,
-                            JavaMailSender mailSender,
-                            AuthenticationRepository authenticationRepository) {
+                            AuthenticationRepository authenticationRepository,
+                            Gender gender) {
         this.accountRepository = accountRepository;
         this.encoder = encoder;
         this.roleRepository = roleRepository;
-        this.mailSender = mailSender;
         this.authenticationRepository = authenticationRepository;
+        this.gender = gender;
     }
 
     @Override
@@ -80,10 +79,12 @@ public class LoginServiceImpl implements LoginService {
             existUser = newAccount;
 
             HttpSession session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
-            session.setAttribute("loginEmail", existUser.getEmail());
+            session.setAttribute("loginEmailForgot", existUser.getEmail());
             if (existUser.getEncryptionPassword() == null) {
                 response.sendRedirect("/mangostore/login/password/refresh");
             } else {
+                session.setAttribute("loginEmail", existUser.getEmail());
+                session.removeAttribute("loginEmailForgot");
                 response.sendRedirect("/mangostore/home");
             }
         } else {
@@ -91,36 +92,16 @@ public class LoginServiceImpl implements LoginService {
                 response.sendRedirect("/mangostore/login/from");
             } else {
                 HttpSession session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
-                session.setAttribute("loginEmail", existUser.getEmail());
+                session.setAttribute("loginEmailForgot", existUser.getEmail());
                 if (existUser.getEncryptionPassword() == null) {
                     response.sendRedirect("/mangostore/login/password/refresh");
                 } else {
+                    session.setAttribute("loginEmail", existUser.getEmail());
+                    session.removeAttribute("loginEmailForgot");
                     response.sendRedirect("/mangostore/home");
                 }
             }
         }
-    }
-
-    public String generateVerificationCode() {
-        int code = (int) ((Math.random() * 900000) + 100000);
-        return String.valueOf(code);
-    }
-
-    public void saveVerificationCode(String email, String verificationCode) {
-        Account account = accountRepository.detailAccountByEmail(email);
-        if (account != null) {
-            account.setVeryCode(verificationCode);
-            accountRepository.save(account);
-        }
-    }
-
-    public void sendEmail(String to, String subject, String verificationCode) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject(subject);
-        String content = "Code để bạn đặt lại mật khẩu là: " + verificationCode;
-        message.setText(content);
-        mailSender.send(message);
     }
 
     @Override
@@ -129,16 +110,16 @@ public class LoginServiceImpl implements LoginService {
         if (detailAccount == null) {
             return "redirect:/mangostore/login/forgot";
         } else {
-            String verificationCode = generateVerificationCode();
-            saveVerificationCode(email, verificationCode);
-            sendEmail(email, "Đặt lại mật khẩu", verificationCode);
+            String verificationCode = gender.generateVerificationCode();
+            gender.saveVerificationCode(email, verificationCode);
+            gender.sendEmail(email, "Đặt lại mật khẩu", verificationCode);
             return "redirect:/mangostore/login/forgot";
         }
     }
 
     @Override
     public String authenticationCode(String codeForgot, HttpSession session) {
-        String email = (String) session.getAttribute("loginEmail");
+        String email = (String) session.getAttribute("loginEmailForgot");
         if (email == null) {
             return "redirect:/mangostore/login/forgot";
         } else {
@@ -152,10 +133,12 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public String refreshPassword(String email, String passwordRefresh) {
+    public String refreshPassword(String email, String passwordRefresh, HttpSession session) {
         Account detailAccount = accountRepository.detailAccountByEmail(email);
         detailAccount.setEncryptionPassword(encoder.encode(passwordRefresh));
         accountRepository.save(detailAccount);
+        session.setAttribute("loginEmail", email);
+        session.removeAttribute("loginEmailForgot");
         return "redirect:/mangostore/home";
     }
 

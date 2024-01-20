@@ -19,7 +19,11 @@ public class Role {
     @OneToMany(mappedBy = "role")
     List<Authentication> authentications;
 
-    public Role(Long id, String name, String note, Integer status, List<Authentication> authentications) {
+    public Role(Long id,
+                String name,
+                String note,
+                Integer status,
+                List<Authentication> authentications) {
         this.id = id;
         this.name = name;
         this.note = note;

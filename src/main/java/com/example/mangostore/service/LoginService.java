@@ -15,7 +15,7 @@ public interface LoginService {
 
     String authenticationCode(String codeForgot, HttpSession session);
 
-    String refreshPassword(String email, String passwordRefresh);
+    String refreshPassword(String email, String passwordRefresh, HttpSession session);
 
     String signUpAccount(String fullName, String email, String passwordRefresh);
 
