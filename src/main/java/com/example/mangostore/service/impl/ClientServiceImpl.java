@@ -25,11 +25,16 @@ public class ClientServiceImpl implements ClientService {
         String email = (String) session.getAttribute("loginEmail");
         if (email != null) {
             Account detailAccount = accountRepository.detailAccountByEmail(email);
-            model.addAttribute("nameAccount", detailAccount.getFullName());
+            if (detailAccount.getStatus() == 0) {
+                session.invalidate();
+                return "redirect:/mangostore/home";
+            } else {
+                model.addAttribute("nameAccount", detailAccount.getFullName());
 
-            Role detailRoleByEmail = roleRepository.getRoleByEmail(email);
-            if (detailRoleByEmail.getName().equals("ADMIN") || detailRoleByEmail.getName().equals("STAFF")) {
-                model.addAttribute("checkAuthentication", detailRoleByEmail);
+                Role detailRoleByEmail = roleRepository.getRoleByEmail(email);
+                if (detailRoleByEmail.getName().equals("ADMIN") || detailRoleByEmail.getName().equals("STAFF")) {
+                    model.addAttribute("checkAuthentication", detailRoleByEmail);
+                }
             }
         }
         return "client/Home";

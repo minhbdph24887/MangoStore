@@ -144,6 +144,20 @@
         </createTable>
     </changeSet>
     <changeSet id="13" author="minhbdph24887">
+        <createTable tableName="origin">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code_origin" type="varchar(255)"/>
+            <column name="name_origin" type="nvarchar(255)"/>
+            <column name="name_user_create" type="nvarchar(255)"/>
+            <column name="name_user_update" type="nvarchar(255)"/>
+            <column name="date_create" type="datetime2(6)"/>
+            <column name="date_update" type="datetime2(6)"/>
+            <column name="status" type="integer"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="14" author="minhbdph24887">
         <createTable tableName="size">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -157,7 +171,7 @@
             <column name="status" type="integer"/>
         </createTable>
     </changeSet>
-    <changeSet id="14" author="minhbdph24887">
+    <changeSet id="15" author="minhbdph24887">
         <createTable tableName="product_detail">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -175,6 +189,9 @@
             <column name="id_color" type="bigint">
                 <constraints nullable="false"/>
             </column>
+            <column name="id_origin" type="bigint">
+                <constraints nullable="false"/>
+            </column>
             <column name="describe" type="nvarchar(255)"/>
             <column name="quantity" type="integer"/>
             <column name="import_price" type="integer"/>
@@ -186,7 +203,7 @@
             <column name="status" type="integer"/>
         </createTable>
     </changeSet>
-    <changeSet id="15" author="minhbdph24887">
+    <changeSet id="16" author="minhbdph24887">
         <addForeignKeyConstraint constraintName="fk_product"
                                  baseTableName="product_detail" baseColumnNames="id_product"
                                  referencedTableName="product" referencedColumnNames="id"/>
@@ -199,6 +216,9 @@
         <addForeignKeyConstraint constraintName="fk_color"
                                  baseTableName="product_detail" baseColumnNames="id_color"
                                  referencedTableName="color" referencedColumnNames="id"/>
+        <addForeignKeyConstraint constraintName="fk_origin"
+                                 baseTableName="product_detail" baseColumnNames="id_origin"
+                                 referencedTableName="origin" referencedColumnNames="id"/>
     </changeSet>
 </databaseChangeLog>
         

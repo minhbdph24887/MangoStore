@@ -38,27 +38,32 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return "redirect:/mangostore/home";
         } else {
             Account detailAccount = accountRepository.detailAccountByEmail(email);
-            model.addAttribute("profile", detailAccount);
-
-            LocalDateTime checkDate = LocalDateTime.now();
-            int hour = checkDate.getHour();
-            if (hour >= 5 && hour < 10) {
-                model.addAttribute("dates", "Morning");
-            } else if (hour >= 10 && hour < 13) {
-                model.addAttribute("dates", "Noon");
-            } else if (hour >= 13 && hour < 18) {
-                model.addAttribute("dates", "Afternoon");
+            if (detailAccount.getStatus() == 0) {
+                session.invalidate();
+                return "redirect:/mangostore/home";
             } else {
-                model.addAttribute("dates", "Evening");
+                model.addAttribute("profile", detailAccount);
+
+                LocalDateTime checkDate = LocalDateTime.now();
+                int hour = checkDate.getHour();
+                if (hour >= 5 && hour < 10) {
+                    model.addAttribute("dates", "Morning");
+                } else if (hour >= 10 && hour < 13) {
+                    model.addAttribute("dates", "Noon");
+                } else if (hour >= 13 && hour < 18) {
+                    model.addAttribute("dates", "Afternoon");
+                } else {
+                    model.addAttribute("dates", "Evening");
+                }
+
+                Page<Authentication> itemsAuthentication = authenticationRepository.findAll(PageRequest.of(page, 4));
+                model.addAttribute("listAuthentication", itemsAuthentication);
+
+                model.addAttribute("currentPage", page);
+
+                model.addAttribute("checkMenuAdmin", true);
+                return "admin/authentication/IndexAuthentication";
             }
-
-            Page<Authentication> itemsAuthentication = authenticationRepository.findAll(PageRequest.of(page, 4));
-            model.addAttribute("listAuthentication", itemsAuthentication);
-
-            model.addAttribute("currentPage", page);
-
-            model.addAttribute("checkMenuAdmin", true);
-            return "admin/authentication/IndexAuthentication";
         }
     }
 
@@ -69,28 +74,33 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return "redirect:/mangostore/home";
         } else {
             Account detailAccount = accountRepository.detailAccountByEmail(email);
-            model.addAttribute("profile", detailAccount);
-
-            LocalDateTime checkDate = LocalDateTime.now();
-            int hour = checkDate.getHour();
-            if (hour >= 5 && hour < 10) {
-                model.addAttribute("dates", "Morning");
-            } else if (hour >= 10 && hour < 13) {
-                model.addAttribute("dates", "Noon");
-            } else if (hour >= 13 && hour < 18) {
-                model.addAttribute("dates", "Afternoon");
+            if (detailAccount.getStatus() == 0) {
+                session.invalidate();
+                return "redirect:/mangostore/home";
             } else {
-                model.addAttribute("dates", "Evening");
+                model.addAttribute("profile", detailAccount);
+
+                LocalDateTime checkDate = LocalDateTime.now();
+                int hour = checkDate.getHour();
+                if (hour >= 5 && hour < 10) {
+                    model.addAttribute("dates", "Morning");
+                } else if (hour >= 10 && hour < 13) {
+                    model.addAttribute("dates", "Noon");
+                } else if (hour >= 13 && hour < 18) {
+                    model.addAttribute("dates", "Afternoon");
+                } else {
+                    model.addAttribute("dates", "Evening");
+                }
+
+                Authentication detailAuthentication = authenticationRepository.findById(idAuthentication).orElse(null);
+                model.addAttribute("detailAuthentication", detailAuthentication);
+
+                List<Role> itemsRole = roleRepository.getAllRole();
+                model.addAttribute("listRole", itemsRole);
+
+                model.addAttribute("checkMenuAdmin", true);
+                return "admin/authentication/DetailAuthentication";
             }
-
-            Authentication detailAuthentication = authenticationRepository.findById(idAuthentication).orElse(null);
-            model.addAttribute("detailAuthentication", detailAuthentication);
-
-            List<Role> itemsRole = roleRepository.getAllRole();
-            model.addAttribute("listRole", itemsRole);
-
-            model.addAttribute("checkMenuAdmin", true);
-            return "admin/authentication/DetailAuthentication";
         }
     }
 

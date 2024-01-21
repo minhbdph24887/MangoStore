@@ -43,38 +43,43 @@ public class ProfileServiceImpl implements ProfileService {
             return "redirect:/mangostore/home";
         } else {
             Account detailAccount = accountRepository.detailAccountByEmail(email);
-            model.addAttribute("profile", detailAccount);
-
-            LocalDateTime checkDate = LocalDateTime.now();
-            int hour = checkDate.getHour();
-            if (hour >= 5 && hour < 10) {
-                model.addAttribute("dates", "Morning");
-            } else if (hour >= 10 && hour < 13) {
-                model.addAttribute("dates", "Noon");
-            } else if (hour >= 13 && hour < 18) {
-                model.addAttribute("dates", "Afternoon");
+            if (detailAccount.getStatus() == 0) {
+                session.invalidate();
+                return "redirect:/mangostore/home";
             } else {
-                model.addAttribute("dates", "Evening");
+                model.addAttribute("profile", detailAccount);
+
+                LocalDateTime checkDate = LocalDateTime.now();
+                int hour = checkDate.getHour();
+                if (hour >= 5 && hour < 10) {
+                    model.addAttribute("dates", "Morning");
+                } else if (hour >= 10 && hour < 13) {
+                    model.addAttribute("dates", "Noon");
+                } else if (hour >= 13 && hour < 18) {
+                    model.addAttribute("dates", "Afternoon");
+                } else {
+                    model.addAttribute("dates", "Evening");
+                }
+
+                Page<Account> itemsAccount = accountRepository.getAllAccountByStatus1(PageRequest.of(page, 4));
+                model.addAttribute("listAccount", itemsAccount);
+
+                Page<Account> itemsAccountInactive = accountRepository.getAllAccountByStatus0(PageRequest.of(page, 4));
+                model.addAttribute("listAccountInactive", itemsAccountInactive);
+
+                model.addAttribute("currentPage", page);
+
+                Role detailRole = roleRepository.getRoleByEmail(email);
+                if (detailRole.getName().equals("ADMIN")) {
+                    model.addAttribute("checkIndexAccount", true);
+                    model.addAttribute("checkMenuAdmin", true);
+                    model.addAttribute("addProfile", new Account());
+                } else {
+                    model.addAttribute("checkIndexAccount", false);
+                    model.addAttribute("checkMenuAdmin", false);
+                }
+                return "admin/account/IndexAccount";
             }
-
-            Page<Account> itemsAccount = accountRepository.getAllAccountByStatus1(PageRequest.of(page, 4));
-            model.addAttribute("listAccount", itemsAccount);
-
-            Page<Account> itemsAccountInactive = accountRepository.getAllAccountByStatus0(PageRequest.of(page, 4));
-            model.addAttribute("listAccountInactive", itemsAccountInactive);
-
-            model.addAttribute("currentPage", page);
-
-            Role detailRole = roleRepository.getRoleByEmail(email);
-            if (detailRole.getName().equals("ADMIN")) {
-                model.addAttribute("checkIndexAccount", true);
-                model.addAttribute("checkMenuAdmin", true);
-                model.addAttribute("addProfile", new Account());
-            }else{
-                model.addAttribute("checkIndexAccount", false);
-                model.addAttribute("checkMenuAdmin", false);
-            }
-            return "admin/account/IndexAccount";
         }
     }
 
@@ -100,35 +105,40 @@ public class ProfileServiceImpl implements ProfileService {
             return "redirect:/mangostore/home";
         } else {
             Account detailAccount = accountRepository.detailAccountByEmail(email);
-            model.addAttribute("profile", detailAccount);
-
-            LocalDateTime checkDate = LocalDateTime.now();
-            int hour = checkDate.getHour();
-            if (hour >= 5 && hour < 10) {
-                model.addAttribute("dates", "Morning");
-            } else if (hour >= 10 && hour < 13) {
-                model.addAttribute("dates", "Noon");
-            } else if (hour >= 13 && hour < 18) {
-                model.addAttribute("dates", "Afternoon");
+            if (detailAccount.getStatus() == 0) {
+                session.invalidate();
+                return "redirect:/mangostore/home";
             } else {
-                model.addAttribute("dates", "Evening");
+                model.addAttribute("profile", detailAccount);
+
+                LocalDateTime checkDate = LocalDateTime.now();
+                int hour = checkDate.getHour();
+                if (hour >= 5 && hour < 10) {
+                    model.addAttribute("dates", "Morning");
+                } else if (hour >= 10 && hour < 13) {
+                    model.addAttribute("dates", "Noon");
+                } else if (hour >= 13 && hour < 18) {
+                    model.addAttribute("dates", "Afternoon");
+                } else {
+                    model.addAttribute("dates", "Evening");
+                }
+
+                Account detailProfile = accountRepository.findById(idAccount).orElse(null);
+                model.addAttribute("detailProfile", detailProfile);
+
+                String accountRole = roleRepository.getRoleByEmail(detailProfile.getEmail()).getName();
+                model.addAttribute("accountRole", accountRole);
+
+                Role detailRole = roleRepository.getRoleByEmail(email);
+                if (detailRole.getName().equals("ADMIN")) {
+                    model.addAttribute("checkDetailAccount", true);
+                    model.addAttribute("checkMenuAdmin", true);
+                } else {
+                    model.addAttribute("checkDetailAccount", false);
+                    model.addAttribute("checkMenuAdmin", false);
+                }
+                return "admin/account/DetailAccount";
             }
-
-            Account detailProfile = accountRepository.findById(idAccount).orElse(null);
-            model.addAttribute("detailProfile", detailProfile);
-
-            String accountRole = roleRepository.getRoleByEmail(detailProfile.getEmail()).getName();
-            model.addAttribute("accountRole", accountRole);
-
-            Role detailRole = roleRepository.getRoleByEmail(email);
-            if (detailRole.getName().equals("ADMIN")) {
-                model.addAttribute("checkDetailAccount", true);
-                model.addAttribute("checkMenuAdmin", true);
-            }else{
-                model.addAttribute("checkDetailAccount", false);
-                model.addAttribute("checkMenuAdmin", false);
-            }
-            return "admin/account/DetailAccount";
         }
     }
 

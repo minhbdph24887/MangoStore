@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+      th:replace="~{/layout/IndexAdmin :: dynamic(~{:: main})}">
+<body>
+<main>
+    <div class="home-tab">
+        <div class="d-sm-flex align-items-center justify-content-between border-bottom">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active ps-0" id="home-tab" data-bs-toggle="tab"
+                       href="#tab1" role="tab"
+                       aria-controls="tab1" aria-selected="true">Active Origin</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab2"
+                       aria-controls="tab2" role="tab"
+                       aria-selected="false">Origin Inactive</a>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-content tab-content-basic">
+            <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1">
+                <div>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page">Index Origin</li>
+                    </ul>
+                </div>
+                <div class="col-lg-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">List Origin Active</h4>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal"
+                                            data-target="#myModal">Add Origin
+                                    </button>
+                                </div>
+                                <div class="col-sm-7 form-group" style="margin-left: 100px;">
+                                    <form>
+                                        <input type="text" name="keyword" class="form-control" th:value="${keyword}"
+                                               placeholder="Search Name Origin"/>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="myModal" role="dialog">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <form th:action="@{/mangostore/admin/origin/add}"
+                                                  th:object="${addOrigin}"
+                                                  method="post" onsubmit="return add()">
+                                                <h3 class="mb-4">Add Origin</h3>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <input type="text"
+                                                                   class="form-control"
+                                                                   name="nameOrigin"
+                                                                   placeholder="Enter Name Origin">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <button type="button" class="btn btn-default"
+                                                                    data-dismiss="modal">Close
+                                                            </button>
+                                                            <input type="submit"
+                                                                   value="Save"
+                                                                   class="btn btn-primary">
+                                                            <div class="submitting"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <div id="messageAlert" th:if="${message}" th:class="${cssClass}"
+                                     th:text="${message}"></div>
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Code Origin</th>
+                                        <th>Name Origin</th>
+                                        <th>User Create</th>
+                                        <th>User Update</th>
+                                        <th>Date Create</th>
+                                        <th>Date Update</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="listOrigin, stat : ${listOrigin}">
+                                        <td th:text="${stat.count}"></td>
+                                        <td>
+                                            <a th:href="@{|/mangostore/admin/origin/detail/${listOrigin.id}|}"
+                                               th:text="${listOrigin.codeOrigin}"
+                                               style="text-decoration: none">
+                                            </a>
+                                        </td>
+                                        <td th:text="${listOrigin.nameOrigin}"></td>
+                                        <td th:text="${listOrigin.nameUserCreate}"></td>
+                                        <td th:text="${listOrigin.nameUserUpdate}"></td>
+                                        <td th:text="${#temporals.format(listOrigin.dateCreate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
+                                        <td th:text="${#temporals.format(listOrigin.dateUpdate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
+                                        <td th:if="${listOrigin.status == 1}">
+                                            <label class="badge badge-success">Is Active</label>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${listOrigin.isEmpty()}">
+                                        <td colspan="9" style="text-align: center; color: red; font-size: larger;">
+                                            Origin is entity
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <nav aria-label="Page navigation example" th:if="${listOrigin.totalPages > 0}">
+                            <ul class="pagination justify-content-center pagination-sm">
+                                <li th:each="i : ${#numbers.sequence(0, listOrigin.totalPages - 1)}"
+                                    th:class="${i == page ? 'active' : ''}"
+                                    class="page-item">
+                                    <a th:href="@{/mangostore/admin/origin(page=${i})}" class="page-link"
+                                       th:text="${i + 1}"></a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="tab2" role="tabpanel"
+                 aria-labelledby="tab2">
+                <div class="col-lg-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">List Origin Inactive</h4>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Code Origin</th>
+                                        <th>Name Origin</th>
+                                        <th>User Create</th>
+                                        <th>User Update</th>
+                                        <th>Date Create</th>
+                                        <th>Date Update</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="listOriginInactive, stat : ${listOriginInactive}">
+                                        <td th:text="${stat.count}"></td>
+                                        <td>
+                                            <a th:href="@{|/mangostore/admin/origin/restore/${listOriginInactive.id}|}"
+                                               th:text="${listOriginInactive.codeOrigin}" onclick="return restore()"
+                                               style="text-decoration: none"></a>
+                                        </td>
+                                        <td th:text="${listOriginInactive.nameOrigin}"></td>
+                                        <td th:text="${listOriginInactive.nameUserCreate}"></td>
+                                        <td th:text="${listOriginInactive.nameUserUpdate}"></td>
+                                        <td th:text="${#temporals.format(listOriginInactive.dateCreate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
+                                        <td th:text="${#temporals.format(listOriginInactive.dateUpdate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
+                                        <td th:if="${listOriginInactive.status == 0}">
+                                            <label class="badge badge-danger">Stop Working</label>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${listOriginInactive.isEmpty()}">
+                                        <td colspan="9" style="text-align: center; color: red; font-size: larger;">
+                                            Origin Inactive is entity
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <nav aria-label="Page navigation example" th:if="${listOriginInactive.totalPages > 0}">
+                            <ul class="pagination justify-content-center pagination-sm">
+                                <li th:each="i : ${#numbers.sequence(0, listOriginInactive.totalPages - 1)}"
+                                    th:class="${i == page ? 'active' : ''}"
+                                    class="page-item">
+                                    <a th:href="@{/mangostore/admin/origin(page=${i})}" class="page-link"
+                                       th:text="${i + 1}"></a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

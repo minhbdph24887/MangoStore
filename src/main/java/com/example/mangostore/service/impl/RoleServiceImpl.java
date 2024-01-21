@@ -36,32 +36,37 @@ public class RoleServiceImpl implements RoleService {
             return "redirect:/mangostore/home";
         } else {
             Account detailAccount = accountRepository.detailAccountByEmail(email);
-            model.addAttribute("profile", detailAccount);
-
-            LocalDateTime checkDate = LocalDateTime.now();
-            int hour = checkDate.getHour();
-            if (hour >= 5 && hour < 10) {
-                model.addAttribute("dates", "Morning");
-            } else if (hour >= 10 && hour < 13) {
-                model.addAttribute("dates", "Noon");
-            } else if (hour >= 13 && hour < 18) {
-                model.addAttribute("dates", "Afternoon");
+            if (detailAccount.getStatus() == 0) {
+                session.invalidate();
+                return "redirect:/mangostore/home";
             } else {
-                model.addAttribute("dates", "Evening");
+                model.addAttribute("profile", detailAccount);
+
+                LocalDateTime checkDate = LocalDateTime.now();
+                int hour = checkDate.getHour();
+                if (hour >= 5 && hour < 10) {
+                    model.addAttribute("dates", "Morning");
+                } else if (hour >= 10 && hour < 13) {
+                    model.addAttribute("dates", "Noon");
+                } else if (hour >= 13 && hour < 18) {
+                    model.addAttribute("dates", "Afternoon");
+                } else {
+                    model.addAttribute("dates", "Evening");
+                }
+
+                Page<Role> itemsRole = roleRepository.getAllRoleByStatus1(PageRequest.of(page, 5));
+                model.addAttribute("listRole", itemsRole);
+
+                Page<Role> itemsRoleInactive = roleRepository.getAllRoleByStatus0(PageRequest.of(page, 5));
+                model.addAttribute("listRoleInactive", itemsRoleInactive);
+
+                model.addAttribute("currentPage", page);
+
+                model.addAttribute("addRole", new Role());
+
+                model.addAttribute("checkMenuAdmin", true);
+                return "admin/role/IndexRole";
             }
-
-            Page<Role> itemsRole = roleRepository.getAllRoleByStatus1(PageRequest.of(page, 5));
-            model.addAttribute("listRole", itemsRole);
-
-            Page<Role> itemsRoleInactive = roleRepository.getAllRoleByStatus0(PageRequest.of(page, 5));
-            model.addAttribute("listRoleInactive", itemsRoleInactive);
-
-            model.addAttribute("currentPage", page);
-
-            model.addAttribute("addRole", new Role());
-
-            model.addAttribute("checkMenuAdmin", true);
-            return "admin/role/IndexRole";
         }
     }
 
@@ -87,32 +92,37 @@ public class RoleServiceImpl implements RoleService {
             return "redirect:/mangostore/home";
         } else {
             Account detailAccount = accountRepository.detailAccountByEmail(email);
-            model.addAttribute("profile", detailAccount);
-
-            LocalDateTime checkDate = LocalDateTime.now();
-            int hour = checkDate.getHour();
-            if (hour >= 5 && hour < 10) {
-                model.addAttribute("dates", "Morning");
-            } else if (hour >= 10 && hour < 13) {
-                model.addAttribute("dates", "Noon");
-            } else if (hour >= 13 && hour < 18) {
-                model.addAttribute("dates", "Afternoon");
+            if (detailAccount.getStatus() == 0) {
+                session.invalidate();
+                return "redirect:/mangostore/home";
             } else {
-                model.addAttribute("dates", "Evening");
+                model.addAttribute("profile", detailAccount);
+
+                LocalDateTime checkDate = LocalDateTime.now();
+                int hour = checkDate.getHour();
+                if (hour >= 5 && hour < 10) {
+                    model.addAttribute("dates", "Morning");
+                } else if (hour >= 10 && hour < 13) {
+                    model.addAttribute("dates", "Noon");
+                } else if (hour >= 13 && hour < 18) {
+                    model.addAttribute("dates", "Afternoon");
+                } else {
+                    model.addAttribute("dates", "Evening");
+                }
+
+                Page<Role> itemsRoleInactive = roleRepository.getAllRoleByStatus0(PageRequest.of(page, 4));
+                model.addAttribute("listRoleInactive", itemsRoleInactive);
+                model.addAttribute("currentPage", page);
+
+                Role detailRole = roleRepository.findById(idRole).orElse(null);
+                model.addAttribute("detailRole", detailRole);
+
+                List<Account> itemsAccount = accountRepository.getAllAccountByRole(idRole);
+                model.addAttribute("listAccountByRole", itemsAccount);
+
+                model.addAttribute("checkMenuAdmin", true);
+                return "admin/role/DetailRole";
             }
-
-            Page<Role> itemsRoleInactive = roleRepository.getAllRoleByStatus0(PageRequest.of(page, 4));
-            model.addAttribute("listRoleInactive", itemsRoleInactive);
-            model.addAttribute("currentPage", page);
-
-            Role detailRole = roleRepository.findById(idRole).orElse(null);
-            model.addAttribute("detailRole", detailRole);
-
-            List<Account> itemsAccount = accountRepository.getAllAccountByRole(idRole);
-            model.addAttribute("listAccountByRole", itemsAccount);
-
-            model.addAttribute("checkMenuAdmin", true);
-            return "admin/role/DetailRole";
         }
     }
 

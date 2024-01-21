@@ -29,27 +29,32 @@ public class AdminServiceImpl implements AdminService {
             return "redirect:/mangostore/home";
         } else {
             Account detailAccount = accountRepository.detailAccountByEmail(email);
-            model.addAttribute("profile", detailAccount);
-
-            LocalDateTime checkDate = LocalDateTime.now();
-            int hour = checkDate.getHour();
-            if (hour >= 5 && hour < 10) {
-                model.addAttribute("dates", "Morning");
-            } else if (hour >= 10 && hour < 13) {
-                model.addAttribute("dates", "Noon");
-            } else if (hour >= 13 && hour < 18) {
-                model.addAttribute("dates", "Afternoon");
+            if (detailAccount.getStatus() == 0) {
+                session.invalidate();
+                return "redirect:/mangostore/home";
             } else {
-                model.addAttribute("dates", "Evening");
-            }
+                model.addAttribute("profile", detailAccount);
 
-            Role detailRole = roleRepository.getRoleByEmail(email);
-            if (detailRole.getName().equals("ADMIN")) {
-                model.addAttribute("checkMenuAdmin", true);
-            } else {
-                model.addAttribute("checkMenuAdmin", false);
+                LocalDateTime checkDate = LocalDateTime.now();
+                int hour = checkDate.getHour();
+                if (hour >= 5 && hour < 10) {
+                    model.addAttribute("dates", "Morning");
+                } else if (hour >= 10 && hour < 13) {
+                    model.addAttribute("dates", "Noon");
+                } else if (hour >= 13 && hour < 18) {
+                    model.addAttribute("dates", "Afternoon");
+                } else {
+                    model.addAttribute("dates", "Evening");
+                }
+
+                Role detailRole = roleRepository.getRoleByEmail(email);
+                if (detailRole.getName().equals("ADMIN")) {
+                    model.addAttribute("checkMenuAdmin", true);
+                } else {
+                    model.addAttribute("checkMenuAdmin", false);
+                }
+                return "admin/Index";
             }
-            return "admin/Index";
         }
     }
 }
