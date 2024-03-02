@@ -28537,7 +28537,6 @@ dl li {
 .table td {
     vertical-align: middle;
     line-height: 1;
-    white-space: nowrap;
     padding: 1.125rem 1.375rem;
 }
 

@@ -1,8 +1,6 @@
 package com.example.mangostore.repository;
 
 import com.example.mangostore.entity.Role;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,10 +17,10 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     Role getRoleByEmail(@Param("email") String email);
 
     @Query(value = "select * from roles where status= 1 order by id desc", nativeQuery = true)
-    Page<Role> getAllRoleByStatus1(Pageable pageable);
+    List<Role> getAllRoleByStatus1();
 
     @Query(value = "select * from roles where status= 0 order by id desc", nativeQuery = true)
-    Page<Role> getAllRoleByStatus0(Pageable pageable);
+    List<Role> getAllRoleByStatus0();
 
     @Query(value = "select * from roles where status= 1", nativeQuery = true)
     List<Role> getAllRole();

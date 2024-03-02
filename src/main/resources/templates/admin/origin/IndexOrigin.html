@@ -77,58 +77,54 @@
                                 </div>
                             </div>
                             <div class="table-responsive">
-                                <div id="messageAlert" th:if="${message}" th:class="${cssClass}"
-                                     th:text="${message}"></div>
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Code Origin</th>
-                                        <th>Name Origin</th>
-                                        <th>User Create</th>
-                                        <th>User Update</th>
-                                        <th>Date Create</th>
-                                        <th>Date Update</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="listOrigin, stat : ${listOrigin}">
-                                        <td th:text="${stat.count}"></td>
-                                        <td>
-                                            <a th:href="@{|/mangostore/admin/origin/detail/${listOrigin.id}|}"
-                                               th:text="${listOrigin.codeOrigin}"
-                                               style="text-decoration: none">
-                                            </a>
-                                        </td>
-                                        <td th:text="${listOrigin.nameOrigin}"></td>
-                                        <td th:text="${listOrigin.nameUserCreate}"></td>
-                                        <td th:text="${listOrigin.nameUserUpdate}"></td>
-                                        <td th:text="${#temporals.format(listOrigin.dateCreate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
-                                        <td th:text="${#temporals.format(listOrigin.dateUpdate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
-                                        <td th:if="${listOrigin.status == 1}">
-                                            <label class="badge badge-success">Is Active</label>
-                                        </td>
-                                    </tr>
-                                    <tr th:if="${listOrigin.isEmpty()}">
-                                        <td colspan="9" style="text-align: center; color: red; font-size: larger;">
-                                            Origin is entity
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                <div class="header">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 49px">#</th>
+                                            <th style="width: 85px">CodeOrigin</th>
+                                            <th style="width: 80px">NameOrigin</th>
+                                            <th style="width: 100px">UserCreate</th>
+                                            <th style="width: 100px">UserUpdate</th>
+                                            <th style="width: 100px">DateCreate</th>
+                                            <th style="width: 100px">DateUpdate</th>
+                                            <th style="width: 100px">Status</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div class="content" style="height: 227px">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                        <tr th:each="listOrigin, stat : ${listOrigin}">
+                                            <td style="width: 49px" th:text="${stat.count}"></td>
+                                            <td style="width: 85px">
+                                                <a th:href="@{|/mangostore/admin/origin/detail/${listOrigin.id}|}"
+                                                   th:text="${listOrigin.codeOrigin}"
+                                                   style="text-decoration: none">
+                                                </a>
+                                            </td>
+                                            <td style="width: 80px" th:text="${listOrigin.nameOrigin}"></td>
+                                            <td style="width: 100px" th:text="${listOrigin.nameUserCreate}"></td>
+                                            <td style="width: 100px" th:text="${listOrigin.nameUserUpdate}"></td>
+                                            <td style="width: 100px"
+                                                th:text="${#temporals.format(listOrigin.dateCreate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
+                                            <td style="width: 100px"
+                                                th:text="${#temporals.format(listOrigin.dateUpdate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
+                                            <td style="width: 100px" th:if="${listOrigin.status == 1}">
+                                                <label class="badge badge-success">Is Active</label>
+                                            </td>
+                                        </tr>
+                                        <tr th:if="${listOrigin.isEmpty()}">
+                                            <td colspan="9" style="text-align: center; color: red; font-size: larger;">
+                                                Origin is entity
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                        <nav aria-label="Page navigation example" th:if="${listOrigin.totalPages > 0}">
-                            <ul class="pagination justify-content-center pagination-sm">
-                                <li th:each="i : ${#numbers.sequence(0, listOrigin.totalPages - 1)}"
-                                    th:class="${i == page ? 'active' : ''}"
-                                    class="page-item">
-                                    <a th:href="@{/mangostore/admin/origin(page=${i})}" class="page-link"
-                                       th:text="${i + 1}"></a>
-                                </li>
-                            </ul>
-                        </nav>
                     </div>
                 </div>
             </div>
@@ -140,55 +136,53 @@
                         <div class="card-body">
                             <h4 class="card-title">List Origin Inactive</h4>
                             <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Code Origin</th>
-                                        <th>Name Origin</th>
-                                        <th>User Create</th>
-                                        <th>User Update</th>
-                                        <th>Date Create</th>
-                                        <th>Date Update</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="listOriginInactive, stat : ${listOriginInactive}">
-                                        <td th:text="${stat.count}"></td>
-                                        <td>
-                                            <a th:href="@{|/mangostore/admin/origin/restore/${listOriginInactive.id}|}"
-                                               th:text="${listOriginInactive.codeOrigin}" onclick="return restore()"
-                                               style="text-decoration: none"></a>
-                                        </td>
-                                        <td th:text="${listOriginInactive.nameOrigin}"></td>
-                                        <td th:text="${listOriginInactive.nameUserCreate}"></td>
-                                        <td th:text="${listOriginInactive.nameUserUpdate}"></td>
-                                        <td th:text="${#temporals.format(listOriginInactive.dateCreate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
-                                        <td th:text="${#temporals.format(listOriginInactive.dateUpdate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
-                                        <td th:if="${listOriginInactive.status == 0}">
-                                            <label class="badge badge-danger">Stop Working</label>
-                                        </td>
-                                    </tr>
-                                    <tr th:if="${listOriginInactive.isEmpty()}">
-                                        <td colspan="9" style="text-align: center; color: red; font-size: larger;">
-                                            Origin Inactive is entity
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                <div class="header">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 49px">#</th>
+                                            <th style="width: 85px">CodeOrigin</th>
+                                            <th style="width: 80px">NameOrigin</th>
+                                            <th style="width: 100px">UserCreate</th>
+                                            <th style="width: 100px">UserUpdate</th>
+                                            <th style="width: 100px">DateCreate</th>
+                                            <th style="width: 100px">DateUpdate</th>
+                                            <th style="width: 100px">Status</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div class="content" style="height: 345px">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                        <tr th:each="listOriginInactive, stat : ${listOriginInactive}">
+                                            <td style="width: 49px" th:text="${stat.count}"></td>
+                                            <td style="width: 85px">
+                                                <a th:href="@{|/mangostore/admin/origin/restore/${listOriginInactive.id}|}"
+                                                   th:text="${listOriginInactive.codeOrigin}" onclick="return restore()"
+                                                   style="text-decoration: none"></a>
+                                            </td>
+                                            <td style="width: 80px" th:text="${listOriginInactive.nameOrigin}"></td>
+                                            <td style="width: 100px" th:text="${listOriginInactive.nameUserCreate}"></td>
+                                            <td style="width: 100px" th:text="${listOriginInactive.nameUserUpdate}"></td>
+                                            <td style="width: 100px"
+                                                th:text="${#temporals.format(listOriginInactive.dateCreate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
+                                            <td style="width: 100px"
+                                                th:text="${#temporals.format(listOriginInactive.dateUpdate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
+                                            <td style="width: 100px" th:if="${listOriginInactive.status == 0}">
+                                                <label class="badge badge-danger">Stop Working</label>
+                                            </td>
+                                        </tr>
+                                        <tr th:if="${listOriginInactive.isEmpty()}">
+                                            <td colspan="9" style="text-align: center; color: red; font-size: larger;">
+                                                Origin Inactive is entity
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                        <nav aria-label="Page navigation example" th:if="${listOriginInactive.totalPages > 0}">
-                            <ul class="pagination justify-content-center pagination-sm">
-                                <li th:each="i : ${#numbers.sequence(0, listOriginInactive.totalPages - 1)}"
-                                    th:class="${i == page ? 'active' : ''}"
-                                    class="page-item">
-                                    <a th:href="@{/mangostore/admin/origin(page=${i})}" class="page-link"
-                                       th:text="${i + 1}"></a>
-                                </li>
-                            </ul>
-                        </nav>
                     </div>
                 </div>
             </div>

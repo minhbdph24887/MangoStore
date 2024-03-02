@@ -74,50 +74,44 @@
                                 </div>
                             </div>
                             <div class="table-responsive">
-                                <div id="messageAlert" th:if="${message}" th:class="${cssClass}"
-                                     th:text="${message}"></div>
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Code</th>
-                                        <th>Name Role</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="listRole, stat : ${listRole}">
-                                        <td th:text="${stat.count}"></td>
-                                        <td>
-                                            <a th:href="@{|/mangostore/admin/role/detail/${listRole.id}|}"
-                                               th:text="${listRole.name}"
-                                               style="text-decoration: none">
-                                            </a>
-                                        </td>
-                                        <td th:text="${listRole.note}"></td>
-                                        <td th:if="${listRole.status == 1}">
-                                            <label class="badge badge-success">Active</label>
-                                        </td>
-                                    </tr>
-                                    <tr th:if="${listRole.isEmpty()}">
-                                        <td colspan="9" style="text-align: center; color: red; font-size: larger;">
-                                            Role is entity
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                <div class="header">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 100px">#</th>
+                                            <th style="width: 100px">CodeRole</th>
+                                            <th style="width: 100px">NameRole</th>
+                                            <th style="width: 100px">Status</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div class="content" style="height: 227px">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                        <tr th:each="listRole, stat : ${listRole}">
+                                            <td style="width: 100px" th:text="${stat.count}"></td>
+                                            <td style="width: 100px">
+                                                <a th:href="@{|/mangostore/admin/role/detail/${listRole.id}|}"
+                                                   th:text="${listRole.name}"
+                                                   style="text-decoration: none">
+                                                </a>
+                                            </td>
+                                            <td style="width: 100px" th:text="${listRole.note}"></td>
+                                            <td style="width: 100px" th:if="${listRole.status == 1}">
+                                                <label class="badge badge-success">Active</label>
+                                            </td>
+                                        </tr>
+                                        <tr th:if="${listRole.isEmpty()}">
+                                            <td colspan="9" style="text-align: center; color: red; font-size: larger;">
+                                                Role is entity
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                        <nav aria-label="Page navigation example" th:if="${listRole.totalPages > 0}">
-                            <ul class="pagination justify-content-center pagination-sm">
-                                <li th:each="i : ${#numbers.sequence(0, listRole.totalPages - 1)}"
-                                    th:class="${i == page ? 'active' : ''}"
-                                    class="page-item">
-                                    <a th:href="@{/mangostore/admin/role(page=${i})}" class="page-link"
-                                       th:text="${i + 1}"></a>
-                                </li>
-                            </ul>
-                        </nav>
                     </div>
                 </div>
             </div>
@@ -129,47 +123,43 @@
                         <div class="card-body">
                             <h4 class="card-title">List Role Inactive</h4>
                             <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Code</th>
-                                        <th>Name Role</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="listRoleInactive, stat : ${listRoleInactive}">
-                                        <td th:text="${stat.count}"></td>
-                                        <td>
-                                            <a th:href="@{|/mangostore/admin/role/restore/${listRoleInactive.id}|}"
-                                               th:text="${listRoleInactive.name}" onclick="return restore()"
-                                               style="text-decoration: none"></a>
-                                        </td>
-                                        <td th:text="${listRoleInactive.note}"></td>
-                                        <td th:if="${listRoleInactive.status == 0}">
-                                            <label class="badge badge-danger">Inactive</label>
-                                        </td>
-                                    </tr>
-                                    <tr th:if="${listRoleInactive.isEmpty()}">
-                                        <td colspan="9" style="text-align: center; color: red; font-size: larger;">
-                                            Role Inactive is entity
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                <div class="header">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 100px">#</th>
+                                            <th style="width: 100px">CodeRole</th>
+                                            <th style="width: 100px">NameRole</th>
+                                            <th style="width: 100px">Status</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div class="content" style="height: 345px">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                        <tr th:each="listRoleInactive, stat : ${listRoleInactive}">
+                                            <td style="width: 100px" th:text="${stat.count}"></td>
+                                            <td style="width: 100px">
+                                                <a th:href="@{|/mangostore/admin/role/restore/${listRoleInactive.id}|}"
+                                                   th:text="${listRoleInactive.name}" onclick="return restore()"
+                                                   style="text-decoration: none"></a>
+                                            </td>
+                                            <td style="width: 100px" th:text="${listRoleInactive.note}"></td>
+                                            <td style="width: 100px" th:if="${listRoleInactive.status == 0}">
+                                                <label class="badge badge-danger">Inactive</label>
+                                            </td>
+                                        </tr>
+                                        <tr th:if="${listRoleInactive.isEmpty()}">
+                                            <td colspan="9" style="text-align: center; color: red; font-size: larger;">
+                                                Role Inactive is entity
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                        <nav aria-label="Page navigation example" th:if="${listRoleInactive.totalPages > 0}">
-                            <ul class="pagination justify-content-center pagination-sm">
-                                <li th:each="i : ${#numbers.sequence(0, listRoleInactive.totalPages - 1)}"
-                                    th:class="${i == page ? 'active' : ''}"
-                                    class="page-item">
-                                    <a th:href="@{/mangostore/admin/role(page=${i})}" class="page-link"
-                                       th:text="${i + 1}"></a>
-                                </li>
-                            </ul>
-                        </nav>
                     </div>
                 </div>
             </div>

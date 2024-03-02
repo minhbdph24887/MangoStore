@@ -9,15 +9,13 @@ import com.example.mangostore.repository.MaterialRepository;
 import com.example.mangostore.repository.RoleRepository;
 import com.example.mangostore.service.MaterialService;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
 public class MaterialServiceImpl implements MaterialService {
@@ -37,7 +35,7 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public String indexMaterial(Model model, HttpSession session, int page, String keyword) {
+    public String indexMaterial(Model model, HttpSession session, String keyword) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -68,17 +66,16 @@ public class MaterialServiceImpl implements MaterialService {
                     model.addAttribute("checkMenuAdmin", false);
                 }
 
-                Page<Material> itemsMaterial = materialRepository.getAllMaterialByStatus1(PageRequest.of(page, 6));
+                List<Material> itemsMaterial = materialRepository.getAllMaterialByStatus1();
                 if (keyword != null) {
-                    itemsMaterial = materialRepository.searchMaterial(PageRequest.of(page, 6), keyword);
+                    itemsMaterial = materialRepository.searchMaterial(keyword);
                     model.addAttribute("keyword", keyword);
                 }
                 model.addAttribute("listMaterial", itemsMaterial);
 
-                Page<Material> itemsMaterialInactive = materialRepository.getAllMaterialByStatus0(PageRequest.of(page, 6));
+                List<Material> itemsMaterialInactive = materialRepository.getAllMaterialByStatus0();
                 model.addAttribute("listMaterialInactive", itemsMaterialInactive);
 
-                model.addAttribute("currentPage", page);
                 model.addAttribute("addMaterial", new Material());
                 return "admin/material/IndexMaterial";
             }
@@ -86,30 +83,24 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public String addMaterial(Material addMaterial, BindingResult result, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String addMaterial(Material addMaterial, BindingResult result, HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         Account detailAccount = accountRepository.detailAccountByEmail(email);
-        if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("message", "Add Material Fail");
-            redirectAttributes.addFlashAttribute("cssClass", "alert alert-danger");
-        } else {
-            Material newMaterial = new Material();
-            newMaterial.setCodeMaterial(gender.generateCode());
-            newMaterial.setNameMaterial(addMaterial.getNameMaterial());
-            newMaterial.setNameUserCreate(detailAccount.getFullName());
-            newMaterial.setNameUserUpdate(detailAccount.getFullName());
-            newMaterial.setDateCreate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
-            newMaterial.setDateUpdate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
-            newMaterial.setStatus(1);
-            materialRepository.save(newMaterial);
-            redirectAttributes.addFlashAttribute("message", "Add Material Successfully");
-            redirectAttributes.addFlashAttribute("cssClass", "alert alert-success");
-        }
+
+        Material newMaterial = new Material();
+        newMaterial.setCodeMaterial(gender.generateCode());
+        newMaterial.setNameMaterial(addMaterial.getNameMaterial());
+        newMaterial.setNameUserCreate(detailAccount.getFullName());
+        newMaterial.setNameUserUpdate(detailAccount.getFullName());
+        newMaterial.setDateCreate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
+        newMaterial.setDateUpdate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
+        newMaterial.setStatus(1);
+        materialRepository.save(newMaterial);
         return "redirect:/mangostore/admin/material";
     }
 
     @Override
-    public String detailMaterial(Model model, HttpSession session, Long idMaterial, int page) {
+    public String detailMaterial(Model model, HttpSession session, Long idMaterial) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -140,9 +131,8 @@ public class MaterialServiceImpl implements MaterialService {
                     model.addAttribute("checkMenuAdmin", false);
                 }
 
-                Page<Material> itemsMaterialInactive = materialRepository.getAllMaterialByStatus0(PageRequest.of(page, 6));
+                List<Material> itemsMaterialInactive = materialRepository.getAllMaterialByStatus0();
                 model.addAttribute("listMaterialInactive", itemsMaterialInactive);
-                model.addAttribute("currentPage", page);
 
                 Material detailMaterial = materialRepository.findById(idMaterial).orElse(null);
                 model.addAttribute("detailMaterial", detailMaterial);
@@ -152,55 +142,34 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public String updateMaterial(RedirectAttributes redirectAttributes, BindingResult result, HttpSession session, Material material) {
-        if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("message", "Update Material Fail");
-            redirectAttributes.addFlashAttribute("cssClass", "alert alert-danger");
-        } else {
-            Material detailMaterial = materialRepository.findById(material.getId()).orElse(null);
-            detailMaterial.setNameMaterial(material.getNameMaterial());
+    public String updateMaterial(BindingResult result, HttpSession session, Material material) {
+        Material detailMaterial = materialRepository.findById(material.getId()).orElse(null);
+        detailMaterial.setNameMaterial(material.getNameMaterial());
 
-            String email = (String) session.getAttribute("loginEmail");
-            Account detailAccount = accountRepository.detailAccountByEmail(email);
-            detailMaterial.setNameUserUpdate(detailAccount.getFullName());
-            detailMaterial.setDateUpdate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
-            detailMaterial.setStatus(material.getStatus());
+        String email = (String) session.getAttribute("loginEmail");
+        Account detailAccount = accountRepository.detailAccountByEmail(email);
+        detailMaterial.setNameUserUpdate(detailAccount.getFullName());
+        detailMaterial.setDateUpdate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
+        detailMaterial.setStatus(material.getStatus());
 
-            materialRepository.save(detailMaterial);
-            redirectAttributes.addFlashAttribute("message", "Update Material Successfully");
-            redirectAttributes.addFlashAttribute("cssClass", "alert alert-success");
-        }
+        materialRepository.save(detailMaterial);
         return "redirect:/mangostore/admin/material";
     }
 
     @Override
-    public String deleteMaterial(RedirectAttributes redirectAttributes, Long idMaterial) {
-        try {
-            Material detailMaterial = materialRepository.findById(idMaterial).orElse(null);
-            assert detailMaterial != null;
-            detailMaterial.setStatus(0);
-            materialRepository.save(detailMaterial);
-            redirectAttributes.addFlashAttribute("message", "Delete Material Successfully");
-            redirectAttributes.addFlashAttribute("cssClass", "alert alert-success");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("message", "Delete Material Fail");
-            redirectAttributes.addFlashAttribute("cssClass", "alert alert-danger");
-        }
-        return "redirect:/mangostore/admin/material";
-    }
-
-    @Override
-    public String restoreMaterial(RedirectAttributes redirectAttributes, Long idMaterial) {
+    public String deleteMaterial(Long idMaterial) {
         Material detailMaterial = materialRepository.findById(idMaterial).orElse(null);
-        if (detailMaterial != null) {
-            detailMaterial.setStatus(1);
-            materialRepository.save(detailMaterial);
-            redirectAttributes.addFlashAttribute("message", "Restore Material Successfully");
-            redirectAttributes.addFlashAttribute("cssClass", "alert alert-success");
-        } else {
-            redirectAttributes.addFlashAttribute("message", "Restore Material Fail");
-            redirectAttributes.addFlashAttribute("cssClass", "alert alert-danger");
-        }
+        assert detailMaterial != null;
+        detailMaterial.setStatus(0);
+        materialRepository.save(detailMaterial);
+        return "redirect:/mangostore/admin/material";
+    }
+
+    @Override
+    public String restoreMaterial(Long idMaterial) {
+        Material detailMaterial = materialRepository.findById(idMaterial).orElse(null);
+        detailMaterial.setStatus(1);
+        materialRepository.save(detailMaterial);
         return "redirect:/mangostore/admin/material";
     }
 }

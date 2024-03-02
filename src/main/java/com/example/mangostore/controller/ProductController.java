@@ -1,12 +1,7 @@
 package com.example.mangostore.controller;
 
-import com.example.mangostore.entity.Material;
-import com.example.mangostore.entity.Origin;
-import com.example.mangostore.entity.Product;
-import com.example.mangostore.entity.Role;
-import com.example.mangostore.service.MaterialService;
-import com.example.mangostore.service.OriginService;
-import com.example.mangostore.service.ProductService;
+import com.example.mangostore.entity.*;
+import com.example.mangostore.service.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.data.repository.query.Param;
@@ -14,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(value = "/mangostore/admin/")
@@ -22,146 +16,211 @@ public class ProductController {
     private final ProductService productService;
     private final MaterialService materialService;
     private final OriginService originService;
+    private final SizeService sizeService;
+    private final ColorService colorService;
 
     public ProductController(ProductService productService,
                              MaterialService materialService,
-                             OriginService originService) {
+                             OriginService originService,
+                             SizeService sizeService,
+                             ColorService colorService) {
         this.productService = productService;
         this.materialService = materialService;
         this.originService = originService;
+        this.sizeService = sizeService;
+        this.colorService = colorService;
     }
 
     @GetMapping(value = "product")
     public String indexProduct(Model model,
                                HttpSession session,
-                               @RequestParam(defaultValue = "0") int page,
                                @Param("keyword") String keyword) {
-        return productService.indexProduct(model, session, page, keyword);
+        return productService.indexProduct(model, session, keyword);
     }
 
     @PostMapping(value = "product/add")
     public String addProduct(@Valid Product addProduct,
                              BindingResult result,
-                             HttpSession session,
-                             RedirectAttributes redirectAttributes) {
-        return productService.addProduct(addProduct, result, session, redirectAttributes);
+                             HttpSession session) {
+        return productService.addProduct(addProduct, result, session);
     }
 
     @GetMapping(value = "product/detail/{id}")
     public String detailProduct(Model model,
                                 HttpSession session,
-                                @PathVariable("id") Long idProduct,
-                                @RequestParam(defaultValue = "0") int page) {
-        return productService.detailProduct(model, session, idProduct, page);
+                                @PathVariable("id") Long idProduct) {
+        return productService.detailProduct(model, session, idProduct);
     }
 
     @PostMapping(value = "product/update")
     public String updateProduct(@Valid Product product,
                                 BindingResult result,
-                                HttpSession session,
-                                RedirectAttributes redirectAttributes) {
-        return productService.updateProduct(redirectAttributes, result, session, product);
+                                HttpSession session) {
+        return productService.updateProduct(result, session, product);
     }
 
     @GetMapping(value = "product/delete/{id}")
-    public String deleteProduct(@PathVariable("id") Long idProduct,
-                                RedirectAttributes redirectAttributes) {
-        return productService.deleteProduct(redirectAttributes, idProduct);
+    public String deleteProduct(@PathVariable("id") Long idProduct) {
+        return productService.deleteProduct(idProduct);
     }
 
     @GetMapping(value = "product/restore/{id}")
-    public String restoreProduct(RedirectAttributes redirectAttributes,
-                                 @PathVariable("id") Long idProduct) {
-        return productService.restoreProduct(redirectAttributes, idProduct);
+    public String restoreProduct(@PathVariable("id") Long idProduct) {
+        return productService.restoreProduct(idProduct);
     }
 
 
     @GetMapping(value = "material")
     public String indexMaterial(Model model,
                                 HttpSession session,
-                                @RequestParam(defaultValue = "0") int page,
                                 @Param("keyword") String keyword) {
-        return materialService.indexMaterial(model, session, page, keyword);
+        return materialService.indexMaterial(model, session, keyword);
     }
 
     @PostMapping(value = "material/add")
     public String addMaterial(@Valid Material addMaterial,
                               BindingResult result,
-                              HttpSession session,
-                              RedirectAttributes redirectAttributes) {
-        return materialService.addMaterial(addMaterial, result, session, redirectAttributes);
+                              HttpSession session) {
+        return materialService.addMaterial(addMaterial, result, session);
     }
 
     @GetMapping(value = "material/detail/{id}")
     public String detailMaterial(Model model,
                                  HttpSession session,
-                                 @PathVariable("id") Long idMaterial,
-                                 @RequestParam(defaultValue = "0") int page) {
-        return materialService.detailMaterial(model, session, idMaterial, page);
+                                 @PathVariable("id") Long idMaterial) {
+        return materialService.detailMaterial(model, session, idMaterial);
     }
 
     @PostMapping(value = "material/update")
     public String updateMaterial(@Valid Material material,
                                  BindingResult result,
-                                 HttpSession session,
-                                 RedirectAttributes redirectAttributes) {
-        return materialService.updateMaterial(redirectAttributes, result, session, material);
+                                 HttpSession session) {
+        return materialService.updateMaterial(result, session, material);
     }
 
     @GetMapping(value = "material/delete/{id}")
-    public String deleteMaterial(@PathVariable("id") Long idMaterial,
-                                 RedirectAttributes redirectAttributes) {
-        return materialService.deleteMaterial(redirectAttributes, idMaterial);
+    public String deleteMaterial(@PathVariable("id") Long idMaterial) {
+        return materialService.deleteMaterial(idMaterial);
     }
 
     @GetMapping(value = "material/restore/{id}")
-    public String restoreMaterial(RedirectAttributes redirectAttributes,
-                                  @PathVariable("id") Long idMaterial) {
-        return materialService.restoreMaterial(redirectAttributes, idMaterial);
+    public String restoreMaterial(@PathVariable("id") Long idMaterial) {
+        return materialService.restoreMaterial(idMaterial);
     }
 
 
     @GetMapping(value = "origin")
     public String indexOrigin(Model model,
                               HttpSession session,
-                              @RequestParam(defaultValue = "0") int page,
                               @Param("keyword") String keyword) {
-        return originService.indexOrigin(model, session, page, keyword);
+        return originService.indexOrigin(model, session, keyword);
     }
 
     @PostMapping(value = "origin/add")
     public String addOrigin(@Valid Origin addOrigin,
                             BindingResult result,
-                            HttpSession session,
-                            RedirectAttributes redirectAttributes) {
-        return originService.addOrigin(addOrigin, result, session, redirectAttributes);
+                            HttpSession session) {
+        return originService.addOrigin(addOrigin, result, session);
     }
 
     @GetMapping(value = "origin/detail/{id}")
     public String detailOrigin(Model model,
                                HttpSession session,
-                               @PathVariable("id") Long idOrigin,
-                               @RequestParam(defaultValue = "0") int page) {
-        return originService.detailOrigin(model, session, idOrigin, page);
+                               @PathVariable("id") Long idOrigin) {
+        return originService.detailOrigin(model, session, idOrigin);
     }
 
     @PostMapping(value = "origin/update")
     public String updateOrigin(@Valid Origin origin,
                                BindingResult result,
-                               HttpSession session,
-                               RedirectAttributes redirectAttributes) {
-        return originService.updateOrigin(redirectAttributes, result, session, origin);
+                               HttpSession session) {
+        return originService.updateOrigin(result, session, origin);
     }
 
     @GetMapping(value = "origin/delete/{id}")
-    public String deleteOrigin(@PathVariable("id") Long idOrigin,
-                               RedirectAttributes redirectAttributes) {
-        return originService.deleteOrigin(redirectAttributes, idOrigin);
+    public String deleteOrigin(@PathVariable("id") Long idOrigin) {
+        return originService.deleteOrigin(idOrigin);
     }
 
     @GetMapping(value = "origin/restore/{id}")
-    public String restoreOrigin(RedirectAttributes redirectAttributes,
-                                @PathVariable("id") Long idOrigin) {
-        return originService.restoreOrigin(redirectAttributes, idOrigin);
+    public String restoreOrigin(@PathVariable("id") Long idOrigin) {
+        return originService.restoreOrigin(idOrigin);
+    }
+
+
+    @GetMapping(value = "size")
+    public String indexSize(Model model,
+                            HttpSession session,
+                            @Param("keyword") String keyword) {
+        return sizeService.indexSize(model, session, keyword);
+    }
+
+    @PostMapping(value = "size/add")
+    public String addSize(@Valid Size addSize,
+                          BindingResult result,
+                          HttpSession session) {
+        return sizeService.addSize(addSize, result, session);
+    }
+
+    @GetMapping(value = "size/detail/{id}")
+    public String detailSize(Model model,
+                             HttpSession session,
+                             @PathVariable("id") Long idSize) {
+        return sizeService.detailSize(model, session, idSize);
+    }
+
+    @PostMapping(value = "size/update")
+    public String updateSize(@Valid Size size,
+                             BindingResult result,
+                             HttpSession session) {
+        return sizeService.updateSize(result, session, size);
+    }
+
+    @GetMapping(value = "size/delete/{id}")
+    public String deleteSize(@PathVariable("id") Long idSize) {
+        return sizeService.deleteSize(idSize);
+    }
+
+    @GetMapping(value = "size/restore/{id}")
+    public String restoreSize(@PathVariable("id") Long idSize) {
+        return sizeService.restoreSize(idSize);
+    }
+
+    @GetMapping(value = "color")
+    public String indexColor(Model model,
+                             HttpSession session,
+                             @Param("keyword") String keyword) {
+        return colorService.indexColor(model, session, keyword);
+    }
+
+    @PostMapping(value = "color/add")
+    public String addColor(@Valid Color addColor,
+                          BindingResult result,
+                          HttpSession session) {
+        return colorService.addColor(addColor, result, session);
+    }
+
+    @GetMapping(value = "color/detail/{id}")
+    public String detailColor(Model model,
+                             HttpSession session,
+                             @PathVariable("id") Long idColor) {
+        return colorService.detailColor(model, session, idColor);
+    }
+
+    @PostMapping(value = "color/update")
+    public String updateColor(@Valid Color color,
+                             BindingResult result,
+                             HttpSession session) {
+        return colorService.updateColor(result, session, color);
+    }
+
+    @GetMapping(value = "color/delete/{id}")
+    public String deleteColor(@PathVariable("id") Long idColor) {
+        return colorService.deleteColor(idColor);
+    }
+
+    @GetMapping(value = "color/restore/{id}")
+    public String restoreColor(@PathVariable("id") Long idColor) {
+        return colorService.restoreColor(idColor);
     }
 }

@@ -3,6 +3,12 @@
       th:replace="~{/layout/IndexAdmin :: dynamic(~{:: main})}">
 <body>
 <main>
+    <div>
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/mangostore/admin/authentication}">Index Authentication</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Detail Authentication</li>
+        </ul>
+    </div>
     <div class="row">
         <div class="col-lg-5 grid-margin stretch-card">
             <div class="card">

@@ -8,16 +8,14 @@ import com.example.mangostore.repository.AuthenticationRepository;
 import com.example.mangostore.repository.RoleRepository;
 import com.example.mangostore.service.ProfileService;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ProfileServiceImpl implements ProfileService {
@@ -37,7 +35,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public String getAllAccountByStatus1(Model model, HttpSession session, int page) {
+    public String getAllAccountByStatus1(Model model, HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -61,13 +59,12 @@ public class ProfileServiceImpl implements ProfileService {
                     model.addAttribute("dates", "Evening");
                 }
 
-                Page<Account> itemsAccount = accountRepository.getAllAccountByStatus1(PageRequest.of(page, 4));
+                List<Account> itemsAccount = accountRepository.getAllAccountByStatus1();
                 model.addAttribute("listAccount", itemsAccount);
 
-                Page<Account> itemsAccountInactive = accountRepository.getAllAccountByStatus0(PageRequest.of(page, 4));
+                List<Account> itemsAccountInactive = accountRepository.getAllAccountByStatus0();
                 model.addAttribute("listAccountInactive", itemsAccountInactive);
 
-                model.addAttribute("currentPage", page);
 
                 Role detailRole = roleRepository.getRoleByEmail(email);
                 if (detailRole.getName().equals("ADMIN")) {
@@ -84,17 +81,10 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public String restoreAccount(RedirectAttributes redirectAttributes, Long idAccount) {
+    public String restoreAccount(Long idAccount) {
         Account detailAccount = accountRepository.findById(idAccount).orElse(null);
-        if (detailAccount != null) {
-            detailAccount.setStatus(1);
-            accountRepository.save(detailAccount);
-            redirectAttributes.addFlashAttribute("message", "Restore Account Successfully");
-            redirectAttributes.addFlashAttribute("cssClass", "alert alert-success");
-        } else {
-            redirectAttributes.addFlashAttribute("message", "Restore Account Fail");
-            redirectAttributes.addFlashAttribute("cssClass", "alert alert-danger");
-        }
+        detailAccount.setStatus(1);
+        accountRepository.save(detailAccount);
         return "redirect:/mangostore/admin/account";
     }
 
@@ -143,85 +133,67 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public String updateAccount(RedirectAttributes redirectAttributes, BindingResult result, String newPassword, MultipartFile imageFile, Account account) {
-        if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("message", "Update Account Fail");
-            redirectAttributes.addFlashAttribute("cssClass", "alert alert-danger");
+    public String updateAccount(BindingResult result, String newPassword, MultipartFile imageFile, Account account) {
+        Account detailAccount = accountRepository.findById(account.getId()).orElse(null);
+        detailAccount.setFullName(account.getFullName());
+        detailAccount.setNumberPhone(account.getNumberPhone());
+        detailAccount.setEmail(account.getEmail());
+        detailAccount.setBirthday(account.getBirthday());
+        detailAccount.setGender(account.getGender());
+
+        String oldImagePath = accountRepository.findById(account.getId()).get().getImages();
+        if (imageFile.isEmpty()) {
+            detailAccount.setImages(oldImagePath);
         } else {
-            Account detailAccount = accountRepository.findById(account.getId()).orElse(null);
-            detailAccount.setFullName(account.getFullName());
-            detailAccount.setNumberPhone(account.getNumberPhone());
-            detailAccount.setEmail(account.getEmail());
-            detailAccount.setBirthday(account.getBirthday());
-            detailAccount.setGender(account.getGender());
-
-            String oldImagePath = accountRepository.findById(account.getId()).get().getImages();
-            if (imageFile.isEmpty()) {
-                detailAccount.setImages(oldImagePath);
-            } else {
-                String fileName = imageFile.getOriginalFilename();
-                detailAccount.setImages(fileName);
-            }
-
-            detailAccount.setEncryptionPassword(newPassword == null ? detailAccount.getEncryptionPassword() : encoder.encode(newPassword));
-            detailAccount.setAddress(account.getAddress());
-            detailAccount.setStatus(account.getStatus());
-            accountRepository.save(detailAccount);
-            redirectAttributes.addFlashAttribute("message", "Update Account Successfully");
-            redirectAttributes.addFlashAttribute("cssClass", "alert alert-success");
+            String fileName = imageFile.getOriginalFilename();
+            detailAccount.setImages(fileName);
         }
+
+        detailAccount.setEncryptionPassword(newPassword == null ? detailAccount.getEncryptionPassword() : encoder.encode(newPassword));
+        detailAccount.setAddress(account.getAddress());
+        detailAccount.setStatus(account.getStatus());
+        accountRepository.save(detailAccount);
         return "redirect:/mangostore/admin/account";
     }
 
     @Override
-    public String deleteAccount(RedirectAttributes redirectAttributes, Long idAccount) {
-        try {
-            Account detailAccount = accountRepository.findById(idAccount).orElse(null);
-            assert detailAccount != null;
-            detailAccount.setStatus(0);
-            accountRepository.save(detailAccount);
-            redirectAttributes.addFlashAttribute("message", "Delete Account Successfully");
-            redirectAttributes.addFlashAttribute("cssClass", "alert alert-success");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("message", "Delete Account Fail");
-            redirectAttributes.addFlashAttribute("cssClass", "alert alert-danger");
-        }
+    public String deleteAccount(Long idAccount) {
+        Account detailAccount = accountRepository.findById(idAccount).orElse(null);
+        assert detailAccount != null;
+        detailAccount.setStatus(0);
+        accountRepository.save(detailAccount);
         return "redirect:/mangostore/admin/account";
     }
 
     @Override
-    public String addAccount(RedirectAttributes redirectAttributes, BindingResult result, Account addProfile) {
-        if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("message", "Add Account Fail");
-            redirectAttributes.addFlashAttribute("cssClass", "alert alert-danger");
-        } else {
-            int checkEmailExists = accountRepository.existsByEmail(addProfile.getEmail());
-            if (checkEmailExists == 1) {
-                redirectAttributes.addFlashAttribute("message", "Email already exists. Add Account Failed.");
-                redirectAttributes.addFlashAttribute("cssClass", "alert alert-danger");
-            } else {
-                Account newAccount = new Account();
-                newAccount.setFullName(addProfile.getFullName());
-                newAccount.setNumberPhone(addProfile.getNumberPhone());
-                newAccount.setEmail(addProfile.getEmail());
-                newAccount.setBirthday(addProfile.getBirthday());
-                newAccount.setGender(addProfile.getGender());
-                newAccount.setImages(addProfile.getImages());
-                newAccount.setEncryptionPassword(encoder.encode(addProfile.getPassword()));
-                newAccount.setAddress(addProfile.getAddress());
-                newAccount.setStatus(1);
-                accountRepository.save(newAccount);
+    public String addAccount(BindingResult result, Account addProfile) {
+        Account newAccount = new Account();
+        newAccount.setFullName(addProfile.getFullName());
+        newAccount.setNumberPhone(addProfile.getNumberPhone());
+        newAccount.setEmail(addProfile.getEmail());
+        newAccount.setBirthday(addProfile.getBirthday());
+        newAccount.setGender(addProfile.getGender());
+        newAccount.setImages(addProfile.getImages());
+        newAccount.setEncryptionPassword(encoder.encode(addProfile.getPassword()));
+        newAccount.setAddress(addProfile.getAddress());
+        newAccount.setStatus(1);
+        accountRepository.save(newAccount);
 
-                Role roleUser = roleRepository.getAllRoleByUser();
-                Authentication newAuthentication = new Authentication();
-                newAuthentication.setAccount(newAccount);
-                newAuthentication.setRole(roleUser);
-                authenticationRepository.save(newAuthentication);
-
-                redirectAttributes.addFlashAttribute("message", "Add Account Successfully");
-                redirectAttributes.addFlashAttribute("cssClass", "alert alert-success");
-            }
-        }
+        Role roleUser = roleRepository.getAllRoleByUser();
+        Authentication newAuthentication = new Authentication();
+        newAuthentication.setAccount(newAccount);
+        newAuthentication.setRole(roleUser);
+        authenticationRepository.save(newAuthentication);
+//        int checkEmailExists = accountRepository.existsByEmail(addProfile.getEmail());
+//        if (checkEmailExists == 1) {
+//            redirectAttributes.addFlashAttribute("message", "Email already exists. Add Account Failed.");
+//            redirectAttributes.addFlashAttribute("cssClass", "alert alert-danger");
+//        } else {
+//
+//
+//            redirectAttributes.addFlashAttribute("message", "Add Account Successfully");
+//            redirectAttributes.addFlashAttribute("cssClass", "alert alert-success");
+//        }
         return "redirect:/mangostore/admin/account";
     }
 }

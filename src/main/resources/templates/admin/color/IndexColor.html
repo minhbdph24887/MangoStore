@@ -9,12 +9,12 @@
                 <li class="nav-item">
                     <a class="nav-link active ps-0" id="home-tab" data-bs-toggle="tab"
                        href="#tab1" role="tab"
-                       aria-controls="tab1" aria-selected="true">Active Material</a>
+                       aria-controls="tab1" aria-selected="true">Active Color</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab2"
                        aria-controls="tab2" role="tab"
-                       aria-selected="false">Material Inactive</a>
+                       aria-selected="false">Color Inactive</a>
                 </li>
             </ul>
         </div>
@@ -22,23 +22,23 @@
             <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1">
                 <div>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item active" aria-current="page">Index Material</li>
+                        <li class="breadcrumb-item active" aria-current="page">Index Color</li>
                     </ul>
                 </div>
                 <div class="col-lg-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">List Material Active</h4>
+                            <h4 class="card-title">List Color Active</h4>
                             <div class="row">
                                 <div class="col-sm-3">
                                     <button type="button" class="btn btn-info btn-lg" data-toggle="modal"
-                                            data-target="#myModal">Add Material
+                                            data-target="#myModal">Add Color
                                     </button>
                                 </div>
                                 <div class="col-sm-7 form-group" style="margin-left: 100px;">
                                     <form>
                                         <input type="text" name="keyword" class="form-control" th:value="${keyword}"
-                                               placeholder="Search Name Material"/>
+                                               placeholder="Search Name Color"/>
                                     </form>
                                 </div>
                             </div>
@@ -46,17 +46,16 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-body">
-                                            <form th:action="@{/mangostore/admin/material/add}"
-                                                  th:object="${addMaterial}"
+                                            <form th:action="@{/mangostore/admin/color/add}" th:object="${addColor}"
                                                   method="post" onsubmit="return add()">
-                                                <h3 class="mb-4">Add Material</h3>
+                                                <h3 class="mb-4">Add Color</h3>
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
                                                             <input type="text"
                                                                    class="form-control"
-                                                                   name="nameMaterial"
-                                                                   placeholder="Enter Name Material">
+                                                                   name="nameColor"
+                                                                   placeholder="Enter Name Color">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-12">
@@ -82,8 +81,8 @@
                                         <thead>
                                         <tr>
                                             <th style="width: 50px">#</th>
-                                            <th style="width: 90px">CodeMaterial</th>
-                                            <th style="width: 172px">NameMaterial</th>
+                                            <th style="width: 90px">CodeColor</th>
+                                            <th style="width: 172px">NameColor</th>
                                             <th style="width: 100px">UserCreate</th>
                                             <th style="width: 100px">UserUpdate</th>
                                             <th style="width: 100px">DateCreate</th>
@@ -96,29 +95,29 @@
                                 <div class="content" style="height: 227px">
                                     <table class="table table-hover">
                                         <tbody>
-                                        <tr th:each="listMaterial, stat : ${listMaterial}">
+                                        <tr th:each="listColor, stat : ${listColor}">
                                             <td style="width: 50px" th:text="${stat.count}"></td>
                                             <td style="width: 90px">
-                                                <a th:href="@{|/mangostore/admin/material/detail/${listMaterial.id}|}"
-                                                   th:text="${listMaterial.codeMaterial}"
+                                                <a th:href="@{|/mangostore/admin/color/detail/${listColor.id}|}"
+                                                   th:text="${listColor.codeColor}"
                                                    style="text-decoration: none">
                                                 </a>
                                             </td>
                                             <td style="width: 172px; word-break: break-all"
-                                                th:text="${listMaterial.nameMaterial}"></td>
-                                            <td style="width: 100px" th:text="${listMaterial.nameUserCreate}"></td>
-                                            <td style="width: 100px" th:text="${listMaterial.nameUserUpdate}"></td>
+                                                th:text="${listColor.nameColor}"></td>
+                                            <td style="width: 100px" th:text="${listColor.nameUserCreate}"></td>
+                                            <td style="width: 100px" th:text="${listColor.nameUserUpdate}"></td>
                                             <td style="width: 100px"
-                                                th:text="${#temporals.format(listMaterial.dateCreate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
+                                                th:text="${#temporals.format(listColor.dateCreate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
                                             <td style="width: 100px"
-                                                th:text="${#temporals.format(listMaterial.dateUpdate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
-                                            <td style="width: 100px" th:if="${listMaterial.status == 1}">
+                                                th:text="${#temporals.format(listColor.dateUpdate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
+                                            <td style="width: 100px" th:if="${listColor.status == 1}">
                                                 <label class="badge badge-success">Is Active</label>
                                             </td>
                                         </tr>
-                                        <tr th:if="${listMaterial.isEmpty()}">
+                                        <tr th:if="${listColor.isEmpty()}">
                                             <td colspan="9" style="text-align: center; color: red; font-size: larger;">
-                                                Material is entity
+                                                Color is entity
                                             </td>
                                         </tr>
                                         </tbody>
@@ -135,15 +134,15 @@
                 <div class="col-lg-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">List Material Inactive</h4>
+                            <h4 class="card-title">List Color Inactive</h4>
                             <div class="table-responsive">
                                 <div class="header">
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
                                             <th style="width: 50px">#</th>
-                                            <th style="width: 90px">CodeMaterial</th>
-                                            <th style="width: 172px">NameMaterial</th>
+                                            <th style="width: 90px">CodeColor</th>
+                                            <th style="width: 172px">NameColor</th>
                                             <th style="width: 100px">UserCreate</th>
                                             <th style="width: 100px">UserUpdate</th>
                                             <th style="width: 100px">DateCreate</th>
@@ -156,31 +155,31 @@
                                 <div class="content" style="height: 345px">
                                     <table class="table table-hover">
                                         <tbody>
-                                        <tr th:each="listMaterialInactive, stat : ${listMaterialInactive}">
+                                        <tr th:each="listColorInactive, stat : ${listColorInactive}">
                                             <td style="width: 50px" th:text="${stat.count}"></td>
                                             <td style="width: 90px">
-                                                <a th:href="@{|/mangostore/admin/material/restore/${listMaterialInactive.id}|}"
-                                                   th:text="${listMaterialInactive.codeMaterial}"
+                                                <a th:href="@{|/mangostore/admin/color/restore/${listColorInactive.id}|}"
+                                                   th:text="${listColorInactive.codeColor}"
                                                    onclick="return restore()"
                                                    style="text-decoration: none"></a>
                                             </td>
-                                            <td style="width: 172px; word-break: break-all"
-                                                th:text="${listMaterialInactive.nameMaterial}"></td>
+                                            <td style="width: 172px;word-break: break-all"
+                                                th:text="${listColorInactive.nameColor}"></td>
                                             <td style="width: 100px"
-                                                th:text="${listMaterialInactive.nameUserCreate}"></td>
+                                                th:text="${listColorInactive.nameUserCreate}"></td>
                                             <td style="width: 100px"
-                                                th:text="${listMaterialInactive.nameUserUpdate}"></td>
+                                                th:text="${listColorInactive.nameUserUpdate}"></td>
                                             <td style="width: 100px"
-                                                th:text="${#temporals.format(listMaterialInactive.dateCreate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
+                                                th:text="${#temporals.format(listColorInactive.dateCreate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
                                             <td style="width: 100px"
-                                                th:text="${#temporals.format(listMaterialInactive.dateUpdate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
-                                            <td style="width: 100px" th:if="${listMaterialInactive.status == 0}">
+                                                th:text="${#temporals.format(listColorInactive.dateUpdate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
+                                            <td style="width: 100px" th:if="${listColorInactive.status == 0}">
                                                 <label class="badge badge-danger">Stop Working</label>
                                             </td>
                                         </tr>
-                                        <tr th:if="${listMaterialInactive.isEmpty()}">
+                                        <tr th:if="${listColorInactive.isEmpty()}">
                                             <td colspan="9" style="text-align: center; color: red; font-size: larger;">
-                                                Material Inactive is entity
+                                                Color Inactive is entity
                                             </td>
                                         </tr>
                                         </tbody>

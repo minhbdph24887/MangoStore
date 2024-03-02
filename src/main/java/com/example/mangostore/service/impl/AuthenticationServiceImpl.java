@@ -8,11 +8,8 @@ import com.example.mangostore.repository.AuthenticationRepository;
 import com.example.mangostore.repository.RoleRepository;
 import com.example.mangostore.service.AuthenticationService;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,7 +29,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public String getAllRole(Model model, HttpSession session, int page) {
+    public String getAllRole(Model model, HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -56,10 +53,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     model.addAttribute("dates", "Evening");
                 }
 
-                Page<Authentication> itemsAuthentication = authenticationRepository.findAll(PageRequest.of(page, 4));
+                List<Authentication> itemsAuthentication = authenticationRepository.findAll();
                 model.addAttribute("listAuthentication", itemsAuthentication);
-
-                model.addAttribute("currentPage", page);
 
                 model.addAttribute("checkMenuAdmin", true);
                 return "admin/authentication/IndexAuthentication";
@@ -68,7 +63,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public String detailAuthentication(Model model, HttpSession session, Long idAuthentication, int page) {
+    public String detailAuthentication(Model model, HttpSession session, Long idAuthentication) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -105,7 +100,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public String updateAuthentication(Authentication updateAuthentication, Role roleSelect, RedirectAttributes redirectAttributes) {
+    public String updateAuthentication(Authentication updateAuthentication, Role roleSelect) {
         Authentication update = authenticationRepository.findById(updateAuthentication.getId()).orElse(null);
         update.setRole(roleSelect);
         authenticationRepository.save(update);

@@ -163,7 +163,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="code_size" type="varchar(255)"/>
-            <column name="name_size" type="nvarchar(255)"/>
+            <column name="name_size" type="varchar(255)"/>
             <column name="name_user_create" type="nvarchar(255)"/>
             <column name="name_user_update" type="nvarchar(255)"/>
             <column name="date_create" type="datetime2(6)"/>

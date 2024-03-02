@@ -2,12 +2,12 @@ package com.example.mangostore.service.impl;
 
 import com.example.mangostore.config.Gender;
 import com.example.mangostore.entity.Account;
-import com.example.mangostore.entity.Product;
 import com.example.mangostore.entity.Role;
+import com.example.mangostore.entity.Size;
 import com.example.mangostore.repository.AccountRepository;
-import com.example.mangostore.repository.ProductRepository;
 import com.example.mangostore.repository.RoleRepository;
-import com.example.mangostore.service.ProductService;
+import com.example.mangostore.repository.SizeRepository;
+import com.example.mangostore.service.SizeService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -18,24 +18,24 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
-public class ProductServiceImpl implements ProductService {
+public class SizeServiceImpl implements SizeService {
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
-    private final ProductRepository productRepository;
+    private final SizeRepository sizeRepository;
     private final Gender gender;
 
-    public ProductServiceImpl(AccountRepository accountRepository,
-                              RoleRepository roleRepository,
-                              ProductRepository productRepository,
-                              Gender gender) {
+    public SizeServiceImpl(AccountRepository accountRepository,
+                           RoleRepository roleRepository,
+                           SizeRepository sizeRepository,
+                           Gender gender) {
         this.accountRepository = accountRepository;
         this.roleRepository = roleRepository;
-        this.productRepository = productRepository;
+        this.sizeRepository = sizeRepository;
         this.gender = gender;
     }
 
     @Override
-    public String indexProduct(Model model, HttpSession session, String keyword) {
+    public String indexSize(Model model, HttpSession session, String keyword) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -66,40 +66,43 @@ public class ProductServiceImpl implements ProductService {
                     model.addAttribute("checkMenuAdmin", false);
                 }
 
-                List<Product> itemsProduct = productRepository.getAllProductByStatus1();
+                List<Size> itemsSize = sizeRepository.getAllSizeByStatus1();
                 if (keyword != null) {
-                    itemsProduct = productRepository.searchProduct(keyword);
+                    itemsSize = sizeRepository.searchSize(keyword);
                     model.addAttribute("keyword", keyword);
                 }
-                model.addAttribute("listProduct", itemsProduct);
+                model.addAttribute("listSize", itemsSize);
 
-                List<Product> itemsProductInactive = productRepository.getAllProductByStatus0();
-                model.addAttribute("listProductInactive", itemsProductInactive);
+                List<Size> itemsSizeInactive = sizeRepository.getAllSizeByStatus0();
+                model.addAttribute("listSizeInactive", itemsSizeInactive);
 
-                model.addAttribute("addProduct", new Product());
-                return "admin/product/IndexProduct";
+                model.addAttribute("addSize", new Size());
+                return "admin/size/IndexSize";
             }
         }
     }
 
     @Override
-    public String addProduct(Product addProduct, BindingResult result, HttpSession session) {
+    public String addSize(Size addSize, BindingResult result, HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         Account detailAccount = accountRepository.detailAccountByEmail(email);
-        Product newProduct = new Product();
-        newProduct.setCodeProduct(gender.generateCode());
-        newProduct.setNameProduct(addProduct.getNameProduct());
-        newProduct.setNameUserCreate(detailAccount.getFullName());
-        newProduct.setNameUserUpdate(detailAccount.getFullName());
-        newProduct.setDateCreate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
-        newProduct.setDateUpdate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
-        newProduct.setStatus(1);
-        productRepository.save(newProduct);
-        return "redirect:/mangostore/admin/product";
+        if (result.hasErrors()) {
+        } else {
+            Size newSize = new Size();
+            newSize.setCodeSize(gender.generateCode());
+            newSize.setNameSize(addSize.getNameSize());
+            newSize.setNameUserCreate(detailAccount.getFullName());
+            newSize.setNameUserUpdate(detailAccount.getFullName());
+            newSize.setDateCreate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
+            newSize.setDateUpdate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
+            newSize.setStatus(1);
+            sizeRepository.save(newSize);
+        }
+        return "redirect:/mangostore/admin/size";
     }
 
     @Override
-    public String detailProduct(Model model, HttpSession session, Long idProduct) {
+    public String detailSize(Model model, HttpSession session, Long idSize) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -130,45 +133,45 @@ public class ProductServiceImpl implements ProductService {
                     model.addAttribute("checkMenuAdmin", false);
                 }
 
-                List<Product> itemsProductInactive = productRepository.getAllProductByStatus0();
-                model.addAttribute("listProductInactive", itemsProductInactive);
+                List<Size> itemsSizeInactive = sizeRepository.getAllSizeByStatus0();
+                model.addAttribute("listSizeInactive", itemsSizeInactive);
 
-                Product detailProduct = productRepository.findById(idProduct).orElse(null);
-                model.addAttribute("detailProduct", detailProduct);
-                return "admin/product/DetailProduct";
+                Size detailSize = sizeRepository.findById(idSize).orElse(null);
+                model.addAttribute("detailSize", detailSize);
+                return "admin/size/DetailSize";
             }
         }
     }
 
     @Override
-    public String updateProduct(BindingResult result, HttpSession session, Product product) {
-        Product detailProduct = productRepository.findById(product.getId()).orElse(null);
-        detailProduct.setNameProduct(product.getNameProduct());
+    public String updateSize(BindingResult result, HttpSession session, Size size) {
+        Size detailSize = sizeRepository.findById(size.getId()).orElse(null);
+        detailSize.setNameSize(size.getNameSize());
 
         String email = (String) session.getAttribute("loginEmail");
         Account detailAccount = accountRepository.detailAccountByEmail(email);
-        detailProduct.setNameUserUpdate(detailAccount.getFullName());
-        detailProduct.setDateUpdate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
-        detailProduct.setStatus(product.getStatus());
+        detailSize.setNameUserUpdate(detailAccount.getFullName());
+        detailSize.setDateUpdate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
+        detailSize.setStatus(size.getStatus());
 
-        productRepository.save(detailProduct);
-        return "redirect:/mangostore/admin/product";
+        sizeRepository.save(detailSize);
+        return "redirect:/mangostore/admin/size";
     }
 
     @Override
-    public String deleteProduct(Long idProduct) {
-        Product detailProduct = productRepository.findById(idProduct).orElse(null);
-        assert detailProduct != null;
-        detailProduct.setStatus(0);
-        productRepository.save(detailProduct);
-        return "redirect:/mangostore/admin/product";
+    public String deleteSize(Long idSize) {
+        Size detailSize = sizeRepository.findById(idSize).orElse(null);
+        assert detailSize != null;
+        detailSize.setStatus(0);
+        sizeRepository.save(detailSize);
+        return "redirect:/mangostore/admin/size";
     }
 
     @Override
-    public String restoreProduct(Long idProduct) {
-        Product detailProduct = productRepository.findById(idProduct).orElse(null);
-        detailProduct.setStatus(1);
-        productRepository.save(detailProduct);
-        return "redirect:/mangostore/admin/product";
+    public String restoreSize(Long idSize) {
+        Size detailSize = sizeRepository.findById(idSize).orElse(null);
+        detailSize.setStatus(1);
+        sizeRepository.save(detailSize);
+        return "redirect:/mangostore/admin/size";
     }
 }

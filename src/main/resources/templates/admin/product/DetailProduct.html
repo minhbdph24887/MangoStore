@@ -26,56 +26,20 @@
                         <li class="breadcrumb-item active" aria-current="page">Detail Product</li>
                     </ul>
                 </div>
-                <div class="row">
-                    <div class="col-lg-5 grid-margin stretch-card">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Detail Product</h4>
-                                <div class="table-responsive">
-                                    <div class="form-group">
-                                        ID Product: <span style="color: red">[[${detailProduct.getId()}]]</span>
-                                    </div>
-                                    <div class="form-group">
-                                        Code Product: <span
-                                            style="color: red;">[[${detailProduct.getCodeProduct()}]]</span>
-                                    </div>
-                                    <div class="form-group">
-                                        Name Product: <span
-                                            style="color: red">[[${detailProduct.getNameProduct()}]]</span>
-                                    </div>
-                                    <div class="form-group">
-                                        User Create: <span
-                                            style="color: red">[[${detailProduct.getNameUserCreate()}]]</span>
-                                    </div>
-                                    <div class="form-group">
-                                        User Update: <span
-                                            style="color: red">[[${detailProduct.getNameUserUpdate()}]]</span>
-                                    </div>
-                                    <div class="form-group">
-                                        Date Create: <span
-                                            style="color: red">[[${detailProduct.getDateCreate()}]]</span>
-                                    </div>
-                                    <div class="form-group">
-                                        Date Update: <span
-                                            style="color: red">[[${detailProduct.getDateUpdate()}]]</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-7 grid-margin stretch-card" id="async-detail-container">
-                        <div class="container light-style flex-grow-1 container-p-y">
+                <div class="col-lg-12 grid-margin stretch-card container">
+                    <div class="card">
+                        <div class="card-body container">
                             <h4 class="font-weight-bold py-3 mb-4">
-                                Update Product, [[${detailProduct.getNameProduct()}]]
+                                Update Product,
                             </h4>
                             <form th:action="@{/mangostore/admin/product/update}" th:object="${detailProduct}"
                                   method="post"
                                   onsubmit="return update()">
                                 <input type="hidden" th:field="*{id}" th:value="${detailProduct.id}">
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-3">
                                         <div class="form-group">
-                                            <label class="form-label">Code Product</label>
+                                            <label class="form-label">CodeProduct</label>
                                             <input type="text"
                                                    class="form-control"
                                                    name="codeProduct" th:field="*{codeProduct}" readonly/>
@@ -83,7 +47,7 @@
                                     </div>
                                     <div class="col-md-9">
                                         <div class="form-group">
-                                            <label class="form-label">Name Product</label>
+                                            <label class="form-label">NameProduct</label>
                                             <input type="text"
                                                    class="form-control"
                                                    name="nameProduct" th:field="*{nameProduct}"/>
@@ -91,15 +55,45 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
+                                            <label class="form-label">UserCreate</label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   name="nameUserCreate" th:field="*{nameUserCreate}" readonly/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">UserUpdate</label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   name="nameUserUpdate" th:field="*{nameUserUpdate}" readonly/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">DateCreate</label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   name="dateCreate" th:field="*{dateCreate}" readonly/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">DateUpdate</label>
+                                            <input type="text"
+                                                   class="form-control"
+                                                   name="dateUpdate" th:field="*{dateUpdate}" readonly/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
                                             <label class="form-label">Status</label>
-                                            <select name="status" class="custom-select">
-                                                <option value="1" th:selected="${detailProduct.status == 1}">
-                                                    Is Active
-                                                </option>
-                                                <option value="0" th:selected="${detailProduct.status == 0}">
-                                                    Stop Working
-                                                </option>
-                                            </select>
+                                            <label class="switch">
+                                                <input type="checkbox"
+                                                       th:checked="${detailProduct.status == 1}" id="active">
+                                                <span class="slider round"></span>
+                                            </label>
+                                            <input type="hidden" id="status" name="status">
                                         </div>
                                     </div>
                                 </div>
@@ -123,55 +117,57 @@
                         <div class="card-body">
                             <h4 class="card-title">List Product Inactive</h4>
                             <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Code Product</th>
-                                        <th>Name Product</th>
-                                        <th>User Create</th>
-                                        <th>User Update</th>
-                                        <th>Date Create</th>
-                                        <th>Date Update</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="listProductInactive, stat : ${listProductInactive}">
-                                        <td th:text="${stat.count}"></td>
-                                        <td>
-                                            <a th:href="@{|/mangostore/admin/product/restore/${listProductInactive.id}|}"
-                                               th:text="${listProductInactive.codeProduct}" onclick="return restore()"
-                                               style="text-decoration: none"></a>
-                                        </td>
-                                        <td th:text="${listProductInactive.nameProduct}"></td>
-                                        <td th:text="${listProductInactive.nameUserCreate}"></td>
-                                        <td th:text="${listProductInactive.nameUserUpdate}"></td>
-                                        <td th:text="${#temporals.format(listProductInactive.dateCreate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
-                                        <td th:text="${#temporals.format(listProductInactive.dateUpdate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
-                                        <td th:if="${listProductInactive.status == 0}">
-                                            <label class="badge badge-danger">Stop Working</label>
-                                        </td>
-                                    </tr>
-                                    <tr th:if="${listProductInactive.isEmpty()}">
-                                        <td colspan="9" style="text-align: center; color: red; font-size: larger;">
-                                            Product Inactive is entity
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                <div class="header">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 50px">#</th>
+                                            <th style="width: 90px">CodeProduct</th>
+                                            <th style="width: 172px">NameProduct</th>
+                                            <th style="width: 100px">UserCreate</th>
+                                            <th style="width: 100px">UserUpdate</th>
+                                            <th style="width: 100px">DateCreate</th>
+                                            <th style="width: 100px">DateUpdate</th>
+                                            <th style="width: 100px">Status</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div class="content" style="height: 345px">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                        <tr th:each="listProductInactive, stat : ${listProductInactive}">
+                                            <td style="width: 50px" th:text="${stat.count}"></td>
+                                            <td style="width: 90px">
+                                                <a th:href="@{|/mangostore/admin/product/restore/${listProductInactive.id}|}"
+                                                   th:text="${listProductInactive.codeProduct}"
+                                                   onclick="return restore()"
+                                                   style="text-decoration: none"></a>
+                                            </td>
+                                            <td style="width: 172px;word-break: break-all"
+                                                th:text="${listProductInactive.nameProduct}"></td>
+                                            <td style="width: 100px"
+                                                th:text="${listProductInactive.nameUserCreate}"></td>
+                                            <td style="width: 100px"
+                                                th:text="${listProductInactive.nameUserUpdate}"></td>
+                                            <td style="width: 100px"
+                                                th:text="${#temporals.format(listProductInactive.dateCreate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
+                                            <td style="width: 100px"
+                                                th:text="${#temporals.format(listProductInactive.dateUpdate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
+                                            <td style="width: 100px" th:if="${listProductInactive.status == 0}">
+                                                <label class="badge badge-danger">Stop Working</label>
+                                            </td>
+                                        </tr>
+                                        <tr th:if="${listProductInactive.isEmpty()}">
+                                            <td colspan="9" style="text-align: center; color: red; font-size: larger;">
+                                                Product Inactive is entity
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                        <nav aria-label="Page navigation example" th:if="${listProductInactive.totalPages > 0}">
-                            <ul class="pagination justify-content-center pagination-sm">
-                                <li th:each="i : ${#numbers.sequence(0, listProductInactive.totalPages - 1)}"
-                                    th:class="${i == page ? 'active' : ''}"
-                                    class="page-item">
-                                    <a th:href="@{/mangostore/admin/product(page=${i})}" class="page-link"
-                                       th:text="${i + 1}"></a>
-                                </li>
-                            </ul>
-                        </nav>
                     </div>
                 </div>
             </div>

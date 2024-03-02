@@ -2,12 +2,14 @@ package com.example.mangostore.service.impl;
 
 import com.example.mangostore.config.Gender;
 import com.example.mangostore.entity.Account;
+import com.example.mangostore.entity.Color;
 import com.example.mangostore.entity.Product;
 import com.example.mangostore.entity.Role;
 import com.example.mangostore.repository.AccountRepository;
+import com.example.mangostore.repository.ColorRepository;
 import com.example.mangostore.repository.ProductRepository;
 import com.example.mangostore.repository.RoleRepository;
-import com.example.mangostore.service.ProductService;
+import com.example.mangostore.service.ColorService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -18,24 +20,24 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
-public class ProductServiceImpl implements ProductService {
+public class ColorServiceImpl implements ColorService {
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
-    private final ProductRepository productRepository;
+    private final ColorRepository colorRepository;
     private final Gender gender;
 
-    public ProductServiceImpl(AccountRepository accountRepository,
-                              RoleRepository roleRepository,
-                              ProductRepository productRepository,
-                              Gender gender) {
+    public ColorServiceImpl(AccountRepository accountRepository,
+                            RoleRepository roleRepository,
+                            ColorRepository colorRepository,
+                            Gender gender) {
         this.accountRepository = accountRepository;
         this.roleRepository = roleRepository;
-        this.productRepository = productRepository;
+        this.colorRepository = colorRepository;
         this.gender = gender;
     }
 
     @Override
-    public String indexProduct(Model model, HttpSession session, String keyword) {
+    public String indexColor(Model model, HttpSession session, String keyword) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -66,40 +68,40 @@ public class ProductServiceImpl implements ProductService {
                     model.addAttribute("checkMenuAdmin", false);
                 }
 
-                List<Product> itemsProduct = productRepository.getAllProductByStatus1();
+                List<Color> itemsColor = colorRepository.getAllColorByStatus1();
                 if (keyword != null) {
-                    itemsProduct = productRepository.searchProduct(keyword);
+                    itemsColor = colorRepository.searchColor(keyword);
                     model.addAttribute("keyword", keyword);
                 }
-                model.addAttribute("listProduct", itemsProduct);
+                model.addAttribute("listColor", itemsColor);
 
-                List<Product> itemsProductInactive = productRepository.getAllProductByStatus0();
-                model.addAttribute("listProductInactive", itemsProductInactive);
+                List<Color> itemsColorInactive = colorRepository.getAllColorByStatus0();
+                model.addAttribute("listColorInactive", itemsColorInactive);
 
-                model.addAttribute("addProduct", new Product());
-                return "admin/product/IndexProduct";
+                model.addAttribute("addColor", new Color());
+                return "admin/color/IndexColor";
             }
         }
     }
 
     @Override
-    public String addProduct(Product addProduct, BindingResult result, HttpSession session) {
+    public String addColor(Color addColor, BindingResult result, HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         Account detailAccount = accountRepository.detailAccountByEmail(email);
-        Product newProduct = new Product();
-        newProduct.setCodeProduct(gender.generateCode());
-        newProduct.setNameProduct(addProduct.getNameProduct());
-        newProduct.setNameUserCreate(detailAccount.getFullName());
-        newProduct.setNameUserUpdate(detailAccount.getFullName());
-        newProduct.setDateCreate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
-        newProduct.setDateUpdate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
-        newProduct.setStatus(1);
-        productRepository.save(newProduct);
-        return "redirect:/mangostore/admin/product";
+        Color newColor = new Color();
+        newColor.setCodeColor(gender.generateCode());
+        newColor.setNameColor(addColor.getNameColor());
+        newColor.setNameUserCreate(detailAccount.getFullName());
+        newColor.setNameUserUpdate(detailAccount.getFullName());
+        newColor.setDateCreate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
+        newColor.setDateUpdate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
+        newColor.setStatus(1);
+        colorRepository.save(newColor);
+        return "redirect:/mangostore/admin/color";
     }
 
     @Override
-    public String detailProduct(Model model, HttpSession session, Long idProduct) {
+    public String detailColor(Model model, HttpSession session, Long idColor) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -130,45 +132,45 @@ public class ProductServiceImpl implements ProductService {
                     model.addAttribute("checkMenuAdmin", false);
                 }
 
-                List<Product> itemsProductInactive = productRepository.getAllProductByStatus0();
-                model.addAttribute("listProductInactive", itemsProductInactive);
+                List<Color> itemsColorInactive = colorRepository.getAllColorByStatus0();
+                model.addAttribute("listColorInactive", itemsColorInactive);
 
-                Product detailProduct = productRepository.findById(idProduct).orElse(null);
-                model.addAttribute("detailProduct", detailProduct);
-                return "admin/product/DetailProduct";
+                Color detailColor = colorRepository.findById(idColor).orElse(null);
+                model.addAttribute("detailColor", detailColor);
+                return "admin/color/DetailColor";
             }
         }
     }
 
     @Override
-    public String updateProduct(BindingResult result, HttpSession session, Product product) {
-        Product detailProduct = productRepository.findById(product.getId()).orElse(null);
-        detailProduct.setNameProduct(product.getNameProduct());
+    public String updateColor(BindingResult result, HttpSession session, Color color) {
+        Color detailColor = colorRepository.findById(color.getId()).orElse(null);
+        detailColor.setNameColor(color.getNameColor());
 
         String email = (String) session.getAttribute("loginEmail");
         Account detailAccount = accountRepository.detailAccountByEmail(email);
-        detailProduct.setNameUserUpdate(detailAccount.getFullName());
-        detailProduct.setDateUpdate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
-        detailProduct.setStatus(product.getStatus());
+        detailColor.setNameUserUpdate(detailAccount.getFullName());
+        detailColor.setDateUpdate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
+        detailColor.setStatus(color.getStatus());
 
-        productRepository.save(detailProduct);
-        return "redirect:/mangostore/admin/product";
+        colorRepository.save(detailColor);
+        return "redirect:/mangostore/admin/color";
     }
 
     @Override
-    public String deleteProduct(Long idProduct) {
-        Product detailProduct = productRepository.findById(idProduct).orElse(null);
-        assert detailProduct != null;
-        detailProduct.setStatus(0);
-        productRepository.save(detailProduct);
-        return "redirect:/mangostore/admin/product";
+    public String deleteColor(Long idColor) {
+        Color detailColor = colorRepository.findById(idColor).orElse(null);
+        assert detailColor != null;
+        detailColor.setStatus(0);
+        colorRepository.save(detailColor);
+        return "redirect:/mangostore/admin/color";
     }
 
     @Override
-    public String restoreProduct(Long idProduct) {
-        Product detailProduct = productRepository.findById(idProduct).orElse(null);
-        detailProduct.setStatus(1);
-        productRepository.save(detailProduct);
-        return "redirect:/mangostore/admin/product";
+    public String restoreColor(Long idColor) {
+        Color detailColor = colorRepository.findById(idColor).orElse(null);
+        detailColor.setStatus(1);
+        colorRepository.save(detailColor);
+        return "redirect:/mangostore/admin/color";
     }
 }
