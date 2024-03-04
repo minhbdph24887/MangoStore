@@ -176,6 +176,7 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+            <column name="name" type="nvarchar(255)"/>
             <column name="images_product_detail" type="nvarchar(255)"/>
             <column name="id_product" type="bigint">
                 <constraints nullable="false"/>
