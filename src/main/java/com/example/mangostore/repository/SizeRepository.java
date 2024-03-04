@@ -18,4 +18,7 @@ public interface SizeRepository extends JpaRepository<Size, Long> {
 
     @Query(value = "select * from size where name_size like %:searchSize%", nativeQuery = true)
     List<Size> searchSize(@Param("searchSize") String searchSize);
+
+    @Query(value = "select * from size where name_size= :nameSize", nativeQuery = true)
+    Size findByName(@Param("nameSize") String nameSize);
 }

@@ -186,7 +186,8 @@
                                                 th:text="${listAccount.gender == true ? 'Nam' : 'Nu'}"></td>
                                             <td style="width: 100px" th:unless="${listAccount.gender != null}"></td>
                                             <td style="width: 100px" th:if="${listAccount.images != null}">
-                                                <img th:src="@{|/image/profile/${listAccount.images}|}" alt="image">
+                                                <img th:src="@{|/image/profile/${listAccount.images}|}" alt="image"
+                                                     style="width: 117px; height: 112px">
                                             </td>
                                             <td style="width: 100px" th:unless="${listAccount.images != null}"></td>
                                             <td style="width: 100px" th:text="${listAccount.address}"></td>
@@ -258,7 +259,7 @@
                                                 th:unless="${listAccountInactive.gender != null}"></td>
                                             <td style="width: 100px" th:if="${listAccountInactive.images != null}">
                                                 <img th:src="@{|/image/profile/${listAccountInactive.images}|}"
-                                                     alt="image">
+                                                     alt="image" style="width: 117px; height: 112px">
                                             </td>
                                             <td style="width: 100px"
                                                 th:unless="${listAccountInactive.images != null}"></td>

@@ -1,6 +1,7 @@
 package com.example.mangostore.controller;
 
 import com.example.mangostore.entity.*;
+import com.example.mangostore.request.ProductDetailRequest;
 import com.example.mangostore.service.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -18,17 +19,20 @@ public class ProductController {
     private final OriginService originService;
     private final SizeService sizeService;
     private final ColorService colorService;
+    private final ProductDetailService productDetailService;
 
     public ProductController(ProductService productService,
                              MaterialService materialService,
                              OriginService originService,
                              SizeService sizeService,
-                             ColorService colorService) {
+                             ColorService colorService,
+                             ProductDetailService productDetailService) {
         this.productService = productService;
         this.materialService = materialService;
         this.originService = originService;
         this.sizeService = sizeService;
         this.colorService = colorService;
+        this.productDetailService = productDetailService;
     }
 
     @GetMapping(value = "product")
@@ -195,22 +199,22 @@ public class ProductController {
 
     @PostMapping(value = "color/add")
     public String addColor(@Valid Color addColor,
-                          BindingResult result,
-                          HttpSession session) {
+                           BindingResult result,
+                           HttpSession session) {
         return colorService.addColor(addColor, result, session);
     }
 
     @GetMapping(value = "color/detail/{id}")
     public String detailColor(Model model,
-                             HttpSession session,
-                             @PathVariable("id") Long idColor) {
+                              HttpSession session,
+                              @PathVariable("id") Long idColor) {
         return colorService.detailColor(model, session, idColor);
     }
 
     @PostMapping(value = "color/update")
     public String updateColor(@Valid Color color,
-                             BindingResult result,
-                             HttpSession session) {
+                              BindingResult result,
+                              HttpSession session) {
         return colorService.updateColor(result, session, color);
     }
 
@@ -222,5 +226,27 @@ public class ProductController {
     @GetMapping(value = "color/restore/{id}")
     public String restoreColor(@PathVariable("id") Long idColor) {
         return colorService.restoreColor(idColor);
+    }
+
+
+    @GetMapping(value = "product-detail")
+    public String indexProductDetail(Model model,
+                                     HttpSession session,
+                                     @Param("keyword") String keyword) {
+        return productDetailService.indexProductDetail(model, session, keyword);
+    }
+
+    @GetMapping(value = "product-detail/create")
+    public String viewCreateProductDetail(Model model,
+                                          HttpSession session) {
+        return productDetailService.viewCreateProductDetail(model, session);
+    }
+
+    @PostMapping(value = "product-detail/add")
+    public String addProductDetail(@Valid ProductDetailRequest productDetailForm,
+                                   BindingResult result,
+                                   HttpSession session,
+                                   Model model) {
+        return productDetailService.addProductDetail(productDetailForm, result, session, model);
     }
 }

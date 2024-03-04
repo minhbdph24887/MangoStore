@@ -18,4 +18,7 @@ public interface ColorRepository extends JpaRepository<Color, Long> {
 
     @Query(value = "select * from color where name_color like %:searchColor%", nativeQuery = true)
     List<Color> searchColor(@Param("searchColor") String searchColor);
+
+    @Query(value = "select * from color where name_color= :nameColor", nativeQuery = true)
+    Color findByName(@Param("nameColor") String nameColor);
 }
