@@ -92,21 +92,25 @@ function addProductDetailAPI() {
         variantRequests: getDataFromTable(),
     };
     console.log(data)
-    if (data.variantRequests === []) {
-        alert("Please enter product variation.")
+    if (add()) {
+        alert("Add ProductDetail Fall.")
     } else {
-        $.ajax({
-            type: "POST",
-            contentType: "application/json",
-            url: "http://localhost:8080" + "/api/mangostore/admin/product-detail/add",
-            data: JSON.stringify(data),
-            dataType: 'json',
-            success: function (responseData) {
-                window.open("http://localhost:8080/mangostore/admin/product-detail", "_self")
-            },
-            error: function (e) {
-                console.log("ERROR : ", e);
-            }
-        });
+        if (data.variantRequests === []) {
+            alert("Please enter product variation.")
+        } else {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json",
+                url: "http://localhost:8080" + "/api/mangostore/admin/product-detail/add",
+                data: JSON.stringify(data),
+                dataType: 'json',
+                success: function (responseData) {
+                    window.open("http://localhost:8080/mangostore/admin/product-detail", "_self")
+                },
+                error: function (e) {
+                    console.log("ERROR : ", e);
+                }
+            });
+        }
     }
 }

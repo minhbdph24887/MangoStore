@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
       th:replace="~{/layout/IndexAdmin :: dynamic(~{:: main})}">
 <body>
-<main>
+<main id="checkValidateVariant">
     <div class="home-tab">
         <div class="d-sm-flex align-items-center justify-content-between border-bottom">
             <ul class="nav nav-tabs" role="tablist">
@@ -55,7 +55,9 @@
                                                             <input type="text"
                                                                    class="form-control"
                                                                    name="nameColor"
+                                                                   id="nameColor"
                                                                    placeholder="Enter Name Color">
+                                                            <span id="returnValidate" style="color: red"></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-12">
