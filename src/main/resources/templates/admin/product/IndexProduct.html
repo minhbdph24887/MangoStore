@@ -80,30 +80,30 @@
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
-                                            <th style="width: 50px">#</th>
-                                            <th style="width: 90px">CodeProduct</th>
-                                            <th style="width: 172px">NameProduct</th>
+                                            <th style="width: 30px">#</th>
+                                            <th style="width: 114px">CodeProduct</th>
+                                            <th style="width: 151px">NameProduct</th>
                                             <th style="width: 100px">UserCreate</th>
                                             <th style="width: 100px">UserUpdate</th>
                                             <th style="width: 100px">DateCreate</th>
                                             <th style="width: 100px">DateUpdate</th>
-                                            <th style="width: 100px">Status</th>
+                                            <th style="width: 84px">Status</th>
                                         </tr>
                                         </thead>
                                     </table>
                                 </div>
-                                <div class="content" style="height: 227px">
+                                <div class="content" style="height: 245px">
                                     <table class="table table-hover">
                                         <tbody>
                                         <tr th:each="listProduct, stat : ${listProduct}">
-                                            <td style="width: 50px" th:text="${stat.count}"></td>
-                                            <td style="width: 90px">
+                                            <td style="width: 30px" th:text="${stat.count}"></td>
+                                            <td style="width: 114px">
                                                 <a th:href="@{|/mangostore/admin/product/detail/${listProduct.id}|}"
                                                    th:text="${listProduct.codeProduct}"
                                                    style="text-decoration: none">
                                                 </a>
                                             </td>
-                                            <td style="width: 172px; word-break: break-all"
+                                            <td style="width: 151px; word-break: break-all"
                                                 th:text="${listProduct.nameProduct}"></td>
                                             <td style="width: 100px" th:text="${listProduct.nameUserCreate}"></td>
                                             <td style="width: 100px" th:text="${listProduct.nameUserUpdate}"></td>
@@ -111,7 +111,7 @@
                                                 th:text="${#temporals.format(listProduct.dateCreate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
                                             <td style="width: 100px"
                                                 th:text="${#temporals.format(listProduct.dateUpdate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
-                                            <td style="width: 100px" th:if="${listProduct.status == 1}">
+                                            <td style="width: 84px" th:if="${listProduct.status == 1}">
                                                 <label class="badge badge-success">Is Active</label>
                                             </td>
                                         </tr>
@@ -140,30 +140,30 @@
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
-                                            <th style="width: 50px">#</th>
-                                            <th style="width: 90px">CodeProduct</th>
-                                            <th style="width: 172px">NameProduct</th>
+                                            <th style="width: 30px">#</th>
+                                            <th style="width: 114px">CodeProduct</th>
+                                            <th style="width: 151px">NameProduct</th>
                                             <th style="width: 100px">UserCreate</th>
                                             <th style="width: 100px">UserUpdate</th>
                                             <th style="width: 100px">DateCreate</th>
                                             <th style="width: 100px">DateUpdate</th>
-                                            <th style="width: 100px">Status</th>
+                                            <th style="width: 84px">Status</th>
                                         </tr>
                                         </thead>
                                     </table>
                                 </div>
-                                <div class="content" style="height: 345px">
+                                <div class="content" style="height: 395px">
                                     <table class="table table-hover">
                                         <tbody>
                                         <tr th:each="listProductInactive, stat : ${listProductInactive}">
-                                            <td style="width: 50px" th:text="${stat.count}"></td>
-                                            <td style="width: 90px">
+                                            <td style="width: 30px" th:text="${stat.count}"></td>
+                                            <td style="width: 114px">
                                                 <a th:href="@{|/mangostore/admin/product/restore/${listProductInactive.id}|}"
                                                    th:text="${listProductInactive.codeProduct}"
                                                    onclick="return restore()"
                                                    style="text-decoration: none"></a>
                                             </td>
-                                            <td style="width: 172px;word-break: break-all"
+                                            <td style="width: 151px;word-break: break-all"
                                                 th:text="${listProductInactive.nameProduct}"></td>
                                             <td style="width: 100px"
                                                 th:text="${listProductInactive.nameUserCreate}"></td>
@@ -173,7 +173,7 @@
                                                 th:text="${#temporals.format(listProductInactive.dateCreate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
                                             <td style="width: 100px"
                                                 th:text="${#temporals.format(listProductInactive.dateUpdate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
-                                            <td style="width: 100px" th:if="${listProductInactive.status == 0}">
+                                            <td style="width: 84px" th:if="${listProductInactive.status == 0}">
                                                 <label class="badge badge-danger">Stop Working</label>
                                             </td>
                                         </tr>

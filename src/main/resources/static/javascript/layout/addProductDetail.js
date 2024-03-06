@@ -3,6 +3,9 @@ $(document).ready(function () {
 });
 
 function generateVariants() {
+    const productValue = document.getElementById("idProduct");
+    const productName = productValue.options[productValue.selectedIndex].dataset.name;
+
     const sizeSelect = document.getElementById("size");
     const selectedSizeOptions = sizeSelect.selectedOptions;
 
@@ -20,32 +23,38 @@ function generateVariants() {
 
             const row = resultTableBody.insertRow();
 
-            const sizeCell = row.insertCell(0);
-            sizeCell.textContent = sizeValue;
+            const productNameCell = row.insertCell(0);
+            const properties = productName + "(" + sizeValue + ", " + colorValue + ")";
+            productNameCell.textContent = properties;
 
-            const colorCell = row.insertCell(1);
-            colorCell.textContent = colorValue;
-
-            const quantityCell = row.insertCell(2);
+            const quantityCell = row.insertCell(1);
             const quantityInput = document.createElement("input");
             quantityInput.type = "number";
             quantityInput.value = 1;
             quantityInput.className = "form-control";
             quantityCell.appendChild(quantityInput);
 
-            const importPriceCell = row.insertCell(3);
+            const importPriceCell = row.insertCell(2);
             const importPriceInput = document.createElement("input");
             importPriceInput.type = "number";
             importPriceInput.value = 1000;
             importPriceInput.className = "form-control";
             importPriceCell.appendChild(importPriceInput);
 
-            const priceCell = row.insertCell(4);
+            const priceCell = row.insertCell(3);
             const priceInput = document.createElement("input");
             priceInput.type = "number";
             priceInput.value = 1000;
             priceInput.className = "form-control";
             priceCell.appendChild(priceInput);
+
+            const sizeHidden = row.insertCell(4);
+            sizeHidden.textContent = sizeValue;
+            sizeHidden.style.display = "none";
+
+            const colorHidden = row.insertCell(5);
+            colorHidden.textContent = colorValue;
+            colorHidden.style.display = "none";
         }
     }
 }
@@ -55,11 +64,11 @@ function getDataFromTable() {
     const tableRows = document.querySelectorAll('#result tbody tr');
 
     tableRows.forEach(function (row) {
-        const size = row.cells[0].textContent;
-        const color = row.cells[1].textContent;
-        const quantityInput = row.cells[2].querySelector("input").value;
-        const importPriceInput = row.cells[3].querySelector("input").value;
-        const priceInput = row.cells[4].querySelector("input").value;
+        const size = row.cells[4].textContent;
+        const color = row.cells[5].textContent;
+        const quantityInput = row.cells[1].querySelector("input").value;
+        const importPriceInput = row.cells[2].querySelector("input").value;
+        const priceInput = row.cells[3].querySelector("input").value;
 
         const quantity = parseInt(quantityInput, 10);
         const importPrice = parseFloat(importPriceInput);

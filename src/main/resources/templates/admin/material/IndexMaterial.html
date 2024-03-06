@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
       th:replace="~{/layout/IndexAdmin :: dynamic(~{:: main})}">
 <body>
-<main>
+<main id="checkValidateVariant">
     <div class="home-tab">
         <div class="d-sm-flex align-items-center justify-content-between border-bottom">
             <ul class="nav nav-tabs" role="tablist">
@@ -53,8 +53,7 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
-                                                            <input type="text"
-                                                                   class="form-control"
+                                                            <input type="text" class="form-control"
                                                                    name="nameMaterial"
                                                                    placeholder="Enter Name Material">
                                                         </div>
@@ -81,30 +80,30 @@
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
-                                            <th style="width: 50px">#</th>
-                                            <th style="width: 90px">CodeMaterial</th>
-                                            <th style="width: 172px">NameMaterial</th>
+                                            <th style="width: 30px">#</th>
+                                            <th style="width: 114px">CodeMaterial</th>
+                                            <th style="width: 151px">NameMaterial</th>
                                             <th style="width: 100px">UserCreate</th>
                                             <th style="width: 100px">UserUpdate</th>
                                             <th style="width: 100px">DateCreate</th>
                                             <th style="width: 100px">DateUpdate</th>
-                                            <th style="width: 100px">Status</th>
+                                            <th style="width: 84px">Status</th>
                                         </tr>
                                         </thead>
                                     </table>
                                 </div>
-                                <div class="content" style="height: 227px">
+                                <div class="content" style="height: 250px">
                                     <table class="table table-hover">
                                         <tbody>
                                         <tr th:each="listMaterial, stat : ${listMaterial}">
-                                            <td style="width: 50px" th:text="${stat.count}"></td>
-                                            <td style="width: 90px">
+                                            <td style="width: 30px" th:text="${stat.count}"></td>
+                                            <td style="width: 114px">
                                                 <a th:href="@{|/mangostore/admin/material/detail/${listMaterial.id}|}"
                                                    th:text="${listMaterial.codeMaterial}"
                                                    style="text-decoration: none">
                                                 </a>
                                             </td>
-                                            <td style="width: 172px; word-break: break-all"
+                                            <td style="width: 151px; word-break: break-all"
                                                 th:text="${listMaterial.nameMaterial}"></td>
                                             <td style="width: 100px" th:text="${listMaterial.nameUserCreate}"></td>
                                             <td style="width: 100px" th:text="${listMaterial.nameUserUpdate}"></td>
@@ -112,7 +111,7 @@
                                                 th:text="${#temporals.format(listMaterial.dateCreate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
                                             <td style="width: 100px"
                                                 th:text="${#temporals.format(listMaterial.dateUpdate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
-                                            <td style="width: 100px" th:if="${listMaterial.status == 1}">
+                                            <td style="width: 84px" th:if="${listMaterial.status == 1}">
                                                 <label class="badge badge-success">Is Active</label>
                                             </td>
                                         </tr>
@@ -141,30 +140,30 @@
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
-                                            <th style="width: 50px">#</th>
-                                            <th style="width: 90px">CodeMaterial</th>
-                                            <th style="width: 172px">NameMaterial</th>
+                                            <th style="width: 30px">#</th>
+                                            <th style="width: 114px">CodeMaterial</th>
+                                            <th style="width: 151px">NameMaterial</th>
                                             <th style="width: 100px">UserCreate</th>
                                             <th style="width: 100px">UserUpdate</th>
                                             <th style="width: 100px">DateCreate</th>
                                             <th style="width: 100px">DateUpdate</th>
-                                            <th style="width: 100px">Status</th>
+                                            <th style="width: 84px">Status</th>
                                         </tr>
                                         </thead>
                                     </table>
                                 </div>
-                                <div class="content" style="height: 345px">
+                                <div class="content" style="height: 395px">
                                     <table class="table table-hover">
                                         <tbody>
                                         <tr th:each="listMaterialInactive, stat : ${listMaterialInactive}">
-                                            <td style="width: 50px" th:text="${stat.count}"></td>
-                                            <td style="width: 90px">
+                                            <td style="width: 30px" th:text="${stat.count}"></td>
+                                            <td style="width: 114px">
                                                 <a th:href="@{|/mangostore/admin/material/restore/${listMaterialInactive.id}|}"
                                                    th:text="${listMaterialInactive.codeMaterial}"
                                                    onclick="return restore()"
                                                    style="text-decoration: none"></a>
                                             </td>
-                                            <td style="width: 172px; word-break: break-all"
+                                            <td style="width: 151px; word-break: break-all"
                                                 th:text="${listMaterialInactive.nameMaterial}"></td>
                                             <td style="width: 100px"
                                                 th:text="${listMaterialInactive.nameUserCreate}"></td>
@@ -174,7 +173,7 @@
                                                 th:text="${#temporals.format(listMaterialInactive.dateCreate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
                                             <td style="width: 100px"
                                                 th:text="${#temporals.format(listMaterialInactive.dateUpdate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
-                                            <td style="width: 100px" th:if="${listMaterialInactive.status == 0}">
+                                            <td style="width: 84px" th:if="${listMaterialInactive.status == 0}">
                                                 <label class="badge badge-danger">Stop Working</label>
                                             </td>
                                         </tr>

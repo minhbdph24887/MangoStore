@@ -44,6 +44,7 @@
                                                         <select name="idProduct" class="form-select" id="idProduct">
                                                             <option th:each="listProduct : ${listProduct}"
                                                                     th:value="${listProduct.id}"
+                                                                    th:data-name="${listProduct.nameProduct}"
                                                                     th:text="${listProduct.nameProduct}"></option>
                                                         </select>
                                                     </div>
@@ -146,8 +147,7 @@
                                             <table id="result">
                                                 <thead>
                                                 <tr>
-                                                    <th style="width: 100px;">Size</th>
-                                                    <th style="width: 100px">Color</th>
+                                                    <th style="width: 172px">NameProduct</th>
                                                     <th style="width: 80px">Quantity</th>
                                                     <th style="width: 100px">ImportPrice</th>
                                                     <th style="width: 100px">Price</th>

@@ -79,36 +79,36 @@
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
-                                            <th style="width: 49px">#</th>
-                                            <th style="width: 85px">CodeSize</th>
-                                            <th style="width: 80px">NameSize</th>
+                                            <th style="width: 30px">#</th>
+                                            <th style="width: 114px">CodeSize</th>
+                                            <th style="width: 110px">NameSize</th>
                                             <th style="width: 100px">UserCreate</th>
                                             <th style="width: 100px">UserUpdate</th>
                                             <th style="width: 100px">DateCreate</th>
                                             <th style="width: 100px">DateUpdate</th>
-                                            <th style="width: 100px">Status</th>
+                                            <th style="width: 84px">Status</th>
                                         </tr>
                                         </thead>
                                     </table>
                                 </div>
-                                <div class="content" style="height: 227px">
+                                <div class="content" style="height: 245px">
                                     <table class="table table-hover">
                                         <tbody>
                                         <tr th:each="listSize, stat : ${listSize}">
-                                            <td style="width: 49px" th:text="${stat.count}"></td>
-                                            <td style="width: 85px">
+                                            <td style="width: 30px" th:text="${stat.count}"></td>
+                                            <td style="width: 114px">
                                                 <a th:href="@{|/mangostore/admin/size/detail/${listSize.id}|}"
                                                    th:text="${listSize.codeSize}" style="text-decoration: none">
                                                 </a>
                                             </td>
-                                            <td style="width: 80px" th:text="${listSize.nameSize}"></td>
+                                            <td style="width: 110px" th:text="${listSize.nameSize}"></td>
                                             <td style="width: 100px" th:text="${listSize.nameUserCreate}"></td>
                                             <td style="width: 100px" th:text="${listSize.nameUserUpdate}"></td>
                                             <td style="width: 100px"
                                                 th:text="${#temporals.format(listSize.dateCreate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
                                             <td style="width: 100px"
                                                 th:text="${#temporals.format(listSize.dateUpdate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
-                                            <td style="width: 100px" th:if="${listSize.status == 1}">
+                                            <td style="width: 84px" th:if="${listSize.status == 1}">
                                                 <label class="badge badge-success">Is Active</label>
                                             </td>
                                         </tr>
@@ -137,37 +137,37 @@
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
-                                            <th style="width: 49px">#</th>
-                                            <th style="width: 85px">CodeSize</th>
-                                            <th style="width: 80px">NameSize</th>
+                                            <th style="width: 30px">#</th>
+                                            <th style="width: 114px">CodeSize</th>
+                                            <th style="width: 110px">NameSize</th>
                                             <th style="width: 100px">UserCreate</th>
                                             <th style="width: 100px">UserUpdate</th>
                                             <th style="width: 100px">DateCreate</th>
                                             <th style="width: 100px">DateUpdate</th>
-                                            <th style="width: 100px">Status</th>
+                                            <th style="width: 84px">Status</th>
                                         </tr>
                                         </thead>
                                     </table>
                                 </div>
-                                <div class="content" style="height: 345px">
+                                <div class="content" style="height: 395px">
                                     <table class="table table-hover">
                                         <tbody>
                                         <tr th:each="listSizeInactive, stat : ${listSizeInactive}">
-                                            <td style="width: 49px" th:text="${stat.count}"></td>
-                                            <td style="width: 85px">
+                                            <td style="width: 30px" th:text="${stat.count}"></td>
+                                            <td style="width: 114px">
                                                 <a th:href="@{|/mangostore/admin/size/restore/${listSizeInactive.id}|}"
                                                    th:text="${listSizeInactive.codeSize}" onclick="return restore()"
                                                    style="text-decoration: none">
                                                 </a>
                                             </td>
-                                            <td style="width: 80px" th:text="${listSizeInactive.nameSize}"></td>
+                                            <td style="width: 110px" th:text="${listSizeInactive.nameSize}"></td>
                                             <td style="width: 100px" th:text="${listSizeInactive.nameUserCreate}"></td>
                                             <td style="width: 100px" th:text="${listSizeInactive.nameUserUpdate}"></td>
                                             <td style="width: 100px"
                                                 th:text="${#temporals.format(listSizeInactive.dateCreate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
                                             <td style="width: 100px"
                                                 th:text="${#temporals.format(listSizeInactive.dateUpdate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
-                                            <td style="width: 100px" th:if="${listSizeInactive.status == 0}">
+                                            <td style="width: 84px" th:if="${listSizeInactive.status == 0}">
                                                 <label class="badge badge-danger">Stop Working</label>
                                             </td>
                                         </tr>

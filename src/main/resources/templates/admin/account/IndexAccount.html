@@ -156,29 +156,29 @@
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
-                                            <th style="width: 50px">#</th>
-                                            <th style="width: 110px">FullName</th>
-                                            <th style="width: 90px">NumberPhone</th>
+                                            <th style="width: 30px">#</th>
+                                            <th style="width: 117px">FullName</th>
+                                            <th style="width: 139px">NumberPhone</th>
                                             <th style="width: 172px">Email</th>
                                             <th style="width: 100px">Birthday</th>
                                             <th style="width: 100px">Gender</th>
                                             <th style="width: 100px">Images</th>
                                             <th style="width: 100px">Address</th>
-                                            <th style="width: 100px">Status</th>
+                                            <th style="width: 84px">Status</th>
                                         </tr>
                                         </thead>
                                     </table>
                                 </div>
-                                <div class="content" style="height: 217px">
+                                <div class="content" style="height: 245px">
                                     <table class="table table-hover">
                                         <tbody>
                                         <tr th:each="listAccount, stat : ${listAccount}">
-                                            <td style="width: 50px" th:text="${stat.count}"></td>
-                                            <td style="width: 110px">
+                                            <td style="width: 30px" th:text="${stat.count}"></td>
+                                            <td style="width: 117px">
                                                 <a th:href="@{|/mangostore/admin/account/detail/${listAccount.id}|}"
                                                    th:text="${listAccount.fullName}" style="text-decoration: none"></a>
                                             </td>
-                                            <td style="width: 90px" th:text="${listAccount.numberPhone}"></td>
+                                            <td style="width: 139px" th:text="${listAccount.numberPhone}"></td>
                                             <td style="width: 172px" th:text="${listAccount.email}"></td>
                                             <td style="width: 100px"
                                                 th:text="${#temporals.format(listAccount.birthday, 'dd/MM/yyyy')}"></td>
@@ -187,11 +187,11 @@
                                             <td style="width: 100px" th:unless="${listAccount.gender != null}"></td>
                                             <td style="width: 100px" th:if="${listAccount.images != null}">
                                                 <img th:src="@{|/image/profile/${listAccount.images}|}" alt="image"
-                                                     style="width: 117px; height: 112px">
+                                                     style="width: 92px; height: 90px">
                                             </td>
                                             <td style="width: 100px" th:unless="${listAccount.images != null}"></td>
                                             <td style="width: 100px" th:text="${listAccount.address}"></td>
-                                            <td style="width: 100px" th:if="${listAccount.status == 1}">
+                                            <td style="width: 84px" th:if="${listAccount.status == 1}">
                                                 <label class="badge badge-success">Active</label>
                                             </td>
                                         </tr>

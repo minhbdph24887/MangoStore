@@ -52,12 +52,9 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
-                                                            <input type="text"
-                                                                   class="form-control"
+                                                            <input type="text" class="form-control"
                                                                    name="nameColor"
-                                                                   id="nameColor"
                                                                    placeholder="Enter Name Color">
-                                                            <span id="returnValidate" style="color: red"></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-12">
@@ -82,30 +79,30 @@
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
-                                            <th style="width: 50px">#</th>
-                                            <th style="width: 90px">CodeColor</th>
-                                            <th style="width: 172px">NameColor</th>
+                                            <th style="width: 30px">#</th>
+                                            <th style="width: 104px">CodeColor</th>
+                                            <th style="width: 136px">NameColor</th>
                                             <th style="width: 100px">UserCreate</th>
                                             <th style="width: 100px">UserUpdate</th>
                                             <th style="width: 100px">DateCreate</th>
                                             <th style="width: 100px">DateUpdate</th>
-                                            <th style="width: 100px">Status</th>
+                                            <th style="width: 84px">Status</th>
                                         </tr>
                                         </thead>
                                     </table>
                                 </div>
-                                <div class="content" style="height: 227px">
+                                <div class="content" style="height: 250px">
                                     <table class="table table-hover">
                                         <tbody>
                                         <tr th:each="listColor, stat : ${listColor}">
-                                            <td style="width: 50px" th:text="${stat.count}"></td>
-                                            <td style="width: 90px">
+                                            <td style="width: 30px" th:text="${stat.count}"></td>
+                                            <td style="width: 104px">
                                                 <a th:href="@{|/mangostore/admin/color/detail/${listColor.id}|}"
                                                    th:text="${listColor.codeColor}"
                                                    style="text-decoration: none">
                                                 </a>
                                             </td>
-                                            <td style="width: 172px; word-break: break-all"
+                                            <td style="width: 136px; word-break: break-all"
                                                 th:text="${listColor.nameColor}"></td>
                                             <td style="width: 100px" th:text="${listColor.nameUserCreate}"></td>
                                             <td style="width: 100px" th:text="${listColor.nameUserUpdate}"></td>
@@ -113,7 +110,7 @@
                                                 th:text="${#temporals.format(listColor.dateCreate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
                                             <td style="width: 100px"
                                                 th:text="${#temporals.format(listColor.dateUpdate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
-                                            <td style="width: 100px" th:if="${listColor.status == 1}">
+                                            <td style="width: 84px" th:if="${listColor.status == 1}">
                                                 <label class="badge badge-success">Is Active</label>
                                             </td>
                                         </tr>
@@ -142,30 +139,30 @@
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
-                                            <th style="width: 50px">#</th>
-                                            <th style="width: 90px">CodeColor</th>
-                                            <th style="width: 172px">NameColor</th>
+                                            <th style="width: 30px">#</th>
+                                            <th style="width: 104px">CodeColor</th>
+                                            <th style="width: 136px">NameColor</th>
                                             <th style="width: 100px">UserCreate</th>
                                             <th style="width: 100px">UserUpdate</th>
                                             <th style="width: 100px">DateCreate</th>
                                             <th style="width: 100px">DateUpdate</th>
-                                            <th style="width: 100px">Status</th>
+                                            <th style="width: 84px">Status</th>
                                         </tr>
                                         </thead>
                                     </table>
                                 </div>
-                                <div class="content" style="height: 345px">
+                                <div class="content" style="height: 395px">
                                     <table class="table table-hover">
                                         <tbody>
                                         <tr th:each="listColorInactive, stat : ${listColorInactive}">
-                                            <td style="width: 50px" th:text="${stat.count}"></td>
-                                            <td style="width: 90px">
+                                            <td style="width: 30px" th:text="${stat.count}"></td>
+                                            <td style="width: 104px">
                                                 <a th:href="@{|/mangostore/admin/color/restore/${listColorInactive.id}|}"
                                                    th:text="${listColorInactive.codeColor}"
                                                    onclick="return restore()"
                                                    style="text-decoration: none"></a>
                                             </td>
-                                            <td style="width: 172px;word-break: break-all"
+                                            <td style="width: 136px;word-break: break-all"
                                                 th:text="${listColorInactive.nameColor}"></td>
                                             <td style="width: 100px"
                                                 th:text="${listColorInactive.nameUserCreate}"></td>
@@ -175,7 +172,7 @@
                                                 th:text="${#temporals.format(listColorInactive.dateCreate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
                                             <td style="width: 100px"
                                                 th:text="${#temporals.format(listColorInactive.dateUpdate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
-                                            <td style="width: 100px" th:if="${listColorInactive.status == 0}">
+                                            <td style="width: 84px" th:if="${listColorInactive.status == 0}">
                                                 <label class="badge badge-danger">Stop Working</label>
                                             </td>
                                         </tr>

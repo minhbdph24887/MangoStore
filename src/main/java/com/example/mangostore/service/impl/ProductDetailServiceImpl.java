@@ -222,7 +222,6 @@ public class ProductDetailServiceImpl implements ProductDetailService {
                 Size size = sizeRepository.findByName(items.getSize());
                 Color color = colorRepository.findByName(items.getColor());
                 ProductDetail productDetail = new ProductDetail();
-                productDetail.setName(product.get().getNameProduct());
                 productDetail.setImagesProductDetail(request.getImagesProduct());
                 productDetail.setDescribe(request.getDescribe());
                 productDetail.setNameUserCreate(account.getFullName());

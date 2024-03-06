@@ -11,7 +11,6 @@ public class ProductDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
     private String imagesProductDetail;
     @ManyToOne
     @JoinColumn(name = "idProduct")
@@ -41,7 +40,6 @@ public class ProductDetail {
     private Integer status;
 
     public ProductDetail(Long id,
-                         String name,
                          String imagesProductDetail,
                          Product product,
                          Material material,
@@ -58,7 +56,6 @@ public class ProductDetail {
                          LocalDateTime dateUpdate,
                          Integer status) {
         this.id = id;
-        this.name = name;
         this.imagesProductDetail = imagesProductDetail;
         this.product = product;
         this.material = material;
@@ -85,14 +82,6 @@ public class ProductDetail {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getImagesProductDetail() {
