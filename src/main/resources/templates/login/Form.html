@@ -5,7 +5,7 @@
 <main>
     <div class="row align-items-center">
         <div class="header-text mb-4">
-            <h2>Hello, Mango Store</h2>
+            <h3>Hello, Mango Store</h3>
             <p>Please log in to use the website.</p>
         </div>
         <form th:action="@{/mangostore/login/success}" method="post">
@@ -24,7 +24,8 @@
                         Me</small></label>
                 </div>
                 <div class="forgot">
-                    <small><a th:href="@{/mangostore/login/forgot}" style="text-decoration: none">Forgot Password?</a></small>
+                    <small><a th:href="@{/mangostore/login/forgot}" style="text-decoration: none">Forgot
+                        Password?</a></small>
                 </div>
             </div>
             <div class="input-group mb-3">
@@ -34,13 +35,13 @@
                 <a type="button" th:href="@{/oauth2/authorization/google}" class="btn btn-lg btn-light w-100 fs-6"><img
                         th:src="@{|/image/icon-google.png|}"
                         style="width:20px"
-                        class="me-2" alt=""><small>Sign In with
+                        class="me-2" alt=""><small>Log In with
                     Google</small>
                 </a>
             </div>
         </form>
         <div class="row">
-            <small>Don't have account? <a th:href="@{/mangostore/login/signup}" style="text-decoration: none">Sign Up</a></small>
+            <small>Don't have account? <a th:href="@{/mangostore/login/signup}" style="text-decoration: none">Log in</a></small>
         </div>
     </div>
 </main>

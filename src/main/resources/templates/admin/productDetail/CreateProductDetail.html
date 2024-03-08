@@ -159,7 +159,7 @@
                                     </div>
                                 </div>
                             </form>
-                            <div style="margin-left: 985px">
+                            <div class="text-right mt-3">
                                 <input type="button" onclick="addProductDetailAPI()"
                                        value="Save"
                                        class="btn btn-primary">
@@ -179,40 +179,42 @@
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
-                                            <th style="width: 50px">#</th>
-                                            <th style="width: 100px">ImagesProduct</th>
+                                            <th style="width: 30px">#</th>
+                                            <th style="width: 139px">ImagesProduct</th>
                                             <th style="width: 172px">Name</th>
-                                            <th style="width: 100px">Material</th>
-                                            <th style="width: 100px">Origin</th>
+                                            <th style="width: 95px">Material</th>
+                                            <th style="width: 95px">Origin</th>
                                             <th style="width: 100px">Describe</th>
-                                            <th style="width: 100px">Quantity</th>
-                                            <th style="width: 100px">Status</th>
+                                            <th style="width: 85px">Quantity</th>
+                                            <th style="width: 84px">Status</th>
                                         </tr>
                                         </thead>
                                     </table>
                                 </div>
-                                <div class="content" style="height: 345px">
+                                <div class="content" style="height: 395px">
                                     <table class="table table-hover">
                                         <tbody>
                                         <tr th:each="listProductDetailInactive, stat : ${listProductDetailInactive}">
-                                            <td style="width: 50px" th:text="${stat.count}"></td>
-                                            <td style="width: 100px"
-                                                th:text="${listProductDetail.imagesProductDetail}"></td>
+                                            <td style="width: 30px" th:text="${stat.count}"></td>
+                                            <td style="width: 139px">
+                                                <img th:src="@{|/image/product/${listProductDetailInactive.imagesProductDetail}|}"
+                                                     alt="image" style="width: 116px; height: 132px">
+                                            </td>
                                             <td style="width: 172px; word-break: break-all">
                                                 <a th:href="@{|/mangostore/admin/product-detail/restore/${listProductDetailInactive.id}|}"
                                                    th:text="${listProductDetailInactive.product.nameProduct}"
                                                    style="text-decoration: none">
                                                 </a>
                                             </td>
-                                            <td style="width: 100px"
+                                            <td style="width: 95px"
                                                 th:text="${listProductDetailInactive.material.nameMaterial}"></td>
-                                            <td style="width: 100px"
+                                            <td style="width: 95px"
                                                 th:text="${listProductDetailInactive.origin.nameOrigin}"></td>
                                             <td style="width: 100px"
                                                 th:text="${listProductDetailInactive.describe}"></td>
-                                            <td style="width: 100px"
+                                            <td style="width: 85px"
                                                 th:text="${listProductDetailInactive.quantity}"></td>
-                                            <td style="width: 100px" th:if="${listProductDetailInactive.status == 0}">
+                                            <td style="width: 84px" th:if="${listProductDetailInactive.status == 0}">
                                                 <label class="badge badge-success">Stop Working</label>
                                             </td>
                                         </tr>

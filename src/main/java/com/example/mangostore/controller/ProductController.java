@@ -249,4 +249,23 @@ public class ProductController {
                                    Model model) {
         return productDetailService.addProductDetail(productDetailForm, result, session, model);
     }
+
+    @GetMapping(value = "product-detail/edit/{id}")
+    public String editProductDetail(@PathVariable("id") Long idProductDetail,
+                                    Model model,
+                                    HttpSession session) {
+        return productDetailService.editProductDetail(idProductDetail, model, session);
+    }
+
+    @PostMapping(value = "product-detail/update")
+    public String updateProductDetail(@Valid ProductDetail editProductDetail,
+                                      BindingResult result,
+                                      HttpSession session) {
+        return productDetailService.updateProductDetail(editProductDetail, result, session);
+    }
+
+    @GetMapping(value = "product-detail/delete/{id}")
+    public String deleteProductDetail(@PathVariable("id") Long idProductDetail) {
+        return productDetailService.deleteProductDetail(idProductDetail);
+    }
 }

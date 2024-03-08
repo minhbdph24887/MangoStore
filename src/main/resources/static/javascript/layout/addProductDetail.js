@@ -62,6 +62,7 @@ function generateVariants() {
 function getDataFromTable() {
     const resultArray = [];
     const tableRows = document.querySelectorAll('#result tbody tr');
+    let isValid = true;
 
     tableRows.forEach(function (row) {
         const size = row.cells[4].textContent;
@@ -74,6 +75,12 @@ function getDataFromTable() {
         const importPrice = parseFloat(importPriceInput);
         const price = parseFloat(priceInput);
 
+        if (quantity <= 0 || importPrice <= 0 || price <= 0) {
+            alert("The new data is incorrect, please re-enter.");
+            isValid = false;
+            return;
+        }
+
         const variantData = {
             size: size,
             color: color,
@@ -83,7 +90,8 @@ function getDataFromTable() {
         };
         resultArray.push(variantData);
     });
-    return resultArray;
+
+    return isValid ? resultArray : null;
 }
 
 function addProductDetailAPI() {
@@ -92,34 +100,39 @@ function addProductDetailAPI() {
     const idOrigin = document.getElementById("origin").value;
     const imagesProduct = document.getElementById("imageInput").files[0].name;
     const describe = document.getElementById("describeInput").value;
+    const variantRequests = getDataFromTable();
+
+    if (!variantRequests) {
+        return;
+    }
+
     const data = {
         idProduct: idProduct,
         imagesProduct: imagesProduct,
         idMaterial: idMaterial,
         idOrigin: idOrigin,
         describe: describe,
-        variantRequests: getDataFromTable(),
+        variantRequests: variantRequests,
     };
+
     console.log(data)
+
     if (add()) {
         alert("Add ProductDetail Fall.")
     } else {
-        if (data.variantRequests === []) {
-            alert("Please enter product variation.")
-        } else {
-            $.ajax({
-                type: "POST",
-                contentType: "application/json",
-                url: "http://localhost:8080" + "/api/mangostore/admin/product-detail/add",
-                data: JSON.stringify(data),
-                dataType: 'json',
-                success: function (responseData) {
-                    window.open("http://localhost:8080/mangostore/admin/product-detail", "_self")
-                },
-                error: function (e) {
-                    console.log("ERROR : ", e);
-                }
-            });
-        }
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "http://localhost:8080" + "/api/mangostore/admin/product-detail/add",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            success: function (responseData) {
+                window.open("http://localhost:8080/mangostore/admin/product-detail", "_self")
+            },
+            error: function (e) {
+                console.log("ERROR : ", e);
+            }
+        });
     }
 }
+

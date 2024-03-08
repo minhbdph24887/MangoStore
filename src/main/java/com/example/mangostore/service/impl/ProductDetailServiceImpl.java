@@ -5,10 +5,12 @@ import com.example.mangostore.entity.*;
 import com.example.mangostore.repository.*;
 import com.example.mangostore.request.CreateProductRequest;
 import com.example.mangostore.request.ProductDetailRequest;
+import com.example.mangostore.request.RestoreProductDetailRequest;
 import com.example.mangostore.service.ProductDetailService;
-import com.example.mangostore.service.ProductService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -240,6 +243,92 @@ public class ProductDetailServiceImpl implements ProductDetailService {
                 productDetailRepository.save(productDetail);
             });
         }
+        return true;
+    }
+
+    @Override
+    public String editProductDetail(Long idProductDetail, Model model, HttpSession session) {
+        String email = (String) session.getAttribute("loginEmail");
+        if (email == null) {
+            return "redirect:/mangostore/home";
+        } else {
+            Account detailAccount = accountRepository.detailAccountByEmail(email);
+            if (detailAccount.getStatus() == 0) {
+                session.invalidate();
+                return "redirect:/mangostore/home";
+            } else {
+                model.addAttribute("profile", detailAccount);
+
+                LocalDateTime checkDate = LocalDateTime.now();
+                int hour = checkDate.getHour();
+                if (hour >= 5 && hour < 10) {
+                    model.addAttribute("dates", "Morning");
+                } else if (hour >= 10 && hour < 13) {
+                    model.addAttribute("dates", "Noon");
+                } else if (hour >= 13 && hour < 18) {
+                    model.addAttribute("dates", "Afternoon");
+                } else {
+                    model.addAttribute("dates", "Evening");
+                }
+
+                Role detailRole = roleRepository.getRoleByEmail(email);
+                if (detailRole.getName().equals("ADMIN")) {
+                    model.addAttribute("checkMenuAdmin", true);
+                } else {
+                    model.addAttribute("checkMenuAdmin", false);
+                }
+
+                ProductDetail productDetail = productDetailRepository.findById(idProductDetail).orElse(null);
+                model.addAttribute("editProductDetail", productDetail);
+
+                List<ProductDetail> itemsProductDetailInactive = productDetailRepository.getAllProductDetailByStatus0();
+                model.addAttribute("listProductDetailInactive", itemsProductDetailInactive);
+
+                return "admin/productDetail/EditProductDetail";
+            }
+        }
+    }
+
+    @Override
+    public String updateProductDetail(ProductDetail editProductDetail, BindingResult result, HttpSession session) {
+        ProductDetail productDetail = productDetailRepository.findById(editProductDetail.getId()).orElse(null);
+
+        productDetail.setDescribe(editProductDetail.getDescribe());
+        productDetail.setQuantity(editProductDetail.getQuantity());
+        productDetail.setImportPrice(editProductDetail.getImportPrice());
+        productDetail.setPrice(editProductDetail.getPrice());
+
+        String email = (String) session.getAttribute("loginEmail");
+        Account detailAccount = accountRepository.detailAccountByEmail(email);
+        productDetail.setNameUserUpdate(detailAccount.getFullName());
+        productDetail.setDateUpdate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
+
+        productDetail.setStatus(editProductDetail.getStatus());
+
+        productDetailRepository.save(productDetail);
+
+        if (productDetail.getQuantity() == 0) {
+            productDetail.setStatus(0);
+            productDetailRepository.save(productDetail);
+        }
+        return "redirect:/mangostore/admin/product-detail";
+    }
+
+    @Override
+    public String deleteProductDetail(Long idProductDetail) {
+        ProductDetail productDetail = productDetailRepository.findById(idProductDetail).orElse(null);
+        assert productDetail != null;
+        productDetail.setStatus(0);
+        productDetailRepository.save(productDetail);
+        return "redirect:/mangostore/admin/product-detail";
+    }
+
+    @Override
+    public boolean restoreProductDetailAPI(RestoreProductDetailRequest request) {
+        ProductDetail productDetail = productDetailRepository.findById(request.getIdProductDetail()).orElse(null);
+        productDetail.setQuantity(request.getQuantity());
+        productDetail.setStatus(1);
+        productDetailRepository.save(productDetail);
         return true;
     }
 }
