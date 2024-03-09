@@ -2,12 +2,12 @@ package com.example.mangostore.service.impl;
 
 import com.example.mangostore.config.Gender;
 import com.example.mangostore.entity.Account;
-import com.example.mangostore.entity.Product;
+import com.example.mangostore.entity.Rank;
 import com.example.mangostore.entity.Role;
 import com.example.mangostore.repository.AccountRepository;
-import com.example.mangostore.repository.ProductRepository;
+import com.example.mangostore.repository.RankRepository;
 import com.example.mangostore.repository.RoleRepository;
-import com.example.mangostore.service.ProductService;
+import com.example.mangostore.service.RankService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -18,24 +18,24 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
-public class ProductServiceImpl implements ProductService {
+public class RankServerImpl implements RankService {
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
-    private final ProductRepository productRepository;
+    private final RankRepository rankRepository;
     private final Gender gender;
 
-    public ProductServiceImpl(AccountRepository accountRepository,
-                              RoleRepository roleRepository,
-                              ProductRepository productRepository,
-                              Gender gender) {
+    public RankServerImpl(AccountRepository accountRepository,
+                          RoleRepository roleRepository,
+                          RankRepository rankRepository,
+                          Gender gender) {
         this.accountRepository = accountRepository;
         this.roleRepository = roleRepository;
-        this.productRepository = productRepository;
+        this.rankRepository = rankRepository;
         this.gender = gender;
     }
 
     @Override
-    public String indexProduct(Model model, HttpSession session, String keyword) {
+    public String indexRank(Model model, HttpSession session, String keyword) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -66,40 +66,42 @@ public class ProductServiceImpl implements ProductService {
                     model.addAttribute("checkMenuAdmin", false);
                 }
 
-                List<Product> itemsProduct = productRepository.getAllProductByStatus1();
+                List<Rank> itemsRank = rankRepository.getAllRankByStatus1();
                 if (keyword != null) {
-                    itemsProduct = productRepository.searchProduct(keyword);
+                    itemsRank = rankRepository.searchRank(keyword);
                     model.addAttribute("keyword", keyword);
                 }
-                model.addAttribute("listProduct", itemsProduct);
+                model.addAttribute("listRank", itemsRank);
 
-                List<Product> itemsProductInactive = productRepository.getAllProductByStatus0();
-                model.addAttribute("listProductInactive", itemsProductInactive);
+                List<Rank> itemsRankInactive = rankRepository.getAllRankByStatus0();
+                model.addAttribute("listRankInactive", itemsRankInactive);
 
-                model.addAttribute("addProduct", new Product());
-                return "admin/product/IndexProduct";
+                model.addAttribute("addRank", new Rank());
+                return "admin/rank/IndexRank";
             }
         }
     }
 
     @Override
-    public String addProduct(Product addProduct, BindingResult result, HttpSession session) {
+    public String addRank(Rank addRank, BindingResult result, HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         Account detailAccount = accountRepository.detailAccountByEmail(email);
-        Product newProduct = new Product();
-        newProduct.setCodeProduct(gender.generateCode());
-        newProduct.setNameProduct(addProduct.getNameProduct());
-        newProduct.setNameUserCreate(detailAccount.getFullName());
-        newProduct.setNameUserUpdate(detailAccount.getFullName());
-        newProduct.setDateCreate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
-        newProduct.setDateUpdate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
-        newProduct.setStatus(1);
-        productRepository.save(newProduct);
-        return "redirect:/mangostore/admin/product";
+        Rank newRank = new Rank();
+        newRank.setCodeRank(gender.generateCode());
+        newRank.setNameRank(addRank.getNameRank());
+        newRank.setMinimumScore(addRank.getMinimumScore());
+        newRank.setMaximumScore(addRank.getMaximumScore());
+        newRank.setUserCreate(detailAccount.getFullName());
+        newRank.setUserUpdate(detailAccount.getFullName());
+        newRank.setDateCreate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
+        newRank.setDateUpdate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
+        newRank.setStatus(1);
+        rankRepository.save(newRank);
+        return "redirect:/mangostore/admin/rank";
     }
 
     @Override
-    public String detailProduct(Model model, HttpSession session, Long idProduct) {
+    public String detailRank(Model model, HttpSession session, Long idRank) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -130,45 +132,45 @@ public class ProductServiceImpl implements ProductService {
                     model.addAttribute("checkMenuAdmin", false);
                 }
 
-                List<Product> itemsProductInactive = productRepository.getAllProductByStatus0();
-                model.addAttribute("listProductInactive", itemsProductInactive);
+                List<Rank> itemsRankInactive = rankRepository.getAllRankByStatus0();
+                model.addAttribute("listRankInactive", itemsRankInactive);
 
-                Product detailProduct = productRepository.findById(idProduct).orElse(null);
-                model.addAttribute("detailProduct", detailProduct);
-                return "admin/product/DetailProduct";
+                Rank detailRank = rankRepository.findById(idRank).orElse(null);
+                model.addAttribute("detailRank", detailRank);
+                return "admin/rank/DetailRank";
             }
         }
     }
 
     @Override
-    public String updateProduct(BindingResult result, HttpSession session, Product product) {
-        Product detailProduct = productRepository.findById(product.getId()).orElse(null);
-        detailProduct.setNameProduct(product.getNameProduct());
-
+    public String updateRank(BindingResult result, HttpSession session, Rank rank) {
+        Rank detailRank = rankRepository.findById(rank.getId()).orElse(null);
+        detailRank.setNameRank(rank.getNameRank());
+        detailRank.setMinimumScore(rank.getMinimumScore());
+        detailRank.setMaximumScore(rank.getMaximumScore());
         String email = (String) session.getAttribute("loginEmail");
         Account detailAccount = accountRepository.detailAccountByEmail(email);
-        detailProduct.setNameUserUpdate(detailAccount.getFullName());
-        detailProduct.setDateUpdate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
-        detailProduct.setStatus(product.getStatus());
-
-        productRepository.save(detailProduct);
-        return "redirect:/mangostore/admin/product";
+        detailRank.setUserUpdate(detailAccount.getFullName());
+        detailRank.setDateUpdate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
+        detailRank.setStatus(rank.getStatus());
+        rankRepository.save(detailRank);
+        return "redirect:/mangostore/admin/rank";
     }
 
     @Override
-    public String deleteProduct(Long idProduct) {
-        Product detailProduct = productRepository.findById(idProduct).orElse(null);
-        assert detailProduct != null;
-        detailProduct.setStatus(0);
-        productRepository.save(detailProduct);
-        return "redirect:/mangostore/admin/product";
+    public String deleteRank(Long idRank) {
+        Rank detailRank = rankRepository.findById(idRank).orElse(null);
+        assert detailRank != null;
+        detailRank.setStatus(0);
+        rankRepository.save(detailRank);
+        return "redirect:/mangostore/admin/rank";
     }
 
     @Override
-    public String restoreProduct(Long idProduct) {
-        Product detailProduct = productRepository.findById(idProduct).orElse(null);
-        detailProduct.setStatus(1);
-        productRepository.save(detailProduct);
-        return "redirect:/mangostore/admin/product";
+    public String restoreRank(Long idRank) {
+        Rank detailRank = rankRepository.findById(idRank).orElse(null);
+        detailRank.setStatus(1);
+        rankRepository.save(detailRank);
+        return "redirect:/mangostore/admin/rank";
     }
 }

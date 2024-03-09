@@ -32,8 +32,11 @@ public class Account implements UserDetails {
     private String images;
     private String encryptionPassword;
     private String veryCode;
-
     private String address;
+    private Integer accumulatedPoints;
+    @ManyToOne
+    @JoinColumn(name = "idRank")
+    private Rank rank;
     @OneToMany(mappedBy = "account")
     List<Authentication> authentications;
     private Integer status;
@@ -48,6 +51,8 @@ public class Account implements UserDetails {
                    String encryptionPassword,
                    String veryCode,
                    String address,
+                   Integer accumulatedPoints,
+                   Rank rank,
                    List<Authentication> authentications,
                    Integer status) {
         this.id = id;
@@ -60,6 +65,8 @@ public class Account implements UserDetails {
         this.encryptionPassword = encryptionPassword;
         this.veryCode = veryCode;
         this.address = address;
+        this.accumulatedPoints = accumulatedPoints;
+        this.rank = rank;
         this.authentications = authentications;
         this.status = status;
     }
@@ -145,6 +152,22 @@ public class Account implements UserDetails {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Integer getAccumulatedPoints() {
+        return accumulatedPoints;
+    }
+
+    public void setAccumulatedPoints(Integer accumulatedPoints) {
+        this.accumulatedPoints = accumulatedPoints;
+    }
+
+    public Rank getRank() {
+        return rank;
+    }
+
+    public void setRank(Rank rank) {
+        this.rank = rank;
     }
 
     public List<Authentication> getAuthentications() {

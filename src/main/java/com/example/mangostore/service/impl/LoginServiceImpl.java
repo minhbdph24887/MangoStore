@@ -2,9 +2,11 @@ package com.example.mangostore.service.impl;
 
 import com.example.mangostore.config.Gender;
 import com.example.mangostore.entity.Account;
+import com.example.mangostore.entity.Rank;
 import com.example.mangostore.entity.Role;
 import com.example.mangostore.repository.AccountRepository;
 import com.example.mangostore.repository.AuthenticationRepository;
+import com.example.mangostore.repository.RankRepository;
 import com.example.mangostore.repository.RoleRepository;
 import com.example.mangostore.service.LoginService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,17 +27,20 @@ public class LoginServiceImpl implements LoginService {
     private final PasswordEncoder encoder;
     private final RoleRepository roleRepository;
     private final AuthenticationRepository authenticationRepository;
+    private final RankRepository rankRepository;
     private final Gender gender;
 
     public LoginServiceImpl(AccountRepository accountRepository,
                             PasswordEncoder encoder,
                             RoleRepository roleRepository,
                             AuthenticationRepository authenticationRepository,
+                            RankRepository rankRepository,
                             Gender gender) {
         this.accountRepository = accountRepository;
         this.encoder = encoder;
         this.roleRepository = roleRepository;
         this.authenticationRepository = authenticationRepository;
+        this.rankRepository = rankRepository;
         this.gender = gender;
     }
 
@@ -67,6 +72,11 @@ public class LoginServiceImpl implements LoginService {
             Account newAccount = new Account();
             newAccount.setEmail(email);
             newAccount.setFullName(fullName);
+            newAccount.setAccumulatedPoints(0);
+
+            Rank detailRank = rankRepository.detailRankByAccumulatedPoints(0);
+            newAccount.setRank(detailRank);
+
             newAccount.setStatus(1);
             accountRepository.save(newAccount);
 
@@ -150,6 +160,11 @@ public class LoginServiceImpl implements LoginService {
             newAccount.setFullName(fullName);
             newAccount.setEmail(email);
             newAccount.setEncryptionPassword(encoder.encode(passwordRefresh));
+            newAccount.setAccumulatedPoints(0);
+
+            Rank detailRank = rankRepository.detailRankByAccumulatedPoints(0);
+            newAccount.setRank(detailRank);
+
             newAccount.setStatus(1);
             accountRepository.save(newAccount);
 

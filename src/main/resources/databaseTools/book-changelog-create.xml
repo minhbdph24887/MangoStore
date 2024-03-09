@@ -19,10 +19,13 @@
             <column name="encryption_password" type="varchar(255)"/>
             <column name="very_code" type="varchar(255)"/>
             <column name="address" type="nvarchar(255)"/>
+            <column name="accumulated_points" type="Integer"/>
+            <column name="id_rank" type="bigint">
+                <constraints nullable="false"/>
+            </column>
             <column name="status" type="integer"/>
         </createTable>
     </changeSet>
-
     <changeSet id="2" author="minhbdph24887">
         <createTable tableName="roles">
             <column name="id" type="bigint" autoIncrement="true">
@@ -47,61 +50,7 @@
             </column>
         </createTable>
     </changeSet>
-
     <changeSet id="4" author="minhbdph24887">
-        <addForeignKeyConstraint constraintName="fk_account"
-                                 baseTableName="authentication" baseColumnNames="id_account"
-                                 referencedTableName="accounts" referencedColumnNames="id"/>
-        <addForeignKeyConstraint constraintName="fk_role"
-                                 baseTableName="authentication" baseColumnNames="id_role"
-                                 referencedTableName="roles" referencedColumnNames="id"/>
-    </changeSet>
-
-    <changeSet id="5" author="minhbdph24887">
-        <insert tableName="accounts">
-            <column name="full_name" value="Bùi Đức Minh"/>
-            <column name="number_phone" value="0388598451"/>
-            <column name="email" value="minhbdph24887@gmail.com"/>
-            <column name="birthday" value="2003-03-09"/>
-            <column name="gender" value="true"/>
-            <column name="images" value="face1.jpg"/>
-            <column name="encryption_password" value="$2a$10$PHxDESHhw3vqCyPX4ph3TuNKktT15ez8BfbuR7qobH6THTjqjGMtm"/>
-            <column name="address" value="Ha Noi"/>
-            <column name="status" value="1"/>
-        </insert>
-    </changeSet>
-
-    <changeSet id="6" author="minhbdph24887">
-        <insert tableName="roles">
-            <column name="name" value="ADMIN"/>
-            <column name="note" value="Quản Trị Viên"/>
-            <column name="status" value="1"/>
-        </insert>
-    </changeSet>
-
-    <changeSet id="7" author="minhbdph24887">
-        <insert tableName="roles">
-            <column name="name" value="USER"/>
-            <column name="note" value="Người Dùng"/>
-            <column name="status" value="1"/>
-        </insert>
-    </changeSet>
-
-    <changeSet id="8" author="minhbdph24887">
-        <insert tableName="roles">
-            <column name="name" value="STAFF"/>
-            <column name="note" value="Nhân Viên"/>
-            <column name="status" value="1"/>
-        </insert>
-    </changeSet>
-
-    <changeSet id="9" author="minhbdph24887">
-        <insert tableName="authentication">
-            <column name="id_account" value="1"/>
-            <column name="id_role" value="1"/>
-        </insert>
-    </changeSet>
-    <changeSet id="10" author="minhbdph24887">
         <createTable tableName="color">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -115,7 +64,7 @@
             <column name="status" type="integer"/>
         </createTable>
     </changeSet>
-    <changeSet id="11" author="minhbdph24887">
+    <changeSet id="5" author="minhbdph24887">
         <createTable tableName="material">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -129,7 +78,7 @@
             <column name="status" type="integer"/>
         </createTable>
     </changeSet>
-    <changeSet id="12" author="minhbdph24887">
+    <changeSet id="6" author="minhbdph24887">
         <createTable tableName="product">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -143,7 +92,7 @@
             <column name="status" type="integer"/>
         </createTable>
     </changeSet>
-    <changeSet id="13" author="minhbdph24887">
+    <changeSet id="7" author="minhbdph24887">
         <createTable tableName="origin">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -157,7 +106,7 @@
             <column name="status" type="integer"/>
         </createTable>
     </changeSet>
-    <changeSet id="14" author="minhbdph24887">
+    <changeSet id="8" author="minhbdph24887">
         <createTable tableName="size">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -171,7 +120,7 @@
             <column name="status" type="integer"/>
         </createTable>
     </changeSet>
-    <changeSet id="15" author="minhbdph24887">
+    <changeSet id="9" author="minhbdph24887">
         <createTable tableName="product_detail">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -203,7 +152,89 @@
             <column name="status" type="integer"/>
         </createTable>
     </changeSet>
-    <changeSet id="16" author="minhbdph24887">
+    <changeSet id="10" author="minhbdph24887">
+        <createTable tableName="rank">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code_rank" type="varchar(255)"/>
+            <column name="name_rank" type="nvarchar(255)"/>
+            <column name="minimum_score" type="Integer"/>
+            <column name="maximum_score" type="Integer"/>
+            <column name="user_create" type="nvarchar(255)"/>
+            <column name="user_update" type="nvarchar(255)"/>
+            <column name="date_create" type="datetime2(6)"/>
+            <column name="date_update" type="datetime2(6)"/>
+            <column name="status" type="integer"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="11" author="minhbdph24887">
+        <createTable tableName="voucher">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code_voucher" type="varchar(255)"/>
+            <column name="name_voucher" type="nvarchar(255)"/>
+            <column name="quantity" type="integer"/>
+            <column name="reduced_value" type="integer"/>
+            <column name="voucher_from" type="varchar(255)"/>
+            <column name="id_rank" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_day" type="date"/>
+            <column name="end_date" type="date"/>
+            <column name="user_create" type="nvarchar(255)"/>
+            <column name="user_update" type="nvarchar(255)"/>
+            <column name="date_create" type="datetime2(6)"/>
+            <column name="date_update" type="datetime2(6)"/>
+            <column name="voucher_status" type="integer"/>
+            <column name="status" type="integer"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="12" author="minhbdph24887">
+        <createTable tableName="voucher_client">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code_voucher" type="varchar(255)"/>
+            <column name="name_voucher" type="nvarchar(255)"/>
+            <column name="reduced_value" type="integer"/>
+            <column name="id_account" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="save_date" type="datetime2(6)"/>
+            <column name="start_day" type="date"/>
+            <column name="end_date" type="date"/>
+            <column name="voucher_status" type="integer"/>
+            <column name="status" type="integer"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="13" author="minhbdph24887">
+        <createTable tableName="address_client">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code_address" type="varchar(255)"/>
+            <column name="name_client" type="nvarchar(255)"/>
+            <column name="phone_number" type="varchar(255)"/>
+            <column name="specific_address" type="nvarchar(255)"/>
+            <column name="commune" type="nvarchar(255)"/>
+            <column name="district" type="nvarchar(255)"/>
+            <column name="province" type="nvarchar(255)"/>
+            <column name="date_create" type="datetime2(6)"/>
+            <column name="id_account" type="bigint"/>
+            <column name="status" type="integer"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="14" author="minhbdph24887">
+        <addForeignKeyConstraint constraintName="fk_account"
+                                 baseTableName="authentication" baseColumnNames="id_account"
+                                 referencedTableName="accounts" referencedColumnNames="id"/>
+        <addForeignKeyConstraint constraintName="fk_role"
+                                 baseTableName="authentication" baseColumnNames="id_role"
+                                 referencedTableName="roles" referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="15" author="minhbdph24887">
         <addForeignKeyConstraint constraintName="fk_product"
                                  baseTableName="product_detail" baseColumnNames="id_product"
                                  referencedTableName="product" referencedColumnNames="id"/>
@@ -219,6 +250,159 @@
         <addForeignKeyConstraint constraintName="fk_origin"
                                  baseTableName="product_detail" baseColumnNames="id_origin"
                                  referencedTableName="origin" referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="16" author="minhbdph24887">
+        <addForeignKeyConstraint constraintName="fk_rank"
+                                 baseTableName="accounts" baseColumnNames="id_rank"
+                                 referencedTableName="rank" referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="17" author="minhbdph24887">
+        <addForeignKeyConstraint baseTableName="voucher" baseColumnNames="id_rank" constraintName="fk_voucher"
+                                 referencedTableName="rank"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="18" author="minhbdph24887">
+        <addForeignKeyConstraint baseTableName="voucher_client" baseColumnNames="id_account"
+                                 constraintName="fk_voucher_client" referencedTableName="accounts"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="19" author="minhbdph24887">
+        <addForeignKeyConstraint baseTableName="address_client" baseColumnNames="id_account"
+                                 constraintName="fk_address_client" referencedTableName="accounts"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="20" author="minhbdph24887">
+        <insert tableName="rank">
+            <column name="code_rank" value="LLH4O242BD"/>
+            <column name="name_rank" value="Đồng"/>
+            <column name="minimum_score" value="0"/>
+            <column name="maximum_score" value="100"/>
+            <column name="user_create" value="Bùi Đức Minh"/>
+            <column name="user_update" value="Bùi Đức Minh"/>
+            <column name="date_create" value="2024-03-09 00:00:00"/>
+            <column name="date_update" value="2024-03-09 00:00:00"/>
+            <column name="status" value="1"/>
+        </insert>
+    </changeSet>
+    <changeSet id="21" author="minhbdph24887">
+        <insert tableName="accounts">
+            <column name="full_name" value="Bùi Đức Minh"/>
+            <column name="number_phone" value="0388598451"/>
+            <column name="email" value="minhbdph24887@gmail.com"/>
+            <column name="birthday" value="2003-03-09"/>
+            <column name="gender" value="true"/>
+            <column name="images" value="face1.jpg"/>
+            <column name="encryption_password" value="$2a$10$PHxDESHhw3vqCyPX4ph3TuNKktT15ez8BfbuR7qobH6THTjqjGMtm"/>
+            <column name="address" value="Hà Nội"/>
+            <column name="accumulated_points" value="0"/>
+            <column name="id_rank" value="1"/>
+            <column name="status" value="1"/>
+        </insert>
+    </changeSet>
+    <changeSet id="22" author="minhbdph24887">
+        <insert tableName="roles">
+            <column name="name" value="ADMIN"/>
+            <column name="note" value="Quản Trị Viên"/>
+            <column name="status" value="1"/>
+        </insert>
+    </changeSet>
+    <changeSet id="23" author="minhbdph24887">
+        <insert tableName="roles">
+            <column name="name" value="USER"/>
+            <column name="note" value="Người Dùng"/>
+            <column name="status" value="1"/>
+        </insert>
+    </changeSet>
+    <changeSet id="24" author="minhbdph24887">
+        <insert tableName="roles">
+            <column name="name" value="STAFF"/>
+            <column name="note" value="Nhân Viên"/>
+            <column name="status" value="1"/>
+        </insert>
+    </changeSet>
+    <changeSet id="25" author="minhbdph24887">
+        <insert tableName="authentication">
+            <column name="id_account" value="1"/>
+            <column name="id_role" value="1"/>
+        </insert>
+    </changeSet>
+    <changeSet id="26" author="minhbdph24887">
+        <insert tableName="rank">
+            <column name="code_rank" value="MD2YT4J661"/>
+            <column name="name_rank" value="Bạc"/>
+            <column name="minimum_score" value="100"/>
+            <column name="maximum_score" value="200"/>
+            <column name="user_create" value="Bùi Đức Minh"/>
+            <column name="user_update" value="Bùi Đức Minh"/>
+            <column name="date_create" value="2024-03-09 00:00:00"/>
+            <column name="date_update" value="2024-03-09 00:00:00"/>
+            <column name="status" value="1"/>
+        </insert>
+    </changeSet>
+    <changeSet id="27" author="minhbdph24887">
+        <insert tableName="rank">
+            <column name="code_rank" value="B92LV7VY38"/>
+            <column name="name_rank" value="Vàng"/>
+            <column name="minimum_score" value="200"/>
+            <column name="maximum_score" value="300"/>
+            <column name="user_create" value="Bùi Đức Minh"/>
+            <column name="user_update" value="Bùi Đức Minh"/>
+            <column name="date_create" value="2024-03-09 00:00:00"/>
+            <column name="date_update" value="2024-03-09 00:00:00"/>
+            <column name="status" value="1"/>
+        </insert>
+    </changeSet>
+    <changeSet id="28" author="minhbdph24887">
+        <insert tableName="rank">
+            <column name="code_rank" value="G70E3LJQ9S"/>
+            <column name="name_rank" value="Bạch Kim"/>
+            <column name="minimum_score" value="300"/>
+            <column name="maximum_score" value="400"/>
+            <column name="user_create" value="Bùi Đức Minh"/>
+            <column name="user_update" value="Bùi Đức Minh"/>
+            <column name="date_create" value="2024-03-09 00:00:00"/>
+            <column name="date_update" value="2024-03-09 00:00:00"/>
+            <column name="status" value="1"/>
+        </insert>
+    </changeSet>
+    <changeSet id="29" author="minhbdph24887">
+        <insert tableName="rank">
+            <column name="code_rank" value="6NB9ROY7EK"/>
+            <column name="name_rank" value="Kim Cương"/>
+            <column name="minimum_score" value="400"/>
+            <column name="maximum_score" value="500"/>
+            <column name="user_create" value="Bùi Đức Minh"/>
+            <column name="user_update" value="Bùi Đức Minh"/>
+            <column name="date_create" value="2024-03-09 00:00:00"/>
+            <column name="date_update" value="2024-03-09 00:00:00"/>
+            <column name="status" value="1"/>
+        </insert>
+    </changeSet>
+    <changeSet id="30" author="minhbdph24887">
+        <insert tableName="rank">
+            <column name="code_rank" value="9JIZ3EL82W"/>
+            <column name="name_rank" value="Thân Thiết"/>
+            <column name="minimum_score" value="500"/>
+            <column name="maximum_score" value="600"/>
+            <column name="user_create" value="Bùi Đức Minh"/>
+            <column name="user_update" value="Bùi Đức Minh"/>
+            <column name="date_create" value="2024-03-09 00:00:00"/>
+            <column name="date_update" value="2024-03-09 00:00:00"/>
+            <column name="status" value="1"/>
+        </insert>
+    </changeSet>
+    <changeSet id="31" author="minhbdph24887">
+        <insert tableName="rank">
+            <column name="code_rank" value="TSD4EG4NHO"/>
+            <column name="name_rank" value="VIP"/>
+            <column name="minimum_score" value="600"/>
+            <column name="maximum_score" value="1000"/>
+            <column name="user_create" value="Bùi Đức Minh"/>
+            <column name="user_update" value="Bùi Đức Minh"/>
+            <column name="date_create" value="2024-03-09 00:00:00"/>
+            <column name="date_update" value="2024-03-09 00:00:00"/>
+            <column name="status" value="1"/>
+        </insert>
     </changeSet>
 </databaseChangeLog>
         

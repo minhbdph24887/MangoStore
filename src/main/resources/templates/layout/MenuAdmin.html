@@ -50,12 +50,31 @@
                 </ul>
             </div>
         </li>
-        <li class="nav-item nav-category">Profile</li>
+        <li class="nav-item nav-category">Voucher Management</li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#form-voucher" aria-expanded="false"
+               aria-controls="form-voucher">
+                <i class="menu-icon bi bi-wallet2"></i>
+                <span class="menu-title">Voucher List</span>
+                <i class="menu-arrow bi bi-arrow-right-short"></i>
+            </a>
+            <div class="collapse" id="form-voucher">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"><a class="nav-link"
+                                            th:href="@{/mangostore/admin/rank}">Rank</a></li>
+                    <li class="nav-item"><a class="nav-link"
+                                            th:href="@{/mangostore/admin/voucher}">Voucher</a></li>
+                    <li class="nav-item"><a class="nav-link"
+                                            th:href="@{/mangostore/admin/voucher-client}">Voucher Client</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item nav-category">Account</li>
         <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false"
                aria-controls="auth">
                 <i class="menu-icon bi bi-person-circle"></i>
-                <span class="menu-title">Profile Management</span>
+                <span class="menu-title">Account Management</span>
                 <i class="menu-arrow bi bi-arrow-right-short"></i>
             </a>
             <div class="collapse" id="auth">
@@ -67,10 +86,14 @@
                                                 th:href="@{/mangostore/admin/role}"> Role </a></li>
                         <li class="nav-item"><a class="nav-link"
                                                 th:href="@{/mangostore/admin/authentication}"> Authority </a></li>
+                        <li class="nav-item"><a class="nav-link"
+                                                th:href="@{/mangostore/admin/address-client}"> Address Client </a></li>
                     </th:block>
                     <th:block th:if="${checkMenuAdmin == false}">
                         <li class="nav-item"><a class="nav-link"
                                                 th:href="@{/mangostore/admin/account}"> Account </a></li>
+                        <li class="nav-item"><a class="nav-link"
+                                                th:href="@{/mangostore/admin/address-client}"> Address Client </a></li>
                     </th:block>
                 </ul>
             </div>

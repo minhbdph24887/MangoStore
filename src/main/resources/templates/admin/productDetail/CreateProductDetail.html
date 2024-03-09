@@ -180,13 +180,13 @@
                                         <thead>
                                         <tr>
                                             <th style="width: 30px">#</th>
-                                            <th style="width: 139px">ImagesProduct</th>
-                                            <th style="width: 172px">Name</th>
-                                            <th style="width: 95px">Material</th>
-                                            <th style="width: 95px">Origin</th>
-                                            <th style="width: 100px">Describe</th>
-                                            <th style="width: 85px">Quantity</th>
-                                            <th style="width: 84px">Status</th>
+                                            <th style="width: 122px">ImagesProduct</th>
+                                            <th style="width: 115px">Name</th>
+                                            <th style="width: 70px">Material</th>
+                                            <th style="width: 70px">Origin</th>
+                                            <th style="width: 70px">Describe</th>
+                                            <th style="width: 124px">Quantity</th>
+                                            <th style="width: 70px">Status</th>
                                         </tr>
                                         </thead>
                                     </table>
@@ -196,27 +196,35 @@
                                         <tbody>
                                         <tr th:each="listProductDetailInactive, stat : ${listProductDetailInactive}">
                                             <td style="width: 30px" th:text="${stat.count}"></td>
-                                            <td style="width: 139px">
-                                                <img th:src="@{|/image/product/${listProductDetailInactive.imagesProductDetail}|}"
-                                                     alt="image" style="width: 116px; height: 132px">
-                                            </td>
-                                            <td style="width: 172px; word-break: break-all">
-                                                <a th:href="@{|/mangostore/admin/product-detail/restore/${listProductDetailInactive.id}|}"
-                                                   th:text="${listProductDetailInactive.product.nameProduct}"
-                                                   style="text-decoration: none">
-                                                </a>
-                                            </td>
-                                            <td style="width: 95px"
+                                            <td style="width: 122px"><img
+                                                    th:src="@{|/image/product/${listProductDetailInactive.imagesProductDetail}|}"
+                                                    alt="image" style="width: 116px; height: 132px"></td>
+                                            <td style="width: 115px; word-break: break-all"
+                                                th:text="${listProductDetailInactive.product.nameProduct + '(' + listProductDetailInactive.size.nameSize + ', ' + listProductDetailInactive.color.nameColor + ')'}"></td>
+                                            <td style="width: 70px"
                                                 th:text="${listProductDetailInactive.material.nameMaterial}"></td>
-                                            <td style="width: 95px"
+                                            <td style="width: 70px"
                                                 th:text="${listProductDetailInactive.origin.nameOrigin}"></td>
-                                            <td style="width: 100px"
+                                            <td style="width: 70px"
                                                 th:text="${listProductDetailInactive.describe}"></td>
-                                            <td style="width: 85px"
-                                                th:text="${listProductDetailInactive.quantity}"></td>
-                                            <td style="width: 84px" th:if="${listProductDetailInactive.status == 0}">
-                                                <label class="badge badge-success">Stop Working</label>
+                                            <td style="width: 124px">
+                                                <input type="hidden" name="id" class="idProductDetail"
+                                                       th:value="${listProductDetailInactive.id}">
+                                                <th:block th:if="${listProductDetailInactive.quantity == 0}">
+                                                    <input type="number" style="width: 70px" name="quantity"
+                                                           class="quantityNew"
+                                                           th:value="${listProductDetailInactive.quantity}">
+                                                </th:block>
+                                                <th:block th:unless="${listProductDetailInactive.quantity == 0}">
+                                                    <input type="text" style="width: 70px" name="quantity"
+                                                           class="quantityOld"
+                                                           th:value="${listProductDetailInactive.quantity}" readonly>
+                                                </th:block>
+                                                <button type="submit" th:text="Save" class="btn btn-info"
+                                                        onclick="restoreProductDetail(this)"></button>
                                             </td>
+                                            <td style="width: 70px" th:if="${listProductDetailInactive.status == 0}">
+                                                <label class="badge badge-danger">Stop Working</label></td>
                                         </tr>
                                         <tr th:if="${listProductDetailInactive.isEmpty()}">
                                             <td colspan="9" style="text-align: center; color: red; font-size: larger;">
