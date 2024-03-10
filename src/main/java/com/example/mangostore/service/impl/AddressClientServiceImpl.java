@@ -3,6 +3,7 @@ package com.example.mangostore.service.impl;
 import com.example.mangostore.config.Gender;
 import com.example.mangostore.entity.Account;
 import com.example.mangostore.entity.AddressClient;
+import com.example.mangostore.entity.Product;
 import com.example.mangostore.entity.Role;
 import com.example.mangostore.repository.AccountRepository;
 import com.example.mangostore.repository.AddressClientRepository;
@@ -99,6 +100,88 @@ public class AddressClientServiceImpl implements AddressClientService {
         newAddressClient.setDateCreate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
         newAddressClient.setStatus(1);
         addressClientRepository.save(newAddressClient);
+        return "redirect:/mangostore/admin/address-client";
+    }
+
+    @Override
+    public String editAddressClient(Long idAddressClient, Model model, HttpSession session) {
+        String email = (String) session.getAttribute("loginEmail");
+        if (email == null) {
+            return "redirect:/mangostore/home";
+        } else {
+            Account detailAccount = accountRepository.detailAccountByEmail(email);
+            if (detailAccount.getStatus() == 0) {
+                session.invalidate();
+                return "redirect:/mangostore/home";
+            } else {
+                model.addAttribute("profile", detailAccount);
+
+                LocalDateTime checkDate = LocalDateTime.now();
+                int hour = checkDate.getHour();
+                if (hour >= 5 && hour < 10) {
+                    model.addAttribute("dates", "Morning");
+                } else if (hour >= 10 && hour < 13) {
+                    model.addAttribute("dates", "Noon");
+                } else if (hour >= 13 && hour < 18) {
+                    model.addAttribute("dates", "Afternoon");
+                } else {
+                    model.addAttribute("dates", "Evening");
+                }
+
+                Role detailRole = roleRepository.getRoleByEmail(email);
+                if (detailRole.getName().equals("ADMIN")) {
+                    model.addAttribute("checkMenuAdmin", true);
+                } else {
+                    model.addAttribute("checkMenuAdmin", false);
+                }
+
+                List<AddressClient> itemsAddressClientInactive = addressClientRepository.getAllAddressClientByStatus0();
+                model.addAttribute("listAddressClientInactive", itemsAddressClientInactive);
+
+                AddressClient detailAddressClient = addressClientRepository.findById(idAddressClient).orElse(null);
+                model.addAttribute("editAddressClient", detailAddressClient);
+                return "admin/addressClient/DetailAddressClient";
+            }
+        }
+    }
+
+    @Override
+    public String updateAddressClient(AddressClient editAddressClient, BindingResult result) {
+        AddressClient detailAddressClient = addressClientRepository.findById(editAddressClient.getId()).orElse(null);
+
+        detailAddressClient.setNameClient(editAddressClient.getNameClient());
+        detailAddressClient.setPhoneNumber(editAddressClient.getPhoneNumber());
+        detailAddressClient.setSpecificAddress(editAddressClient.getSpecificAddress());
+        if (editAddressClient.getCommune().equals("") || editAddressClient.getDistrict().equals("") || editAddressClient.getProvince().equals("")) {
+            detailAddressClient.setCommune(detailAddressClient.getCommune());
+            detailAddressClient.setDistrict(detailAddressClient.getDistrict());
+            detailAddressClient.setProvince(detailAddressClient.getProvince());
+        } else {
+            detailAddressClient.setCommune(editAddressClient.getCommune());
+            detailAddressClient.setDistrict(editAddressClient.getDistrict());
+            detailAddressClient.setProvince(editAddressClient.getProvince());
+        }
+        detailAddressClient.setStatus(editAddressClient.getStatus());
+
+        addressClientRepository.save(detailAddressClient);
+        return "redirect:/mangostore/admin/address-client";
+    }
+
+    @Override
+    public String deleteAddressClient(Long idAddressClient) {
+        AddressClient detailAddressClient = addressClientRepository.findById(idAddressClient).orElse(null);
+        assert detailAddressClient != null;
+        detailAddressClient.setStatus(0);
+        addressClientRepository.save(detailAddressClient);
+        return "redirect:/mangostore/admin/address-client";
+    }
+
+    @Override
+    public String restoreAddressClient(Long idAddressClient) {
+        AddressClient detailAddressClient = addressClientRepository.findById(idAddressClient).orElse(null);
+        assert detailAddressClient != null;
+        detailAddressClient.setStatus(1);
+        addressClientRepository.save(detailAddressClient);
         return "redirect:/mangostore/admin/address-client";
     }
 }

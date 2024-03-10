@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -33,5 +34,28 @@ public class AddressClientController {
                                    BindingResult result,
                                    HttpSession session) {
         return addressClientService.addAddressClient(addAddressClient, result, session);
+    }
+
+    @GetMapping(value = "address-client/detail/{id}")
+    public String editAddressClient(@PathVariable("id") Long idAddressClient,
+                                    Model model,
+                                    HttpSession session) {
+        return addressClientService.editAddressClient(idAddressClient, model, session);
+    }
+
+    @PostMapping(value = "address-client/update")
+    public String updateAddressClient(@Valid AddressClient editAddressClient,
+                                      BindingResult result) {
+        return addressClientService.updateAddressClient(editAddressClient, result);
+    }
+
+    @GetMapping(value = "address-client/delete/{id}")
+    public String deleteAddressClient(@PathVariable("id") Long idAddressClient) {
+        return addressClientService.deleteAddressClient(idAddressClient);
+    }
+
+    @GetMapping(value = "address-client/restore/{id}")
+    public String restoreAddressClient(@PathVariable("id") Long idAddressClient) {
+        return addressClientService.restoreAddressClient(idAddressClient);
     }
 }

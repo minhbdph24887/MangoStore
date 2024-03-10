@@ -3,6 +3,7 @@ package com.example.mangostore.service.impl;
 import com.example.mangostore.config.Gender;
 import com.example.mangostore.entity.*;
 import com.example.mangostore.repository.*;
+import com.example.mangostore.request.RestoreVoucherRequest;
 import com.example.mangostore.service.VoucherService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
@@ -183,8 +184,11 @@ public class VoucherServiceImpl implements VoucherService {
             checkStatus = 2;
         }
         detailVoucher.setVoucherStatus(checkStatus);
-        detailVoucher.setStatus(voucher.getStatus());
-
+        if (voucher.getQuantity() == 0) {
+            detailVoucher.setStatus(0);
+        } else {
+            detailVoucher.setStatus(voucher.getStatus());
+        }
         voucherRepository.save(detailVoucher);
         return "redirect:/mangostore/admin/voucher";
     }
@@ -199,10 +203,11 @@ public class VoucherServiceImpl implements VoucherService {
     }
 
     @Override
-    public String restoreVoucher(Long idVoucher) {
-        Voucher detailVoucher = voucherRepository.findById(idVoucher).orElse(null);
-        detailVoucher.setStatus(1);
-        voucherRepository.save(detailVoucher);
-        return "redirect:/mangostore/admin/voucher";
+    public boolean restoreVoucherAPI(RestoreVoucherRequest request) {
+        Voucher voucher = voucherRepository.findById(request.getIdVoucher()).orElse(null);
+        voucher.setQuantity(request.getQuantity());
+        voucher.setStatus(1);
+        voucherRepository.save(voucher);
+        return true;
     }
 }

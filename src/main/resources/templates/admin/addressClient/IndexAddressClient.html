@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
       th:replace="~{/layout/IndexAdmin :: dynamic(~{:: main})}">
 <body>
-<main id="apiAddress">
+<main class="apiAddress">
     <div class="home-tab">
         <div class="d-sm-flex align-items-center justify-content-between border-bottom">
             <ul class="nav nav-tabs" role="tablist">
@@ -57,10 +57,13 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <select name="province" class="form-select form-select-sm mb-3"
-                                                                id="city" aria-label=".form-select-sm">
-                                                            <option value="" selected>Chọn tỉnh thành</option>
-                                                        </select>
+                                                        <div class="form-group">
+                                                            <select name="province"
+                                                                    class="form-select form-select-sm mb-3"
+                                                                    id="city" aria-label=".form-select-sm">
+                                                                <option value="" selected>Chọn tỉnh thành</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
@@ -114,18 +117,15 @@
                                             <th style="width: 30px">#</th>
                                             <th style="width: 114px">CodeAddress</th>
                                             <th style="width: 151px">NameClient</th>
-                                            <th style="width: 100px">PhoneNumber</th>
-                                            <th style="width: 100px">SpecificAddress</th>
-                                            <th style="width: 100px">Commune</th>
-                                            <th style="width: 100px">District</th>
-                                            <th style="width: 100px">Province</th>
+                                            <th style="width: 115px">PhoneNumber</th>
+                                            <th style="width: 172px">SpecificAddressClient</th>
                                             <th style="width: 100px">DateCreate</th>
                                             <th style="width: 84px">Status</th>
                                         </tr>
                                         </thead>
                                     </table>
                                 </div>
-                                <div class="content" style="height: 245px">
+                                <div class="content" style="height: 200px">
                                     <table class="table table-hover">
                                         <tbody>
                                         <tr th:each="listAddressClient, stat : ${listAddressClient}">
@@ -138,12 +138,9 @@
                                             </td>
                                             <td style="width: 151px; word-break: break-all"
                                                 th:text="${listAddressClient.nameClient}"></td>
-                                            <td style="width: 100px" th:text="${listAddressClient.phoneNumber}"></td>
-                                            <td style="width: 100px"
-                                                th:text="${listAddressClient.specificAddress}"></td>
-                                            <td style="width: 100px" th:text="${listAddressClient.commune}"></td>
-                                            <td style="width: 100px" th:text="${listAddressClient.district}"></td>
-                                            <td style="width: 100px" th:text="${listAddressClient.province}"></td>
+                                            <td style="width: 115px" th:text="${listAddressClient.phoneNumber}"></td>
+                                            <td style="width: 172px; word-break: break-all"
+                                                th:text="${listAddressClient.specificAddress +', '+ listAddressClient.commune +', '+ listAddressClient.district +', '+ listAddressClient.province}"></td>
                                             <td style="width: 100px"
                                                 th:text="${#temporals.format(listAddressClient.dateCreate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
                                             <td style="width: 84px" th:if="${listAddressClient.status == 1}">
@@ -178,18 +175,15 @@
                                             <th style="width: 30px">#</th>
                                             <th style="width: 114px">CodeAddress</th>
                                             <th style="width: 151px">NameClient</th>
-                                            <th style="width: 100px">PhoneNumber</th>
-                                            <th style="width: 100px">SpecificAddress</th>
-                                            <th style="width: 100px">Commune</th>
-                                            <th style="width: 100px">District</th>
-                                            <th style="width: 100px">Province</th>
+                                            <th style="width: 115px">PhoneNumber</th>
+                                            <th style="width: 172px">SpecificAddressClient</th>
                                             <th style="width: 100px">DateCreate</th>
                                             <th style="width: 84px">Status</th>
                                         </tr>
                                         </thead>
                                     </table>
                                 </div>
-                                <div class="content" style="height: 395px">
+                                <div class="content" style="height: 347px">
                                     <table class="table table-hover">
                                         <tbody>
                                         <tr th:each="listAddressClientInactive, stat : ${listAddressClientInactive}">
@@ -201,13 +195,11 @@
                                                    style="text-decoration: none"></a>
                                             </td>
                                             <td style="width: 151px; word-break: break-all"
-                                                th:text="${listAddressClient.nameClient}"></td>
-                                            <td style="width: 100px" th:text="${listAddressClient.phoneNumber}"></td>
-                                            <td style="width: 100px"
-                                                th:text="${listAddressClient.specificAddress}"></td>
-                                            <td style="width: 100px" th:text="${listAddressClient.commune}"></td>
-                                            <td style="width: 100px" th:text="${listAddressClient.district}"></td>
-                                            <td style="width: 100px" th:text="${listAddressClient.province}"></td>
+                                                th:text="${listAddressClientInactive.nameClient}"></td>
+                                            <td style="width: 115px"
+                                                th:text="${listAddressClientInactive.phoneNumber}"></td>
+                                            <td style="width: 172px; word-break: break-all"
+                                                th:text="${listAddressClientInactive.specificAddress +', '+ listAddressClientInactive.commune +', '+ listAddressClientInactive.district +', '+ listAddressClientInactive.province}"></td>
                                             <td style="width: 100px"
                                                 th:text="${#temporals.format(listAddressClientInactive.dateCreate, 'dd/MM/yyyy : HH:mm:ss')}"></td>
                                             <td style="width: 84px" th:if="${listAddressClientInactive.status == 0}">

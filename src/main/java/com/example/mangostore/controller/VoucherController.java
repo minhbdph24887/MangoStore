@@ -98,9 +98,4 @@ public class VoucherController {
     public String deleteVoucher(@PathVariable("id") Long idVoucher) {
         return voucherService.deleteVoucher(idVoucher);
     }
-
-    @GetMapping(value = "voucher/restore/{id}")
-    public String restoreVoucher(@PathVariable("id") Long idVoucher) {
-        return voucherService.restoreVoucher(idVoucher);
-    }
 }

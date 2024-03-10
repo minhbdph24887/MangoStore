@@ -1,11 +1,11 @@
-if (document.getElementById('apiAddress')) {
+const apiAddressElement = document.querySelector('.apiAddress');
+if (apiAddressElement) {
     var citis = document.getElementById("city");
     var districts = document.getElementById("district");
     var wards = document.getElementById("ward");
     var Parameter = {
         url: "/api/address",
         method: "GET",
-        responseType: "application/json",
     };
     var promise = axios(Parameter);
     promise.then(function (result) {

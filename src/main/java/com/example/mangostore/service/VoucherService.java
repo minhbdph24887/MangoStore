@@ -1,6 +1,7 @@
 package com.example.mangostore.service;
 
 import com.example.mangostore.entity.Voucher;
+import com.example.mangostore.request.RestoreVoucherRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,5 +17,5 @@ public interface VoucherService {
 
     String deleteVoucher(Long idVoucher);
 
-    String restoreVoucher(Long idVoucher);
+    boolean restoreVoucherAPI(RestoreVoucherRequest request);
 }

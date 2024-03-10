@@ -2,9 +2,11 @@ package com.example.mangostore.service.impl;
 
 import com.example.mangostore.entity.Account;
 import com.example.mangostore.entity.Authentication;
+import com.example.mangostore.entity.Rank;
 import com.example.mangostore.entity.Role;
 import com.example.mangostore.repository.AccountRepository;
 import com.example.mangostore.repository.AuthenticationRepository;
+import com.example.mangostore.repository.RankRepository;
 import com.example.mangostore.repository.RoleRepository;
 import com.example.mangostore.service.ProfileService;
 import jakarta.servlet.http.HttpSession;
@@ -21,15 +23,18 @@ import java.util.List;
 public class ProfileServiceImpl implements ProfileService {
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
+    private final RankRepository rankRepository;
     private final PasswordEncoder encoder;
     private final AuthenticationRepository authenticationRepository;
 
     public ProfileServiceImpl(AccountRepository accountRepository,
                               RoleRepository roleRepository,
+                              RankRepository rankRepository,
                               PasswordEncoder encoder,
                               AuthenticationRepository authenticationRepository) {
         this.accountRepository = accountRepository;
         this.roleRepository = roleRepository;
+        this.rankRepository = rankRepository;
         this.encoder = encoder;
         this.authenticationRepository = authenticationRepository;
     }
@@ -176,6 +181,9 @@ public class ProfileServiceImpl implements ProfileService {
         newAccount.setImages(addProfile.getImages());
         newAccount.setEncryptionPassword(encoder.encode(addProfile.getPassword()));
         newAccount.setAddress(addProfile.getAddress());
+        newAccount.setAccumulatedPoints(0);
+        Rank detailRank = rankRepository.detailRankByAccumulatedPoints(0);
+        newAccount.setRank(detailRank);
         newAccount.setStatus(1);
         accountRepository.save(newAccount);
 
@@ -184,16 +192,6 @@ public class ProfileServiceImpl implements ProfileService {
         newAuthentication.setAccount(newAccount);
         newAuthentication.setRole(roleUser);
         authenticationRepository.save(newAuthentication);
-//        int checkEmailExists = accountRepository.existsByEmail(addProfile.getEmail());
-//        if (checkEmailExists == 1) {
-//            redirectAttributes.addFlashAttribute("message", "Email already exists. Add Account Failed.");
-//            redirectAttributes.addFlashAttribute("cssClass", "alert alert-danger");
-//        } else {
-//
-//
-//            redirectAttributes.addFlashAttribute("message", "Add Account Successfully");
-//            redirectAttributes.addFlashAttribute("cssClass", "alert alert-success");
-//        }
         return "redirect:/mangostore/admin/account";
     }
 }

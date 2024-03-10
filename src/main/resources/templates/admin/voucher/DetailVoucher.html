@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
       th:replace="~{/layout/IndexAdmin :: dynamic(~{:: main})}">
 <body>
-<main id="checkBoxDetail">
+<main class="checkBoxDetail">
     <div class="home-tab">
         <div class="d-sm-flex align-items-center justify-content-between border-bottom">
             <ul class="nav nav-tabs" role="tablist">
@@ -194,14 +194,12 @@
                                         <thead>
                                         <tr>
                                             <th style="width: 30px">#</th>
-                                            <th style="width: 110px">Code</th>
+                                            <th style="width: 100px">Code</th>
                                             <th style="width: 145px">NameVoucher</th>
-                                            <th style="width: 104px">Quantity</th>
+                                            <th style="width: 141px">Quantity</th>
                                             <th style="width: 105px">ReducedValue</th>
                                             <th style="width: 100px">VoucherFrom</th>
                                             <th style="width: 100px">Belong</th>
-                                            <th style="width: 104px">StartDay</th>
-                                            <th style="width: 101px">EndDate</th>
                                             <th style="width: 102px">Status</th>
                                         </tr>
                                         </thead>
@@ -212,23 +210,29 @@
                                         <tbody>
                                         <tr th:each="listVoucherInactive, stat : ${listVoucherInactive}">
                                             <td style="width: 30px" th:text="${stat.count}"></td>
-                                            <td style="width: 110px">
-                                                <a th:href="@{|/mangostore/admin/voucher/restore/${listVoucherInactive.id}|}"
-                                                   th:text="${listVoucherInactive.codeVoucher}"
-                                                   onclick="return restore()"
-                                                   style="text-decoration: none"></a>
-                                            </td>
+                                            <td style="width: 100px" th:text="${listVoucherInactive.codeVoucher}"></td>
                                             <td style="width: 145px;word-break: break-all"
                                                 th:text="${listVoucherInactive.nameVoucher}"></td>
-                                            <td style="width: 104px" th:text="${listVoucherInactive.quantity}"></td>
+                                            <td style="width: 141px">
+                                                <input type="hidden" name="id" class="idVoucher"
+                                                       th:value="${listVoucherInactive.id}">
+                                                <th:block th:if="${listVoucherInactive.quantity == 0}">
+                                                    <input type="number" style="width: 70px" name="quantity"
+                                                           class="quantityNew"
+                                                           th:value="${listVoucherInactive.quantity}">
+                                                </th:block>
+                                                <th:block th:unless="${listVoucherInactive.quantity == 0}">
+                                                    <input type="text" style="width: 70px" name="quantity"
+                                                           class="quantityOld"
+                                                           th:value="${listVoucherInactive.quantity}" readonly>
+                                                </th:block>
+                                                <button type="submit" th:text="Save" class="btn btn-info"
+                                                        onclick="restoreVoucher(this)"></button>
+                                            </td>
                                             <td style="width: 105px" th:text="${listVoucherInactive.reducedValue}"></td>
                                             <td style="width: 100px" th:text="${listVoucherInactive.voucherFrom}"></td>
                                             <td style="width: 100px"
                                                 th:text="${listVoucherInactive.rank.nameRank}"></td>
-                                            <td style="width: 104px"
-                                                th:text="${#temporals.format(listVoucherInactive.startDay, 'dd/MM/yyyy')}"></td>
-                                            <td style="width: 101px"
-                                                th:text="${#temporals.format(listVoucherInactive.endDate, 'dd/MM/yyyy')}"></td>
                                             <td style="width: 102px" th:if="${listVoucherInactive.voucherStatus == 0}">
                                                 <label class="badge badge-danger">Finished</label>
                                             </td>

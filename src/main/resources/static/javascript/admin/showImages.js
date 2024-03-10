@@ -1,4 +1,5 @@
-if (document.getElementById('indexAccountPage')) {
+const indexAccountPageElement = document.querySelector('.indexAccountPage');
+if (indexAccountPageElement) {
     const originalImageSrc = document.getElementById('previewImage').src;
     document.getElementById('imageInput').addEventListener('change', function (e) {
         const reader = new FileReader();

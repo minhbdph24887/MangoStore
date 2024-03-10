@@ -2,10 +2,11 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
       th:replace="~{/layout/IndexAdmin :: dynamic(~{:: main})}">
 <body>
-<main id="indexAccountPage">
+<main class="indexAccountPage">
     <div class="home-tab">
         <div class="d-sm-flex align-items-center justify-content-between border-bottom">
             <ul class="nav nav-tabs" role="tablist">
+                x
                 <li class="nav-item">
                     <a class="nav-link active ps-0" id="home-tab" data-bs-toggle="tab"
                        href="#tab1" role="tab"
@@ -139,13 +140,17 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="modal-footer" style="padding-top: 73px">
-                                                <input type="submit"
-                                                       value="Save"
-                                                       class="btn btn-primary">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close
-                                                </button>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <input type="submit"
+                                                               value="Save"
+                                                               class="btn btn-primary">
+                                                        <button type="button" class="btn btn-default"
+                                                                data-dismiss="modal">
+                                                            Close
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </form>
                                     </div>
