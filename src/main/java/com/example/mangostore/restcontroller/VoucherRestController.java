@@ -1,6 +1,5 @@
 package com.example.mangostore.restcontroller;
 
-import com.example.mangostore.request.RestoreProductDetailRequest;
 import com.example.mangostore.request.RestoreVoucherRequest;
 import com.example.mangostore.service.VoucherService;
 import org.springframework.web.bind.annotation.PostMapping;

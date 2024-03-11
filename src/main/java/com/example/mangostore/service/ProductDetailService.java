@@ -6,12 +6,10 @@ import com.example.mangostore.request.ProductDetailRequest;
 import com.example.mangostore.request.RestoreProductDetailRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
 import java.io.IOException;
-import java.util.Map;
 
 public interface ProductDetailService {
     String indexProductDetail(Model model, HttpSession session, String keyword);

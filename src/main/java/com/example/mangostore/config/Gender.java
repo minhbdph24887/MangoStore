@@ -2,6 +2,7 @@ package com.example.mangostore.config;
 
 import com.example.mangostore.entity.Account;
 import com.example.mangostore.repository.AccountRepository;
+import com.example.mangostore.repository.InvoiceRepository;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -14,11 +15,14 @@ import java.util.Random;
 public class Gender {
     private final AccountRepository accountRepository;
     private final JavaMailSender mailSender;
+    private final InvoiceRepository invoiceRepository;
 
     public Gender(AccountRepository accountRepository,
-                  JavaMailSender mailSender) {
+                  JavaMailSender mailSender,
+                  InvoiceRepository invoiceRepository) {
         this.accountRepository = accountRepository;
         this.mailSender = mailSender;
+        this.invoiceRepository = invoiceRepository;
     }
 
     public String generateVerificationCode() {
@@ -59,5 +63,15 @@ public class Gender {
                 .limit(targetStringLength)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
+    }
+
+    public String generateNameInvoice() {
+        String maxInvoiceCode = invoiceRepository.getMaxInvoiceCode();
+        if (maxInvoiceCode != null) {
+            int maxInvoiceNumber = Integer.parseInt(maxInvoiceCode.substring(2));
+            return "HD" + String.format("%04d", maxInvoiceNumber + 1);
+        } else {
+            return "HD0001";
+        }
     }
 }
