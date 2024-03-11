@@ -235,6 +235,7 @@
             <column name="name_invoice" type="nvarchar(255)"/>
             <column name="id_account" type="bigint"/>
             <column name="invoice_form" type="nvarchar(255)"/>
+            <column name="id_customer" type="bigint"/>
             <column name="id_voucher" type="bigint"/>
             <column name="id_voucher_client" type="bigint"/>
             <column name="id_address_client" type="bigint"/>

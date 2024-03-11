@@ -24,4 +24,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     @Query(value = "select case when count(*) > 0 then 1 else 0 end from accounts where email = :email", nativeQuery = true)
     int existsByEmail(@Param("email") String email);
+
+    @Query(value = "select * from accounts where number_phone= :numberPhoneClient", nativeQuery = true)
+    Account findAccountByNumberPhone(@Param("numberPhoneClient") String numberPhoneClient);
 }

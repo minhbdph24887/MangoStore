@@ -5,7 +5,7 @@
 <main>
     <div>
         <ul class="breadcrumb">
-            <li class="breadcrumb-item active" aria-current="page">Detail Authentication</li>
+            <li class="breadcrumb-item active" aria-current="page">Index Sell</li>
         </ul>
     </div>
     <div class="row">
@@ -15,6 +15,16 @@
                     <h3>Sales At The Counter</h3>
                     <a type="button" id="createOrderButton" class="btn btn-success">Create Order *</a>
                     <span style="font-size: 0.8em; color: red">* You only create a maximum of 5 invoices</span>
+                    <br>
+                    <th:block th:each="listInvoiceByAccount : ${listInvoiceByAccount}">
+                        <a type="button" class="btn btn-light"
+                           th:href="@{/mangostore/admin/sell/edit(id=${listInvoiceByAccount.id})}">
+                            <tr>
+                                <td class="align-middle" th:text="${listInvoiceByAccount.nameInvoice}"></td>
+                            </tr>
+                        </a>
+                    </th:block>
+
                 </div>
             </div>
         </div>

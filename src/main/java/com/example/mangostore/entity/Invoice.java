@@ -17,6 +17,7 @@ public class Invoice {
     @JoinColumn(name = "idAccount")
     private Account account;
     private String invoiceForm;
+    private Long idCustomer;
     @ManyToOne
     @JoinColumn(name = "idVoucher")
     private Voucher voucher;
@@ -40,6 +41,7 @@ public class Invoice {
                    String nameInvoice,
                    Account account,
                    String invoiceForm,
+                   Long idCustomer,
                    Voucher voucher,
                    VoucherClient voucherClient,
                    AddressClient addressClient,
@@ -54,6 +56,7 @@ public class Invoice {
         this.nameInvoice = nameInvoice;
         this.account = account;
         this.invoiceForm = invoiceForm;
+        this.idCustomer = idCustomer;
         this.voucher = voucher;
         this.voucherClient = voucherClient;
         this.addressClient = addressClient;
@@ -106,6 +109,14 @@ public class Invoice {
 
     public void setInvoiceForm(String invoiceForm) {
         this.invoiceForm = invoiceForm;
+    }
+
+    public Long getIdCustomer() {
+        return idCustomer;
+    }
+
+    public void setIdCustomer(Long idCustomer) {
+        this.idCustomer = idCustomer;
     }
 
     public Voucher getVoucher() {

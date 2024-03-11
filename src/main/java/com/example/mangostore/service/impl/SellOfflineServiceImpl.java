@@ -93,4 +93,72 @@ public class SellOfflineServiceImpl implements SellOfflineService {
             return new ResponseEntity<>(HttpStatus.OK);
         }
     }
+
+    @Override
+    public String editInvoice(Long idInvoice, Model model, HttpSession session) {
+        String email = (String) session.getAttribute("loginEmail");
+        if (email == null) {
+            return "redirect:/mangostore/home";
+        } else {
+            Account detailAccount = accountRepository.detailAccountByEmail(email);
+            if (detailAccount.getStatus() == 0) {
+                session.invalidate();
+                return "redirect:/mangostore/home";
+            } else {
+                model.addAttribute("profile", detailAccount);
+
+                LocalDateTime checkDate = LocalDateTime.now();
+                int hour = checkDate.getHour();
+                if (hour >= 5 && hour < 10) {
+                    model.addAttribute("dates", "Morning");
+                } else if (hour >= 10 && hour < 13) {
+                    model.addAttribute("dates", "Noon");
+                } else if (hour >= 13 && hour < 18) {
+                    model.addAttribute("dates", "Afternoon");
+                } else {
+                    model.addAttribute("dates", "Evening");
+                }
+
+                Role detailRole = roleRepository.getRoleByEmail(email);
+                if (detailRole.getName().equals("ADMIN")) {
+                    model.addAttribute("checkMenuAdmin", true);
+                } else {
+                    model.addAttribute("checkMenuAdmin", false);
+                }
+
+                List<Invoice> itemsInvoice = invoiceRepository.getAllInvoiceByAccount(detailAccount.getId());
+                model.addAttribute("listInvoiceByAccount", itemsInvoice);
+
+                Invoice detailInvoice = invoiceRepository.findById(idInvoice).orElse(null);
+                model.addAttribute("detailInvoice", detailInvoice);
+
+                if (detailInvoice.getIdCustomer() != null) {
+                    Account detailAccountByIdAccount = accountRepository.findById(detailInvoice.getIdCustomer()).orElse(null);
+                    model.addAttribute("nameClient", detailAccountByIdAccount.getFullName());
+                    model.addAttribute("pointClient", detailAccountByIdAccount.getAccumulatedPoints());
+                }
+                return "sellOffline/DetailInvoiceSell";
+            }
+        }
+    }
+
+    @Override
+    public String updateClient(Long idInvoice, String numberPhoneClient) {
+        Account detailAccountCustom = accountRepository.findAccountByNumberPhone(numberPhoneClient);
+        Invoice invoice = invoiceRepository.findById(idInvoice).orElse(null);
+        invoice.setIdCustomer(detailAccountCustom.getId());
+        invoiceRepository.save(invoice);
+        return "redirect:/mangostore/admin/sell/edit?id=" + invoice.getId();
+    }
+
+    @Override
+    public String updatePoint(Long idInvoice, Integer pointClient) {
+        Invoice invoice = invoiceRepository.findById(idInvoice).orElse(null);
+        invoice.setCustomerPoints(pointClient);
+        invoiceRepository.save(invoice);
+        Account detailAccount = accountRepository.findById(invoice.getIdCustomer()).orElse(null);
+        detailAccount.setAccumulatedPoints(0);
+        accountRepository.save(detailAccount);
+        return "redirect:/mangostore/admin/sell/edit?id=" + invoice.getId();
+    }
 }
