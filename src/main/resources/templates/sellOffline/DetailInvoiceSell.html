@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
-      th:replace="~{/layout/IndexAdmin :: dynamic(~{:: main})}">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" th:replace="~{/layout/IndexAdmin :: dynamic(~{:: main})}">
+
 <body>
 <main>
     <div>
@@ -15,9 +15,10 @@
                 <div class="card-body">
                     <h3>Sales At The Counter</h3>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                             <a type="button" id="createOrderButton" class="btn btn-success">Create Order *</a>
-                            <span style="font-size: 0.8em; color: red">* You only create a maximum of 5 invoices</span>
+                            <span style="font-size: 0.8em; color: red">* You only create a maximum of 5
+                                    invoices</span>
                             <br>
                             <th:block th:each="listInvoiceByAccount : ${listInvoiceByAccount}">
                                 <a type="button" class="btn btn-light"
@@ -27,8 +28,12 @@
                                     </tr>
                                 </a>
                             </th:block>
+                            <form th:action="@{/mangostore/admin/sell/delete}" method="post">
+                                <input type="hidden" name="id" th:value="${detailInvoice.id}"/>
+                                <button type="submit" class="btn btn-danger">Cancel Invoice</button>
+                            </form>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-7">
                             <form th:action="@{/mangostore/admin/sell/update-client}" method="post">
                                 <div class="form-group d-flex">
                                     <input type="hidden" name="id" th:value="${detailInvoice.id}"/>
@@ -39,18 +44,33 @@
                             </form>
                             <th:block th:if="${nameClient != null and pointClient != null}">
                                 <form th:action="@{/mangostore/admin/sell/update-point}" method="post">
-                                    <input type="hidden" name="id" th:value="${detailInvoice.id}"/>
-                                    <input type="hidden" name="point" th:value="${pointClient}">
-                                    <p>fullName: <span th:text="${nameClient}"></span>, customerPoints: <span
-                                            th:text="${pointClient}"></span>
+                                    <div class="form-group d-flex">
+                                        <input type="hidden" name="id" th:value="${detailInvoice.id}"/>
+                                        <input type="hidden" name="point" th:value="${pointClient}">
+                                        <input type="text" class="form-control"
+                                               th:value="${'fullName:' + nameClient + ',  customerPoints:' + pointClient}"
+                                               readonly>
                                         <button class="btn btn-info" type="submit">Apply</button>
-                                    </p>
+                                    </div>
                                 </form>
                             </th:block>
                             <th:block th:unless="${nameClient != null and pointClient != null}">
-                                <p>No data</p>
+                                <div class="form-group d-flex">
+                                    <input type="text" class="form-control" value="No data" readonly>
+                                </div>
                             </th:block>
-
+                            <form th:action="@{/mangostore/admin/sell/update-voucher}" method="post">
+                                <div class="form-group d-flex">
+                                    <input type="hidden" name="id" th:value="${detailInvoice.id}">
+                                    <select name="voucher" class="form-control">
+                                        <option value="">Chọn Voucher</option>
+                                        <option th:each="listVoucherClient : ${listVoucherClient}"
+                                                th:value="${listVoucherClient.id}"
+                                                th:text="${listVoucherClient.nameVoucher}"></option>
+                                    </select>
+                                    <button type="submit" class="btn btn-success">Apply</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -59,4 +79,5 @@
     </div>
 </main>
 </body>
+
 </html>

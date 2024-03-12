@@ -4,9 +4,11 @@ import com.example.mangostore.config.Gender;
 import com.example.mangostore.entity.Account;
 import com.example.mangostore.entity.Invoice;
 import com.example.mangostore.entity.Role;
+import com.example.mangostore.entity.Voucher;
 import com.example.mangostore.repository.AccountRepository;
 import com.example.mangostore.repository.InvoiceRepository;
 import com.example.mangostore.repository.RoleRepository;
+import com.example.mangostore.repository.VoucherRepository;
 import com.example.mangostore.service.SellOfflineService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
@@ -24,15 +26,18 @@ public class SellOfflineServiceImpl implements SellOfflineService {
     private final RoleRepository roleRepository;
     private final InvoiceRepository invoiceRepository;
     private final Gender gender;
+    private final VoucherRepository voucherRepository;
 
     public SellOfflineServiceImpl(AccountRepository accountRepository,
                                   RoleRepository roleRepository,
                                   InvoiceRepository invoiceRepository,
-                                  Gender gender) {
+                                  Gender gender,
+                                  VoucherRepository voucherRepository) {
         this.accountRepository = accountRepository;
         this.roleRepository = roleRepository;
         this.invoiceRepository = invoiceRepository;
         this.gender = gender;
+        this.voucherRepository = voucherRepository;
     }
 
     @Override
@@ -136,6 +141,12 @@ public class SellOfflineServiceImpl implements SellOfflineService {
                     Account detailAccountByIdAccount = accountRepository.findById(detailInvoice.getIdCustomer()).orElse(null);
                     model.addAttribute("nameClient", detailAccountByIdAccount.getFullName());
                     model.addAttribute("pointClient", detailAccountByIdAccount.getAccumulatedPoints());
+
+                    List<Voucher> itemsVoucherOffline = voucherRepository.findVoucherByVoucherFrom(detailAccount.getRank().getId());
+                    model.addAttribute("listVoucherClient", itemsVoucherOffline);
+                } else {
+                    List<Voucher> itemsVoucherOffline = voucherRepository.getAllVoucherByStatus1();
+                    model.addAttribute("listVoucherClient", itemsVoucherOffline);
                 }
                 return "sellOffline/DetailInvoiceSell";
             }
@@ -160,5 +171,13 @@ public class SellOfflineServiceImpl implements SellOfflineService {
         detailAccount.setAccumulatedPoints(0);
         accountRepository.save(detailAccount);
         return "redirect:/mangostore/admin/sell/edit?id=" + invoice.getId();
+    }
+
+    @Override
+    public String cancelInvoice(Long idInvoice) {
+        Invoice invoice = invoiceRepository.findById(idInvoice).orElse(null);
+        invoice.setInvoiceStatus(6);
+        invoiceRepository.save(invoice);
+        return "redirect:/mangostore/admin/sell";
     }
 }

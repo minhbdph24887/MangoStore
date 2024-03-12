@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface VoucherRepository extends JpaRepository<Voucher, Long> {
-    @Query(value = "select * from voucher where voucher_status= 1 status= 1 order by id desc", nativeQuery = true)
+    @Query(value = "select * from voucher where voucher_status= 1 and status= 1 and id_rank= 1 order by id desc", nativeQuery = true)
     List<Voucher> getAllVoucherByStatus1();
 
     @Query(value = "select * from voucher where voucher_status in (0, 1, 2) and status= 0 order by id desc", nativeQuery = true)
@@ -21,4 +21,7 @@ public interface VoucherRepository extends JpaRepository<Voucher, Long> {
 
     @Query(value = "select * from voucher where voucher_status in (1, 2) and name_voucher like %:searchVoucher%", nativeQuery = true)
     List<Voucher> searchVoucher(@Param("searchVoucher") String searchVoucher);
+
+    @Query(value = "select * from voucher where voucher_status = 1 and status = 1 and voucher_from = 'offline' and start_day <= cast(getdate() as date) and end_date >= cast(getdate() as date) and id_rank = :idRank", nativeQuery = true)
+    List<Voucher> findVoucherByVoucherFrom(@Param("idRank") Long idRank);
 }

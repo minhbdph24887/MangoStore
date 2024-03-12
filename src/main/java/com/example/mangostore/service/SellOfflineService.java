@@ -14,4 +14,6 @@ public interface SellOfflineService {
     String updateClient(Long idInvoice, String numberPhoneClient);
 
     String updatePoint(Long idInvoice, Integer pointClient);
+
+    String cancelInvoice(Long idInvoice);
 }

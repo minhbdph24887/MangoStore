@@ -40,4 +40,9 @@ public class SellOfflineController {
                                      @RequestParam("point") Integer pointClient) {
         return sellOfflineService.updatePoint(idInvoice, pointClient);
     }
+
+    @PostMapping(value = "sell/delete")
+    public String cancelInvoice(@RequestParam("id") Long idInvoice) {
+        return sellOfflineService.cancelInvoice(idInvoice);
+    }
 }
