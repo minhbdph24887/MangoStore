@@ -1,5 +1,6 @@
 package com.example.mangostore.service;
 
+import com.example.mangostore.entity.Voucher;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -14,6 +15,8 @@ public interface SellOfflineService {
     String updateClient(Long idInvoice, String numberPhoneClient);
 
     String updatePoint(Long idInvoice, Integer pointClient);
+
+    String updateVoucher(Long idInvoice, Voucher voucher);
 
     String cancelInvoice(Long idInvoice);
 }

@@ -148,6 +148,20 @@ public class SellOfflineServiceImpl implements SellOfflineService {
                     List<Voucher> itemsVoucherOffline = voucherRepository.getAllVoucherByStatus1();
                     model.addAttribute("listVoucherClient", itemsVoucherOffline);
                 }
+
+                if (detailInvoice.getVoucher() != null) {
+                    Voucher getReducedValue = voucherRepository.findById(detailInvoice.getVoucher().getId()).orElse(null);
+                    model.addAttribute("discountVouchers", getReducedValue.getReducedValue());
+                }
+
+                if (detailInvoice.getTotalInvoiceAmount() != null) {
+                    model.addAttribute("totalInvoice", "aa");
+                }
+
+                if (detailInvoice.getCustomerPoints() != null) {
+                    Integer customerPoints = detailInvoice.getCustomerPoints() * 1000;
+                    model.addAttribute("customerPoints", customerPoints);
+                }
                 return "sellOffline/DetailInvoiceSell";
             }
         }
@@ -170,6 +184,21 @@ public class SellOfflineServiceImpl implements SellOfflineService {
         Account detailAccount = accountRepository.findById(invoice.getIdCustomer()).orElse(null);
         detailAccount.setAccumulatedPoints(0);
         accountRepository.save(detailAccount);
+        return "redirect:/mangostore/admin/sell/edit?id=" + invoice.getId();
+    }
+
+    @Override
+    public String updateVoucher(Long idInvoice, Voucher voucher) {
+        Invoice invoice = invoiceRepository.findById(idInvoice).orElse(null);
+        invoice.setVoucher(voucher);
+        invoiceRepository.save(invoice);
+        Voucher detailVoucher = voucherRepository.findById(voucher.getId()).orElse(null);
+        Integer quantityNew = detailVoucher.getQuantity() - 1;
+        detailVoucher.setQuantity(quantityNew);
+        if (quantityNew == 0) {
+            detailVoucher.setStatus(0);
+        }
+        voucherRepository.save(detailVoucher);
         return "redirect:/mangostore/admin/sell/edit?id=" + invoice.getId();
     }
 

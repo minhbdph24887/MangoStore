@@ -33,6 +33,7 @@ public class Invoice {
     private LocalDateTime invoicePaymentDate;
     private Integer customerPoints;
     private Integer totalInvoiceAmount;
+    private Integer returnClientMoney;
     private Integer totalPayment;
     private Integer invoiceStatus;
 
@@ -49,6 +50,7 @@ public class Invoice {
                    LocalDateTime invoicePaymentDate,
                    Integer customerPoints,
                    Integer totalInvoiceAmount,
+                   Integer returnClientMoney,
                    Integer totalPayment,
                    Integer invoiceStatus) {
         this.id = id;
@@ -64,6 +66,7 @@ public class Invoice {
         this.invoicePaymentDate = invoicePaymentDate;
         this.customerPoints = customerPoints;
         this.totalInvoiceAmount = totalInvoiceAmount;
+        this.returnClientMoney = returnClientMoney;
         this.totalPayment = totalPayment;
         this.invoiceStatus = invoiceStatus;
     }
@@ -173,6 +176,14 @@ public class Invoice {
 
     public void setTotalInvoiceAmount(Integer totalInvoiceAmount) {
         this.totalInvoiceAmount = totalInvoiceAmount;
+    }
+
+    public Integer getReturnClientMoney() {
+        return returnClientMoney;
+    }
+
+    public void setReturnClientMoney(Integer returnClientMoney) {
+        this.returnClientMoney = returnClientMoney;
     }
 
     public Integer getTotalPayment() {

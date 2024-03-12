@@ -1,5 +1,6 @@
 package com.example.mangostore.controller;
 
+import com.example.mangostore.entity.Voucher;
 import com.example.mangostore.service.SellOfflineService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -39,6 +40,12 @@ public class SellOfflineController {
     public String updateInvoicePoint(@RequestParam("id") Long idInvoice,
                                      @RequestParam("point") Integer pointClient) {
         return sellOfflineService.updatePoint(idInvoice, pointClient);
+    }
+
+    @PostMapping(value = "sell/update-voucher")
+    public String updateInvoiceVoucher(@RequestParam("id") Long idInvoice,
+                                       @RequestParam("voucher") Voucher voucher) {
+        return sellOfflineService.updateVoucher(idInvoice, voucher);
     }
 
     @PostMapping(value = "sell/delete")
