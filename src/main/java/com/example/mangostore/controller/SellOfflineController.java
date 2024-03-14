@@ -3,6 +3,7 @@ package com.example.mangostore.controller;
 import com.example.mangostore.entity.Voucher;
 import com.example.mangostore.service.SellOfflineService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,5 +52,23 @@ public class SellOfflineController {
     @PostMapping(value = "sell/delete")
     public String cancelInvoice(@RequestParam("id") Long idInvoice) {
         return sellOfflineService.cancelInvoice(idInvoice);
+    }
+
+    @GetMapping(value = "sell/add-product")
+    public String addProductDetail(@RequestParam("idProductDetail") Long idProductDetail,
+                                   @RequestParam("idInvoice") Long idInvoice,
+                                   @RequestParam("quantityNew") Integer newQuantity) {
+        return sellOfflineService.addProduct(idInvoice, idProductDetail, newQuantity);
+    }
+
+    @GetMapping(value = "sell/delete-product")
+    public String deleteProduct(@RequestParam("id") Long idInvoiceDetail) {
+        return sellOfflineService.deleteProduct(idInvoiceDetail);
+    }
+
+    @PostMapping(value = "sell/update-status")
+    public String updateStatus(@RequestParam("id") Long idInvoice,
+                               @RequestParam("returnClientMoney") Integer returnClientMoney) {
+        return sellOfflineService.updateStatusInvoice(idInvoice, returnClientMoney);
     }
 }

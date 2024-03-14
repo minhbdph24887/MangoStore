@@ -13,8 +13,9 @@
             <div class="card">
                 <div class="card-body">
                     <h3>Sales At The Counter</h3>
-                    <a type="button" id="createOrderButton" class="btn btn-success">Create Order *</a>
-                    <span style="font-size: 0.8em; color: red">* You only create a maximum of 5 invoices</span>
+                    <a type="button" id="createOrderButton" class="btn btn-success"
+                       style="padding: 5px 10px;font-size: 12px;line-height: 1.5;">Create Order *</a>
+                    <span style="font-size: 12px; line-height: 1.5; padding: 5px 10px; color: red">* You only create a maximum of 5 invoices</span>
                     <br>
                     <th:block th:each="listInvoiceByAccount : ${listInvoiceByAccount}">
                         <a type="button" class="btn btn-light"
@@ -24,7 +25,6 @@
                             </tr>
                         </a>
                     </th:block>
-
                 </div>
             </div>
         </div>

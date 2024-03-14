@@ -74,4 +74,9 @@ public class Gender {
             return "HD0001";
         }
     }
+
+    public Integer roundingNumber(Double number) {
+        Integer roundedNumber = Math.toIntExact(Math.round(number));
+        return roundedNumber;
+    }
 }

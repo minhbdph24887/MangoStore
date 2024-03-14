@@ -15,4 +15,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 
     @Query(value = "select top 1 name_invoice from invoice order by name_invoice desc", nativeQuery = true)
     String getMaxInvoiceCode();
+
+    @Query(value = "select * from invoice where id= :idInvoice", nativeQuery = true)
+    List<Invoice> getAllInvoiceById(@Param("idInvoice") Long idInvoice);
 }

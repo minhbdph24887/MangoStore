@@ -73,16 +73,6 @@ public class VoucherServiceImpl implements VoucherService {
                     model.addAttribute("checkMenuAdmin", false);
                 }
 
-                List<Voucher> allVouchers = voucherRepository.findAll();
-                for (Voucher voucher : allVouchers) {
-                    LocalDateTime voucherEndDate = voucher.getEndDate().atStartOfDay();
-                    if (voucherEndDate.isBefore(LocalDateTime.now())) {
-                        voucher.setVoucherStatus(0);
-                        voucher.setStatus(0);
-                        voucherRepository.save(voucher);
-                    }
-                }
-
                 List<Voucher> itemsVoucher = voucherRepository.getAllVoucherByStatus1And2();
                 if (keyword != null) {
                     itemsVoucher = voucherRepository.searchVoucher(keyword);
@@ -97,7 +87,6 @@ public class VoucherServiceImpl implements VoucherService {
 
                 List<Rank> itemsRank = rankRepository.getAllRankByStatus1();
                 model.addAttribute("listRank", itemsRank);
-
                 return "admin/voucher/IndexVoucher";
             }
         }

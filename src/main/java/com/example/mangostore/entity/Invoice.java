@@ -33,7 +33,9 @@ public class Invoice {
     private LocalDateTime invoicePaymentDate;
     private Integer customerPoints;
     private Integer totalInvoiceAmount;
+    private String payments;
     private Integer returnClientMoney;
+    private Integer leftoverMoney;
     private Integer totalPayment;
     private Integer invoiceStatus;
 
@@ -50,7 +52,9 @@ public class Invoice {
                    LocalDateTime invoicePaymentDate,
                    Integer customerPoints,
                    Integer totalInvoiceAmount,
+                   String payments,
                    Integer returnClientMoney,
+                   Integer leftoverMoney,
                    Integer totalPayment,
                    Integer invoiceStatus) {
         this.id = id;
@@ -66,7 +70,9 @@ public class Invoice {
         this.invoicePaymentDate = invoicePaymentDate;
         this.customerPoints = customerPoints;
         this.totalInvoiceAmount = totalInvoiceAmount;
+        this.payments = payments;
         this.returnClientMoney = returnClientMoney;
+        this.leftoverMoney = leftoverMoney;
         this.totalPayment = totalPayment;
         this.invoiceStatus = invoiceStatus;
     }
@@ -184,6 +190,22 @@ public class Invoice {
 
     public void setReturnClientMoney(Integer returnClientMoney) {
         this.returnClientMoney = returnClientMoney;
+    }
+
+    public Integer getLeftoverMoney() {
+        return leftoverMoney;
+    }
+
+    public void setLeftoverMoney(Integer leftoverMoney) {
+        this.leftoverMoney = leftoverMoney;
+    }
+
+    public String getPayments() {
+        return payments;
+    }
+
+    public void setPayments(String payments) {
+        this.payments = payments;
     }
 
     public Integer getTotalPayment() {

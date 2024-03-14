@@ -19,4 +19,10 @@ public interface SellOfflineService {
     String updateVoucher(Long idInvoice, Voucher voucher);
 
     String cancelInvoice(Long idInvoice);
+
+    String addProduct(Long idInvoice, Long idProductDetail, Integer newQuantity);
+
+    String deleteProduct(Long idInvoiceDetail);
+
+    String updateStatusInvoice(Long idInvoice, Integer returnClientMoney);
 }
