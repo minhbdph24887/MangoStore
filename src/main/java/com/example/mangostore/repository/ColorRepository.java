@@ -16,9 +16,9 @@ public interface ColorRepository extends JpaRepository<Color, Long> {
     @Query(value = "select * from color where status= 0 order by id desc", nativeQuery = true)
     List<Color> getAllColorByStatus0();
 
-    @Query(value = "select * from color where name_color like %:searchColor%", nativeQuery = true)
+    @Query(value = "select * from color where name_color like %:searchColor and status= 1%", nativeQuery = true)
     List<Color> searchColor(@Param("searchColor") String searchColor);
 
-    @Query(value = "select * from color where name_color= :nameColor", nativeQuery = true)
+    @Query(value = "select * from color where name_color= :nameColor and status= 1", nativeQuery = true)
     Color findByName(@Param("nameColor") String nameColor);
 }

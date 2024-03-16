@@ -16,6 +16,6 @@ public interface AddressClientRepository extends JpaRepository<AddressClient, Lo
     @Query(value = "select * from address_client where status= 0 order by id desc", nativeQuery = true)
     List<AddressClient> getAllAddressClientByStatus0();
 
-    @Query(value = "select * from address_client where name_client like %:searchNameClient%", nativeQuery = true)
+    @Query(value = "select * from address_client where name_client like %:searchNameClient% and status= 1", nativeQuery = true)
     List<AddressClient> searchNameClient(@Param("searchNameClient") String searchClient);
 }

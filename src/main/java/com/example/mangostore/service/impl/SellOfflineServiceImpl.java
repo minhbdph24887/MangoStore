@@ -3,6 +3,7 @@ package com.example.mangostore.service.impl;
 import com.example.mangostore.config.Gender;
 import com.example.mangostore.entity.*;
 import com.example.mangostore.repository.*;
+import com.example.mangostore.request.InvoiceRequest;
 import com.example.mangostore.service.SellOfflineService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
@@ -140,8 +141,10 @@ public class SellOfflineServiceImpl implements SellOfflineService {
                 Invoice detailInvoice = invoiceRepository.findById(idInvoice).orElse(null);
                 model.addAttribute("detailInvoice", detailInvoice);
 
+                assert detailInvoice != null;
                 if (detailInvoice.getIdCustomer() != null) {
                     Account detailAccountByIdAccount = accountRepository.findById(detailInvoice.getIdCustomer()).orElse(null);
+                    assert detailAccountByIdAccount != null;
                     model.addAttribute("nameClient", detailAccountByIdAccount.getFullName());
                     model.addAttribute("pointClient", detailAccountByIdAccount.getAccumulatedPoints());
 
@@ -154,6 +157,7 @@ public class SellOfflineServiceImpl implements SellOfflineService {
 
                 if (detailInvoice.getVoucher() != null) {
                     Voucher getReducedValue = voucherRepository.findById(detailInvoice.getVoucher().getId()).orElse(null);
+                    assert getReducedValue != null;
                     model.addAttribute("discountVouchers", getReducedValue.getReducedValue());
                 }
 
@@ -184,6 +188,7 @@ public class SellOfflineServiceImpl implements SellOfflineService {
     public String updateClient(Long idInvoice, String numberPhoneClient) {
         Account detailAccountCustom = accountRepository.findAccountByNumberPhone(numberPhoneClient);
         Invoice invoice = invoiceRepository.findById(idInvoice).orElse(null);
+        assert invoice != null;
         if (invoice.getIdCustomer() == null) {
             invoice.setIdCustomer(detailAccountCustom.getId());
             invoiceRepository.save(invoice);
@@ -194,8 +199,10 @@ public class SellOfflineServiceImpl implements SellOfflineService {
     @Override
     public String updatePoint(Long idInvoice, Integer pointClient) {
         Invoice invoice = invoiceRepository.findById(idInvoice).orElse(null);
+        assert invoice != null;
         if (invoice.getTotalPayment() != null) {
             Account detailAccountCustom = accountRepository.findById(invoice.getIdCustomer()).orElse(null);
+            assert detailAccountCustom != null;
             Integer customerPoints = detailAccountCustom.getAccumulatedPoints() * 1000;
             Integer totalPaymentPoint = invoice.getTotalPayment() - customerPoints;
             invoice.setTotalPayment(totalPaymentPoint);
@@ -206,6 +213,7 @@ public class SellOfflineServiceImpl implements SellOfflineService {
             invoice.setCustomerPoints(pointClient);
             invoiceRepository.save(invoice);
             Account detailAccount = accountRepository.findById(invoice.getIdCustomer()).orElse(null);
+            assert detailAccount != null;
             detailAccount.setAccumulatedPoints(0);
             accountRepository.save(detailAccount);
         }
@@ -216,11 +224,13 @@ public class SellOfflineServiceImpl implements SellOfflineService {
     public String updateVoucher(Long idInvoice, Voucher voucher) {
         Invoice invoice = invoiceRepository.findById(idInvoice).orElse(null);
 
+        assert invoice != null;
         if (invoice.getVoucher() == null) {
             invoice.setVoucher(voucher);
             invoiceRepository.save(invoice);
             Voucher detailVoucher = voucherRepository.findById(voucher.getId()).orElse(null);
-            Integer quantityNew = detailVoucher.getQuantity() - 1;
+            assert detailVoucher != null;
+            int quantityNew = detailVoucher.getQuantity() - 1;
             detailVoucher.setQuantity(quantityNew);
             if (quantityNew == 0) {
                 detailVoucher.setStatus(0);
@@ -230,6 +240,7 @@ public class SellOfflineServiceImpl implements SellOfflineService {
 
         if (invoice.getTotalPayment() != null) {
             Voucher detailVoucher = voucherRepository.findById(invoice.getVoucher().getId()).orElse(null);
+            assert detailVoucher != null;
             Integer totalPaymentVoucher = invoice.getTotalPayment() - detailVoucher.getReducedValue();
             invoice.setTotalPayment(totalPaymentVoucher);
             invoiceRepository.save(invoice);
@@ -240,11 +251,13 @@ public class SellOfflineServiceImpl implements SellOfflineService {
     @Override
     public String cancelInvoice(Long idInvoice) {
         Invoice invoice = invoiceRepository.findById(idInvoice).orElse(null);
+        assert invoice != null;
         invoice.setInvoiceStatus(6);
         invoiceRepository.save(invoice);
 
         if (invoice.getVoucher() != null) {
             Voucher detailVoucher = voucherRepository.findById(invoice.getVoucher().getId()).orElse(null);
+            assert detailVoucher != null;
             Integer quantityOld = detailVoucher.getQuantity() + 1;
             detailVoucher.setQuantity(quantityOld);
             voucherRepository.save(detailVoucher);
@@ -253,6 +266,7 @@ public class SellOfflineServiceImpl implements SellOfflineService {
         if (invoice.getIdCustomer() != null) {
             Integer customerClientOld = invoice.getCustomerPoints();
             Account detailAccount = accountRepository.findById(invoice.getIdCustomer()).orElse(null);
+            assert detailAccount != null;
             detailAccount.setAccumulatedPoints(customerClientOld);
             accountRepository.save(detailAccount);
         }
@@ -274,6 +288,7 @@ public class SellOfflineServiceImpl implements SellOfflineService {
         }
 
         Integer reducedValueVoucher = 0;
+        assert invoice != null;
         if (invoice.getVoucher() == null) {
             reducedValueVoucher = 0;
         } else {
@@ -303,6 +318,7 @@ public class SellOfflineServiceImpl implements SellOfflineService {
 
                 Invoice detailInvoiceSet = invoiceRepository.findById(invoice.getId()).orElse(null);
                 Integer newSum = 0;
+                assert detailInvoiceSet != null;
                 if (detailInvoiceSet.getTotalInvoiceAmount() == null) {
                     newSum = sum;
                     detailInvoiceSet.setTotalInvoiceAmount(newSum);
@@ -311,12 +327,8 @@ public class SellOfflineServiceImpl implements SellOfflineService {
                     detailInvoiceSet.setTotalInvoiceAmount(newSum);
                 }
 
-                Integer totalPayment = newSum - reducedValueVoucher - (customPoint * 1000);
-                if (totalPayment <= 0) {
-                    detailInvoiceSet.setTotalPayment(0);
-                } else {
-                    detailInvoiceSet.setTotalPayment(totalPayment);
-                }
+                int totalPayment = newSum - reducedValueVoucher - (customPoint * 1000);
+                detailInvoiceSet.setTotalPayment(Math.max(totalPayment, 0));
                 invoiceRepository.save(detailInvoiceSet);
             }
         }
@@ -326,10 +338,12 @@ public class SellOfflineServiceImpl implements SellOfflineService {
     @Override
     public String deleteProduct(Long idInvoiceDetail) {
         InvoiceDetail invoiceDetail = invoiceDetailRepository.findById(idInvoiceDetail).orElse(null);
+        assert invoiceDetail != null;
         List<Invoice> itemsInvoice = invoiceRepository.getAllInvoiceById(invoiceDetail.getInvoice().getId());
         Invoice invoice = itemsInvoice.isEmpty() ? null : itemsInvoice.get(0);
 
         Integer totalSum = invoiceDetail.getQuantity() * invoiceDetail.getPrice();
+        assert invoice != null;
         Integer totalCustomer = invoice.getTotalInvoiceAmount() - totalSum;
 
         Integer reducedValueVoucher = 0;
@@ -346,14 +360,9 @@ public class SellOfflineServiceImpl implements SellOfflineService {
             customPoint = invoice.getCustomerPoints();
         }
 
-        Integer newTotalPayment = totalCustomer - reducedValueVoucher - customPoint;
+        int newTotalPayment = totalCustomer - reducedValueVoucher - (customPoint * 1000);
         invoice.setTotalInvoiceAmount(totalCustomer);
-
-        if (newTotalPayment < 0) {
-            invoice.setTotalPayment(0);
-        } else {
-            invoice.setTotalPayment(newTotalPayment);
-        }
+        invoice.setTotalPayment(Math.max(newTotalPayment, 0));
 
         invoiceRepository.save(invoice);
         invoiceDetailRepository.deleteById(idInvoiceDetail);
@@ -361,41 +370,123 @@ public class SellOfflineServiceImpl implements SellOfflineService {
     }
 
     @Override
-    public String updateStatusInvoice(Long idInvoice, Integer returnClientMoney) {
-        Invoice invoice = invoiceRepository.findById(idInvoice).orElse(null);
+    public boolean updateStatusInvoice(InvoiceRequest request) {
+        Invoice invoice = invoiceRepository.findById(request.getIdInvoice()).orElse(null);
+        assert invoice != null;
         invoice.setInvoicePaymentDate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
-        invoice.setReturnClientMoney(returnClientMoney);
+        invoice.setReturnClientMoney(request.getReturnClientMoney());
         invoice.setPayments("cash");
-        Integer leftoverMoney = returnClientMoney - invoice.getTotalPayment();
+        Integer leftoverMoney = request.getReturnClientMoney() - invoice.getTotalPayment();
         invoice.setLeftoverMoney(leftoverMoney);
         invoice.setInvoiceStatus(5);
         invoiceRepository.save(invoice);
 
-        List<InvoiceDetail> getAllInvoiceDetail = invoiceDetailRepository.findAllByIdInvoice(idInvoice);
+        List<InvoiceDetail> getAllInvoiceDetail = invoiceDetailRepository.findAllByIdInvoice(request.getIdInvoice());
         for (InvoiceDetail detail : getAllInvoiceDetail) {
             ProductDetail productDetail = productDetailRepository.findById(detail.getProductDetail().getId()).orElse(null);
+            assert productDetail != null;
             Integer quantityNew = productDetail.getQuantity() - detail.getQuantity();
             productDetail.setQuantity(quantityNew);
             productDetailRepository.save(productDetail);
         }
 
-        Double rewardPoints = invoice.getTotalInvoiceAmount().doubleValue() / 12500;
-        Integer addPoints = gender.roundingNumber(rewardPoints);
-        Account detailAccount = accountRepository.findById(invoice.getIdCustomer()).orElse(null);
-        Integer points = detailAccount.getAccumulatedPoints() + addPoints;
-        detailAccount.setAccumulatedPoints(points);
-        accountRepository.save(detailAccount);
+        if (invoice.getIdCustomer() != null) {
+            Double rewardPoints = invoice.getTotalInvoiceAmount().doubleValue() / 12500;
+            Integer addPoints = gender.roundingNumber(rewardPoints);
+            Account detailAccount = accountRepository.findById(invoice.getIdCustomer()).orElse(null);
+            assert detailAccount != null;
+            Integer points = detailAccount.getAccumulatedPoints() + addPoints;
+            detailAccount.setAccumulatedPoints(points);
+            accountRepository.save(detailAccount);
 
-        List<Rank> itemsRank = rankRepository.getAllRankByStatus1();
-        itemsRank.sort((rank1, rank2) -> rank2.getMaximumScore().compareTo(rank1.getMaximumScore()));
-        for (Rank rank : itemsRank) {
-            if (detailAccount.getAccumulatedPoints() > rank.getMinimumScore() && detailAccount.getAccumulatedPoints() < rank.getMaximumScore()) {
-                detailAccount.setRank(rank);
-            } else if (detailAccount.getAccumulatedPoints() > rank.getMaximumScore()) {
-                detailAccount.setRank(itemsRank.get(0));
+            List<Rank> itemsRank = rankRepository.getAllRankByStatus1();
+            itemsRank.sort((rank1, rank2) -> rank2.getMaximumScore().compareTo(rank1.getMaximumScore()));
+            for (Rank rank : itemsRank) {
+                if (detailAccount.getAccumulatedPoints() > rank.getMinimumScore() && detailAccount.getAccumulatedPoints() < rank.getMaximumScore()) {
+                    detailAccount.setRank(rank);
+                } else if (detailAccount.getAccumulatedPoints() > rank.getMaximumScore()) {
+                    detailAccount.setRank(itemsRank.get(0));
+                }
             }
+            accountRepository.save(detailAccount);
         }
-        accountRepository.save(detailAccount);
-        return "redirect:/mangostore/admin/sell";
+        return true;
+    }
+
+    @Override
+    public String reduceQuantity(Long idInvoiceDetail) {
+        InvoiceDetail detail = invoiceDetailRepository.findById(idInvoiceDetail).orElse(null);
+        assert detail != null;
+
+        int quantityReduce = detail.getQuantity() - 1;
+        detail.setQuantity(quantityReduce);
+
+        detail.setCapitalSum(quantityReduce * detail.getPrice());
+        invoiceDetailRepository.save(detail);
+
+        List<Invoice> itemsInvoice = invoiceRepository.getAllInvoiceById(detail.getInvoice().getId());
+        Invoice invoice = itemsInvoice.isEmpty() ? null : itemsInvoice.get(0);
+        assert invoice != null;
+
+        int totalInvoiceAmount = invoice.getTotalInvoiceAmount() - detail.getPrice();
+        invoice.setTotalInvoiceAmount(totalInvoiceAmount);
+
+        Integer reducedValueVoucher = 0;
+        if (invoice.getVoucher() == null) {
+            reducedValueVoucher = 0;
+        } else {
+            reducedValueVoucher = invoice.getVoucher().getReducedValue();
+        }
+
+        Integer customPoint = 0;
+        if (invoice.getCustomerPoints() == null) {
+            customPoint = 0;
+        } else {
+            customPoint = invoice.getCustomerPoints();
+        }
+
+        int newTotalPayment = totalInvoiceAmount - reducedValueVoucher - (customPoint * 1000);
+        invoice.setTotalPayment(Math.max(newTotalPayment, 0));
+
+        invoiceRepository.save(invoice);
+
+        if (quantityReduce == 0) {
+            invoiceDetailRepository.deleteById(idInvoiceDetail);
+        }
+        return "redirect:/mangostore/admin/sell/edit?id=" + detail.getInvoice().getId();
+    }
+
+    @Override
+    public String increaseQuantity(Long idInvoiceDetail) {
+        InvoiceDetail detail = invoiceDetailRepository.findById(idInvoiceDetail).orElse(null);
+        assert detail != null;
+        int quantityIncrease = detail.getQuantity() + 1;
+        detail.setQuantity(quantityIncrease);
+        detail.setCapitalSum(quantityIncrease * detail.getPrice());
+        invoiceDetailRepository.save(detail);
+        List<Invoice> itemsInvoice = invoiceRepository.getAllInvoiceById(detail.getInvoice().getId());
+        Invoice invoice = itemsInvoice.isEmpty() ? null : itemsInvoice.get(0);
+        assert invoice != null;
+        int totalInvoiceAmount = invoice.getTotalInvoiceAmount() + detail.getPrice();
+        invoice.setTotalInvoiceAmount(totalInvoiceAmount);
+
+        Integer reducedValueVoucher = 0;
+        if (invoice.getVoucher() == null) {
+            reducedValueVoucher = 0;
+        } else {
+            reducedValueVoucher = invoice.getVoucher().getReducedValue();
+        }
+
+        Integer customPoint = 0;
+        if (invoice.getCustomerPoints() == null) {
+            customPoint = 0;
+        } else {
+            customPoint = invoice.getCustomerPoints();
+        }
+
+        int newTotalPayment = totalInvoiceAmount - reducedValueVoucher - (customPoint * 1000);
+        invoice.setTotalPayment(Math.max(newTotalPayment, 0));
+        invoiceRepository.save(invoice);
+        return "redirect:/mangostore/admin/sell/edit?id=" + detail.getInvoice().getId();
     }
 }

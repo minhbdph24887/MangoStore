@@ -6,10 +6,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(value = "/mangostore/admin/")
@@ -66,9 +63,13 @@ public class SellOfflineController {
         return sellOfflineService.deleteProduct(idInvoiceDetail);
     }
 
-    @PostMapping(value = "sell/update-status")
-    public String updateStatus(@RequestParam("id") Long idInvoice,
-                               @RequestParam("returnClientMoney") Integer returnClientMoney) {
-        return sellOfflineService.updateStatusInvoice(idInvoice, returnClientMoney);
+    @PostMapping(value = "sell/reduce")
+    public String reduceQuantity(@RequestParam("id") Long idInvoiceDetail) {
+        return sellOfflineService.reduceQuantity(idInvoiceDetail);
+    }
+
+    @PostMapping(value = "sell/increase")
+    public String increaseQuantity(@RequestParam("id") Long idInvoiceDetail){
+        return sellOfflineService.increaseQuantity(idInvoiceDetail);
     }
 }

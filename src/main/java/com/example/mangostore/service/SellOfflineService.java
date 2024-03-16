@@ -1,6 +1,7 @@
 package com.example.mangostore.service;
 
 import com.example.mangostore.entity.Voucher;
+import com.example.mangostore.request.InvoiceRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -24,5 +25,9 @@ public interface SellOfflineService {
 
     String deleteProduct(Long idInvoiceDetail);
 
-    String updateStatusInvoice(Long idInvoice, Integer returnClientMoney);
+    boolean updateStatusInvoice(InvoiceRequest request);
+
+    String reduceQuantity(Long idInvoiceDetail);
+
+    String increaseQuantity(Long idInvoiceDetail);
 }
