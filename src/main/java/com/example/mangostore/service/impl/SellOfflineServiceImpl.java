@@ -402,10 +402,12 @@ public class SellOfflineServiceImpl implements SellOfflineService {
             List<Rank> itemsRank = rankRepository.getAllRankByStatus1();
             itemsRank.sort((rank1, rank2) -> rank2.getMaximumScore().compareTo(rank1.getMaximumScore()));
             for (Rank rank : itemsRank) {
-                if (detailAccount.getAccumulatedPoints() > rank.getMinimumScore() && detailAccount.getAccumulatedPoints() < rank.getMaximumScore()) {
+                if (detailAccount.getAccumulatedPoints() >= rank.getMinimumScore() && detailAccount.getAccumulatedPoints() < rank.getMaximumScore()) {
                     detailAccount.setRank(rank);
-                } else if (detailAccount.getAccumulatedPoints() > rank.getMaximumScore()) {
+                    break;
+                } else if (detailAccount.getAccumulatedPoints() >= rank.getMaximumScore()) {
                     detailAccount.setRank(itemsRank.get(0));
+                    break;
                 }
             }
             accountRepository.save(detailAccount);

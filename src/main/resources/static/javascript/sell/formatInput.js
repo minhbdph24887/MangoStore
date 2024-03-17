@@ -18,15 +18,19 @@ if (checkInfoMoneyPage) {
         const messageElement = document.getElementById('remainingMoney');
         const saveButton = document.getElementById('saveButton');
         const outputElement = document.getElementById('output');
+        const convertElement = document.getElementById('convert');
 
         if (clientMoney >= totalPayment) {
             saveButton.disabled = false;
             messageElement.innerText = (remainingMoney >= 0 ? formatToCurrency(remainingMoney.toString()) : '0') + ' VND';
             outputElement.value = remainingMoney;
+            convertElement.value = clientMoney;
+
         } else {
             saveButton.disabled = true;
             messageElement.innerText = 'The amount the customer paid is not enough for the invoice amount';
             outputElement.value = '';
+            convertElement.value = '';
         }
     }
 
@@ -41,7 +45,7 @@ if (checkInfoMoneyPage) {
 
     function updateInvoiceStatus() {
         const idInvoice = document.getElementById("idInvoice").value;
-        const returnClientMoney = parseInt(document.getElementById("output").value);
+        const returnClientMoney = parseInt(document.getElementById("convert").value);
 
         console.log(idInvoice);
         console.log(returnClientMoney);
