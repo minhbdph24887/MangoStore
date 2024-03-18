@@ -2,8 +2,8 @@ package com.example.mangostore.controller;
 
 import com.example.mangostore.entity.Voucher;
 import com.example.mangostore.service.SellOfflineService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -69,7 +69,19 @@ public class SellOfflineController {
     }
 
     @PostMapping(value = "sell/increase")
-    public String increaseQuantity(@RequestParam("id") Long idInvoiceDetail){
+    public String increaseQuantity(@RequestParam("id") Long idInvoiceDetail) {
         return sellOfflineService.increaseQuantity(idInvoiceDetail);
+    }
+
+    @GetMapping(value = "sell/banking")
+    public String bankingVnPay(@RequestParam("id") Long idInvoice,
+                               HttpServletRequest request,
+                               HttpSession session) {
+        return sellOfflineService.paymentVnPay(idInvoice, request, session);
+    }
+
+    @GetMapping(value = "sell/banking/success")
+    public String bankingSuccess(HttpServletRequest request, HttpSession session) {
+        return sellOfflineService.bankingSuccess(request, session);
     }
 }

@@ -5,6 +5,7 @@ import com.example.mangostore.entity.*;
 import com.example.mangostore.repository.*;
 import com.example.mangostore.request.InvoiceRequest;
 import com.example.mangostore.service.SellOfflineService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -490,5 +491,67 @@ public class SellOfflineServiceImpl implements SellOfflineService {
         invoice.setTotalPayment(Math.max(newTotalPayment, 0));
         invoiceRepository.save(invoice);
         return "redirect:/mangostore/admin/sell/edit?id=" + detail.getInvoice().getId();
+    }
+
+    @Override
+    public String paymentVnPay(Long idInvoice, HttpServletRequest request, HttpSession session) {
+        Invoice invoice = invoiceRepository.findById(idInvoice).orElse(null);
+        session.setAttribute("idInvoice", idInvoice);
+        String vnPayUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+        assert invoice != null;
+        return "redirect:" + gender.createPaymentVnPay(invoice, vnPayUrl);
+    }
+
+    @Override
+    public String bankingSuccess(HttpServletRequest request, HttpSession session) {
+        int paymentStatus = gender.orderReturn(request);
+        Long idInvoice = (Long) session.getAttribute("idInvoice");
+        if (paymentStatus == 1) {
+            Invoice invoice = invoiceRepository.findById(idInvoice).orElse(null);
+            assert invoice != null;
+            invoice.setInvoicePaymentDate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
+            invoice.setReturnClientMoney(invoice.getTotalPayment());
+            invoice.setPayments("banking");
+            invoice.setLeftoverMoney(0);
+            invoice.setInvoiceStatus(5);
+            invoiceRepository.save(invoice);
+
+            List<InvoiceDetail> getAllInvoiceDetail = invoiceDetailRepository.findAllByIdInvoice(idInvoice);
+            for (InvoiceDetail detail : getAllInvoiceDetail) {
+                ProductDetail productDetail = productDetailRepository.findById(detail.getProductDetail().getId()).orElse(null);
+                assert productDetail != null;
+                Integer quantityNew = productDetail.getQuantity() - detail.getQuantity();
+                productDetail.setQuantity(quantityNew);
+                productDetailRepository.save(productDetail);
+            }
+
+            if (invoice.getIdCustomer() != null) {
+                Double rewardPoints = invoice.getTotalInvoiceAmount().doubleValue() / 12500;
+                Integer addPoints = gender.roundingNumber(rewardPoints);
+                Account detailAccount = accountRepository.findById(invoice.getIdCustomer()).orElse(null);
+                assert detailAccount != null;
+                Integer points = detailAccount.getAccumulatedPoints() + addPoints;
+                detailAccount.setAccumulatedPoints(points);
+                accountRepository.save(detailAccount);
+
+                List<Rank> itemsRank = rankRepository.getAllRankByStatus1();
+                itemsRank.sort((rank1, rank2) -> rank2.getMaximumScore().compareTo(rank1.getMaximumScore()));
+                for (Rank rank : itemsRank) {
+                    if (detailAccount.getAccumulatedPoints() >= rank.getMinimumScore() && detailAccount.getAccumulatedPoints() < rank.getMaximumScore()) {
+                        detailAccount.setRank(rank);
+                        break;
+                    } else if (detailAccount.getAccumulatedPoints() >= rank.getMaximumScore()) {
+                        detailAccount.setRank(itemsRank.get(0));
+                        break;
+                    }
+                }
+                accountRepository.save(detailAccount);
+            }
+            System.out.println("Thanh Toan Thanh Cong");
+            return "redirect:/mangostore/admin/sell";
+        } else {
+            System.out.println("Thanh Toan That Bai");
+            return "redirect:/mangostore/admin/sell/edit?id=" + idInvoice;
+        }
     }
 }

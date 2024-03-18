@@ -2,6 +2,7 @@ package com.example.mangostore.service;
 
 import com.example.mangostore.entity.Voucher;
 import com.example.mangostore.request.InvoiceRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -30,4 +31,8 @@ public interface SellOfflineService {
     String reduceQuantity(Long idInvoiceDetail);
 
     String increaseQuantity(Long idInvoiceDetail);
+
+    String paymentVnPay(Long idInvoice, HttpServletRequest request, HttpSession session);
+
+    String bankingSuccess(HttpServletRequest request, HttpSession session);
 }
