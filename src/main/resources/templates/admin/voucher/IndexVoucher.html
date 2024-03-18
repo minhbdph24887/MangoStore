@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
       th:replace="~{/layout/IndexAdmin :: dynamic(~{:: main})}">
 <body>
-<main>
+<main class="indexFormatMoneyPage">
     <div class="home-tab">
         <div class="d-sm-flex align-items-center justify-content-between border-bottom">
             <ul class="nav nav-tabs" role="tablist">
@@ -43,7 +43,7 @@
                                 </div>
                             </div>
                             <div class="modal fade" id="myModal" role="dialog">
-                                <div class="modal-dialog">
+                                <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-body">
                                             <form th:action="@{/mangostore/admin/voucher/add}" th:object="${addVoucher}"
@@ -52,30 +52,39 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
+                                                            <label class="form-label">Name Voucher:</label>
                                                             <input type="text"
                                                                    class="form-control"
                                                                    name="nameVoucher"
                                                                    placeholder="Enter Name Voucher">
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-5">
                                                         <div class="form-group">
+                                                            <label class="form-label">Quantity:</label>
                                                             <input type="number"
                                                                    class="form-control"
                                                                    name="quantity"
                                                                    placeholder="Enter Quantity Voucher">
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-7">
                                                         <div class="form-group">
-                                                            <input type="number"
-                                                                   class="form-control"
-                                                                   name="reducedValue"
-                                                                   placeholder="Enter ReducedValue Voucher">
+                                                            <label class="form-label">Reduced Voucher:</label>
+                                                            <div class="d-flex">
+                                                                <input type="text"
+                                                                       id="currencyInput"
+                                                                       class="form-control"
+                                                                       oninput="onInput(this.value)"
+                                                                       placeholder="Enter ReducedValue Voucher">
+                                                                <span style="margin-left: 0.5rem">VND</span>
+                                                                <input type="hidden" name="reducedValue" id="output">
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-12">
                                                         <div class="form-group">
+                                                            <label class="form-label">Voucher From:</label>
                                                             <select name="voucherFrom" class="form-select">
                                                                 <option value="offline" th:text="offline"></option>
                                                                 <option value="online" th:text="online"></option>
@@ -84,6 +93,7 @@
                                                     </div>
                                                     <div class="col-md-12">
                                                         <div class="form-group">
+                                                            <label class="form-label">Voucher belongs to rank:</label>
                                                             <select name="rank" class="form-select">
                                                                 <option th:each="listRank : ${listRank}"
                                                                         th:value="${listRank.id}"
@@ -93,6 +103,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
+                                                            <label class="form-label">Start Day:</label>
                                                             <input type="date"
                                                                    class="form-control"
                                                                    name="startDay">
@@ -100,6 +111,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
+                                                            <label class="form-label">End Date:</label>
                                                             <input type="date"
                                                                    class="form-control"
                                                                    name="endDate">
@@ -155,7 +167,8 @@
                                             <td style="width: 145px; word-break: break-all"
                                                 th:text="${listVoucher.nameVoucher}"></td>
                                             <td style="width: 104px" th:text="${listVoucher.quantity}"></td>
-                                            <td style="width: 111px" th:text="${listVoucher.reducedValue}"></td>
+                                            <td style="width: 111px"
+                                                th:text="${#numbers.formatDecimal(listVoucher.reducedValue, 0, 'COMMA', 0, 'POINT') + ' VND'}"></td>
                                             <td style="width: 104px" th:text="${listVoucher.voucherFrom}"></td>
                                             <td style="width: 100px" th:text="${listVoucher.rank.nameRank}"></td>
                                             <td style="width: 104px"
@@ -230,7 +243,8 @@
                                                 <button type="submit" th:text="Save" class="btn btn-info"
                                                         onclick="restoreVoucher(this)"></button>
                                             </td>
-                                            <td style="width: 105px" th:text="${listVoucherInactive.reducedValue}"></td>
+                                            <td style="width: 105px"
+                                                th:text="${#numbers.formatDecimal(listVoucherInactive.reducedValue, 0, 'COMMA', 0, 'POINT') + ' VND'}"></td>
                                             <td style="width: 100px" th:text="${listVoucherInactive.voucherFrom}"></td>
                                             <td style="width: 100px"
                                                 th:text="${listVoucherInactive.rank.nameRank}"></td>

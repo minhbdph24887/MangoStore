@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
       th:replace="~{/layout/IndexAdmin :: dynamic(~{:: main})}">
 <body>
-<main class="checkBoxDetail">
+<main class="checkBoxDetail fromFormatMoney">
     <div class="home-tab">
         <div class="d-sm-flex align-items-center justify-content-between border-bottom">
             <ul class="nav nav-tabs" role="tablist">
@@ -34,7 +34,7 @@
                             </h4>
                             <form th:action="@{/mangostore/admin/voucher/update}" th:object="${detailVoucher}"
                                   method="post"
-                                  onsubmit="return update()">
+                                  onsubmit="return prepareValueForSubmit()">
                                 <input type="hidden" th:field="*{id}" th:value="${detailVoucher.id}">
                                 <div class="row">
                                     <div class="col-md-3">
@@ -75,9 +75,14 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="form-label">ReducedValue</label>
-                                            <input type="text"
-                                                   class="form-control"
-                                                   name="reducedValue" th:field="*{reducedValue}"/>
+                                            <div class="d-flex">
+                                                <input type="text"
+                                                       id="currencyInput" oninput="onInput(this.value)"
+                                                       class="form-control" th:value="${detailVoucher.reducedValue}"/>
+                                                <span style="margin-left: 0.5rem">VND</span>
+                                                <input type="hidden" name="reducedValue" th:field="*{reducedValue}"
+                                                       id="output">
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -170,7 +175,8 @@
                                     </div>
                                 </div>
                                 <div class="text-right mt-3">
-                                    <button type="submit" class="btn btn-primary">Save As</button>&nbsp;
+                                    <button type="submit" class="btn btn-primary" onclick="return update()">Save As
+                                    </button>&nbsp;
                                     <a th:href="@{/mangostore/admin/voucher/delete/{id}(id=${detailVoucher.id})}">
                                         <button type="button" class="btn btn-danger" onclick="return remove()">Delete
                                         </button>
@@ -229,7 +235,8 @@
                                                 <button type="submit" th:text="Save" class="btn btn-info"
                                                         onclick="restoreVoucher(this)"></button>
                                             </td>
-                                            <td style="width: 105px" th:text="${listVoucherInactive.reducedValue}"></td>
+                                            <td style="width: 105px"
+                                                th:text="${#numbers.formatDecimal(listVoucherInactive.reducedValue, 0, 'COMMA', 0, 'POINT') + ' VND'}"></td>
                                             <td style="width: 100px" th:text="${listVoucherInactive.voucherFrom}"></td>
                                             <td style="width: 100px"
                                                 th:text="${listVoucherInactive.rank.nameRank}"></td>

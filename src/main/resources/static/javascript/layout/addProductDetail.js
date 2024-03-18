@@ -36,17 +36,35 @@ function generateVariants() {
 
             const importPriceCell = row.insertCell(2);
             const importPriceInput = document.createElement("input");
-            importPriceInput.type = "number";
-            importPriceInput.value = 1000;
+            importPriceInput.type = "text";
+            importPriceInput.id = "importPriceInput"
+            importPriceInput.value = (1000).toLocaleString('vi-VN');
             importPriceInput.className = "form-control";
+            importPriceInput.oninput = function () {
+                onInputImportPrice(this.value);
+            };
+
+            const importPriceHidden = document.createElement("input");
+            importPriceHidden.type = "hidden";
+            importPriceHidden.id = "outputImportPrice";
             importPriceCell.appendChild(importPriceInput);
+            importPriceCell.appendChild(importPriceHidden);
 
             const priceCell = row.insertCell(3);
             const priceInput = document.createElement("input");
-            priceInput.type = "number";
-            priceInput.value = 1000;
+            priceInput.type = "text";
+            priceInput.id = "priceInput"
+            priceInput.value = (1000).toLocaleString('vi-VN');
             priceInput.className = "form-control";
+            priceInput.oninput = function () {
+                onInputPrice(this.value);
+            };
+
+            const priceHidden = document.createElement("input");
+            priceHidden.type = "hidden";
+            priceHidden.id = "outputPrice";
             priceCell.appendChild(priceInput);
+            priceCell.appendChild(priceHidden);
 
             const sizeHidden = row.insertCell(4);
             sizeHidden.textContent = sizeValue;
@@ -68,12 +86,10 @@ function getDataFromTable() {
         const size = row.cells[4].textContent;
         const color = row.cells[5].textContent;
         const quantityInput = row.cells[1].querySelector("input").value;
-        const importPriceInput = row.cells[2].querySelector("input").value;
-        const priceInput = row.cells[3].querySelector("input").value;
+        const importPrice = parseFloat(row.cells[2].querySelector("#outputImportPrice").value);
+        const price = parseFloat(row.cells[3].querySelector("#outputPrice").value);
 
         const quantity = parseInt(quantityInput, 10);
-        const importPrice = parseFloat(importPriceInput);
-        const price = parseFloat(priceInput);
 
         if (quantity <= 0 || importPrice <= 0 || price <= 0) {
             alert("The new data is incorrect, please re-enter.");
