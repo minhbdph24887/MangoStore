@@ -23,19 +23,22 @@ public class ProductController {
     private final SizeService sizeService;
     private final ColorService colorService;
     private final ProductDetailService productDetailService;
+    private final CategoryService categoryService;
 
     public ProductController(ProductService productService,
                              MaterialService materialService,
                              OriginService originService,
                              SizeService sizeService,
                              ColorService colorService,
-                             ProductDetailService productDetailService) {
+                             ProductDetailService productDetailService,
+                             CategoryService categoryService) {
         this.productService = productService;
         this.materialService = materialService;
         this.originService = originService;
         this.sizeService = sizeService;
         this.colorService = colorService;
         this.productDetailService = productDetailService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping(value = "product")
@@ -76,6 +79,43 @@ public class ProductController {
         return productService.restoreProduct(idProduct);
     }
 
+    @GetMapping(value = "category")
+    public String indexCategory(Model model,
+                                HttpSession session,
+                                @Param("keyword") String keyword) {
+        return categoryService.indexCategory(model, session, keyword);
+    }
+
+    @PostMapping(value = "category/add")
+    public String addCategory(@Valid Category addCategory,
+                              BindingResult result,
+                              HttpSession session) {
+        return categoryService.addCategory(addCategory, result, session);
+    }
+
+    @GetMapping(value = "category/detail/{id}")
+    public String detailCategory(Model model,
+                                 HttpSession session,
+                                 @PathVariable("id") Long idCategory) {
+        return categoryService.detailCategory(model, session, idCategory);
+    }
+
+    @PostMapping(value = "category/update")
+    public String updateCategory(@Valid Category category,
+                                 BindingResult result,
+                                 HttpSession session) {
+        return categoryService.updateCategory(result, session, category);
+    }
+
+    @GetMapping(value = "category/delete/{id}")
+    public String deleteCategory(@PathVariable("id") Long idCategory) {
+        return categoryService.deleteCategory(idCategory);
+    }
+
+    @GetMapping(value = "category/restore/{id}")
+    public String restoreCategory(@PathVariable("id") Long idCategory) {
+        return categoryService.restoreCategory(idCategory);
+    }
 
     @GetMapping(value = "material")
     public String indexMaterial(Model model,

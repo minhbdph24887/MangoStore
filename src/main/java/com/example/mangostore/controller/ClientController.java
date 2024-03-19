@@ -21,4 +21,9 @@ public class ClientController {
                               HttpSession session) {
         return clientService.indexClient(model, session);
     }
+
+    @GetMapping(value = "product")
+    public String viewProductClient(Model model) {
+        return clientService.viewProductClient(model);
+    }
 }

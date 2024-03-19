@@ -80,6 +80,26 @@ p {
     transition: background 0.5s;
 }
 
+.btn-info {
+    display: inline-block;
+    background: #2867b3;
+    color: #fff;
+    padding: 8px 30px;
+    margin: 30px 0;
+    border-radius: 30px;
+    transition: background 0.5s;
+}
+
+.btn-danger {
+    display: inline-block;
+    background: #d72d2d;
+    color: #fff;
+    padding: 8px 30px;
+    margin: 30px 0;
+    border-radius: 30px;
+    transition: background 0.5s;
+}
+
 .btn:hover {
     background: #563434;
 

@@ -13,7 +13,7 @@
                     </th:block>
                     <th:block th:unless="${profile != null}">
                         <li>
-                            <a type="button" th:href="@{/mangostore/login/from}" class="btn btn-info">Login</a>
+                            <a th:href="@{/mangostore/login/from}" class="btn-info">Login</a>
                         </li>
                     </th:block>
                     <th:block th:if="${profile != null}">
@@ -26,7 +26,7 @@
                             </a>
                         </li>
                         <li>
-                            <a type="button" th:href="@{/mangostore/login/clear}" class="btn btn-danger"
+                            <a type="button" th:href="@{/mangostore/login/clear}" class="btn-danger"
                                th:text="LogOut"></a>
                         </li>
                     </th:block>

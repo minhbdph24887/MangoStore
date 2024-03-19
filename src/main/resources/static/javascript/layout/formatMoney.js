@@ -26,9 +26,9 @@ if (formatMoneyImportPrice) {
         return value.replace(/[\D.]+/g, '');
     }
 
-    function onInputImportPrice(value) {
-        document.getElementById('importPriceInput').value = formatToCurrency(value);
-        document.getElementById('outputImportPrice').value = formatToNumber(formatToCurrency(value));
+    function onInputImportPrice(value, id) {
+        document.getElementById(id).value = formatToCurrency(value);
+        document.getElementById('outputImportPrice' + id.slice(-2)).value = formatToNumber(formatToCurrency(value));
     }
 }
 
@@ -43,9 +43,9 @@ if (formatMoneyPrice) {
         return value.replace(/[\D.]+/g, '');
     }
 
-    function onInputPrice(value) {
-        document.getElementById('priceInput').value = formatToCurrency(value);
-        document.getElementById('outputPrice').value = formatToNumber(formatToCurrency(value));
+    function onInputPrice(value, id) {
+        document.getElementById(id).value = formatToCurrency(value);
+        document.getElementById('outputPrice' + id.slice(-2)).value = formatToNumber(formatToCurrency(value));
     }
 }
 

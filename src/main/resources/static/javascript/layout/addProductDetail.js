@@ -37,32 +37,34 @@ function generateVariants() {
             const importPriceCell = row.insertCell(2);
             const importPriceInput = document.createElement("input");
             importPriceInput.type = "text";
-            importPriceInput.id = "importPriceInput"
+            importPriceInput.id = "importPriceInput" + i + j;
             importPriceInput.value = (1000).toLocaleString('vi-VN');
             importPriceInput.className = "form-control";
             importPriceInput.oninput = function () {
-                onInputImportPrice(this.value);
+                onInputImportPrice(this.value, this.id);
             };
 
             const importPriceHidden = document.createElement("input");
             importPriceHidden.type = "hidden";
-            importPriceHidden.id = "outputImportPrice";
+            importPriceHidden.id = "outputImportPrice" + i + j;
+            importPriceHidden.className = "outputImportPrice";
             importPriceCell.appendChild(importPriceInput);
             importPriceCell.appendChild(importPriceHidden);
 
             const priceCell = row.insertCell(3);
             const priceInput = document.createElement("input");
             priceInput.type = "text";
-            priceInput.id = "priceInput"
+            priceInput.id = "priceInput" + i + j;
             priceInput.value = (1000).toLocaleString('vi-VN');
             priceInput.className = "form-control";
             priceInput.oninput = function () {
-                onInputPrice(this.value);
+                onInputPrice(this.value, this.id);
             };
 
             const priceHidden = document.createElement("input");
             priceHidden.type = "hidden";
-            priceHidden.id = "outputPrice";
+            priceHidden.id = "outputPrice" + i + j;
+            priceHidden.className = "outputPrice";
             priceCell.appendChild(priceInput);
             priceCell.appendChild(priceHidden);
 
@@ -86,8 +88,8 @@ function getDataFromTable() {
         const size = row.cells[4].textContent;
         const color = row.cells[5].textContent;
         const quantityInput = row.cells[1].querySelector("input").value;
-        const importPrice = parseFloat(row.cells[2].querySelector("#outputImportPrice").value);
-        const price = parseFloat(row.cells[3].querySelector("#outputPrice").value);
+        const importPrice = parseFloat(row.cells[2].querySelector(".outputImportPrice").value);
+        const price = parseFloat(row.cells[3].querySelector(".outputPrice").value);
 
         const quantity = parseInt(quantityInput, 10);
 
@@ -114,6 +116,7 @@ function addProductDetailAPI() {
     const idProduct = document.getElementById("idProduct").value;
     const idMaterial = document.getElementById("material").value;
     const idOrigin = document.getElementById("origin").value;
+    const idCategory = document.getElementById("category").value;
     const imagesProduct = document.getElementById("imageInput").files[0].name;
     const describe = document.getElementById("describeInput").value;
     const variantRequests = getDataFromTable();
@@ -127,6 +130,7 @@ function addProductDetailAPI() {
         imagesProduct: imagesProduct,
         idMaterial: idMaterial,
         idOrigin: idOrigin,
+        idCategory: idCategory,
         describe: describe,
         variantRequests: variantRequests,
     };

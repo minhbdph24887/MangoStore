@@ -1,23 +1,30 @@
 package com.example.mangostore.service.impl;
 
 import com.example.mangostore.entity.Account;
+import com.example.mangostore.entity.ProductDetail;
 import com.example.mangostore.entity.Role;
 import com.example.mangostore.repository.AccountRepository;
+import com.example.mangostore.repository.ProductDetailRepository;
 import com.example.mangostore.repository.RoleRepository;
 import com.example.mangostore.service.ClientService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.util.List;
+
 @Service
 public class ClientServiceImpl implements ClientService {
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
+    private final ProductDetailRepository productDetailRepository;
 
     public ClientServiceImpl(AccountRepository accountRepository,
-                             RoleRepository roleRepository) {
+                             RoleRepository roleRepository,
+                             ProductDetailRepository productDetailRepository) {
         this.accountRepository = accountRepository;
         this.roleRepository = roleRepository;
+        this.productDetailRepository = productDetailRepository;
     }
 
     @Override
@@ -37,5 +44,12 @@ public class ClientServiceImpl implements ClientService {
             }
         }
         return "client/Home";
+    }
+
+    @Override
+    public String viewProductClient(Model model) {
+        List<ProductDetail> itemsAllProductDetail = productDetailRepository.findAll();
+        model.addAttribute("listProductDetail", itemsAllProductDetail);
+        return "client/List";
     }
 }

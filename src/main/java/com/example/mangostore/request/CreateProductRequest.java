@@ -8,6 +8,7 @@ public class CreateProductRequest {
     private String imagesProduct;
     private Long idMaterial;
     private Long idOrigin;
+    private Long idCategory;
     private String describe;
     private String userCreate;
     private String userUpdate;
@@ -45,6 +46,14 @@ public class CreateProductRequest {
 
     public void setIdOrigin(Long idOrigin) {
         this.idOrigin = idOrigin;
+    }
+
+    public Long getIdCategory() {
+        return idCategory;
+    }
+
+    public void setIdCategory(Long idCategory) {
+        this.idCategory = idCategory;
     }
 
     public String getDescribe() {

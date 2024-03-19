@@ -27,6 +27,9 @@ public class ProductDetail {
     @ManyToOne
     @JoinColumn(name = "idOrigin")
     private Origin origin;
+    @ManyToOne
+    @JoinColumn(name = "idCategory")
+    private Category category;
     private String describe;
     private Integer quantity;
     private Integer importPrice;
@@ -46,6 +49,7 @@ public class ProductDetail {
                          Size size,
                          Color color,
                          Origin origin,
+                         Category category,
                          String describe,
                          Integer quantity,
                          Integer importPrice,
@@ -62,6 +66,7 @@ public class ProductDetail {
         this.size = size;
         this.color = color;
         this.origin = origin;
+        this.category = category;
         this.describe = describe;
         this.quantity = quantity;
         this.importPrice = importPrice;
@@ -130,6 +135,14 @@ public class ProductDetail {
 
     public void setOrigin(Origin origin) {
         this.origin = origin;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getDescribe() {

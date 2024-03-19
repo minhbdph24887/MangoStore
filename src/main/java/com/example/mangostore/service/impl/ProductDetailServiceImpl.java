@@ -30,6 +30,7 @@ public class ProductDetailServiceImpl implements ProductDetailService {
     private final ColorRepository colorRepository;
     private final MaterialRepository materialRepository;
     private final OriginRepository originRepository;
+    private final CategoryRepository categoryRepository;
     private final Gender gender;
 
     public ProductDetailServiceImpl(AccountRepository accountRepository,
@@ -40,6 +41,7 @@ public class ProductDetailServiceImpl implements ProductDetailService {
                                     ColorRepository colorRepository,
                                     MaterialRepository materialRepository,
                                     OriginRepository originRepository,
+                                    CategoryRepository categoryRepository,
                                     Gender gender) {
         this.accountRepository = accountRepository;
         this.roleRepository = roleRepository;
@@ -49,6 +51,7 @@ public class ProductDetailServiceImpl implements ProductDetailService {
         this.colorRepository = colorRepository;
         this.materialRepository = materialRepository;
         this.originRepository = originRepository;
+        this.categoryRepository = categoryRepository;
         this.gender = gender;
     }
 
@@ -145,6 +148,9 @@ public class ProductDetailServiceImpl implements ProductDetailService {
                 List<Origin> itemsOrigin = originRepository.getAllOriginByStatus1();
                 model.addAttribute("listOrigin", itemsOrigin);
 
+                List<Category> itemsCategory = categoryRepository.getAllCategoryByStatus1();
+                model.addAttribute("listCategory", itemsCategory);
+
                 List<ProductDetail> itemsProductDetailInactive = productDetailRepository.getAllProductDetailByStatus0();
                 model.addAttribute("listProductDetailInactive", itemsProductDetailInactive);
 
@@ -176,14 +182,6 @@ public class ProductDetailServiceImpl implements ProductDetailService {
         if (productDetailForm.getProductVariants() == null) {
             productDetailForm.setProductVariants(new ArrayList<>());
         }
-
-        System.out.println("aaaaaaaaaaaaaaaa " + productDetailForm.getIdProduct());
-        System.out.println("bbbbbbbbbbbbbbbb " + productDetailForm.getImagesProductDetail());
-        System.out.println("cccccccccccccccc " + productDetailForm.getIdSizes());
-        System.out.println("dddddddddddddddd " + productDetailForm.getIdColors());
-        System.out.println("eeeeeeeeeeeeeeee " + productDetailForm.getMaterial());
-        System.out.println("gggggggggggggggg " + productDetailForm.getOrigin());
-        System.out.println("hhhhhhhhhhhhhhhh " + productDetailForm.getDescribe());
 
         for (Long sizeId : productDetailForm.getIdSizes()) {
             for (Long colorId : productDetailForm.getIdColors()) {
@@ -218,6 +216,7 @@ public class ProductDetailServiceImpl implements ProductDetailService {
             Optional<Product> product = productRepository.findById(request.getIdProduct());
             Optional<Material> material = materialRepository.findById(request.getIdMaterial());
             Optional<Origin> origin = originRepository.findById(request.getIdOrigin());
+            Optional<Category> category = categoryRepository.findById(request.getIdCategory());
             request.getVariantRequests().forEach(items -> {
                 Size size = sizeRepository.findByName(items.getSize());
                 Color color = colorRepository.findByName(items.getColor());
@@ -235,6 +234,7 @@ public class ProductDetailServiceImpl implements ProductDetailService {
                 productDetail.setProduct(product.get());
                 productDetail.setMaterial(material.get());
                 productDetail.setOrigin(origin.get());
+                productDetail.setCategory(category.get());
                 productDetail.setSize(size);
                 productDetail.setColor(color);
                 productDetailRepository.save(productDetail);

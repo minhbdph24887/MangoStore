@@ -2,12 +2,13 @@ package com.example.mangostore.service.impl;
 
 import com.example.mangostore.config.Gender;
 import com.example.mangostore.entity.Account;
+import com.example.mangostore.entity.Category;
 import com.example.mangostore.entity.Product;
 import com.example.mangostore.entity.Role;
 import com.example.mangostore.repository.AccountRepository;
-import com.example.mangostore.repository.ProductRepository;
+import com.example.mangostore.repository.CategoryRepository;
 import com.example.mangostore.repository.RoleRepository;
-import com.example.mangostore.service.ProductService;
+import com.example.mangostore.service.CategoryService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -18,24 +19,24 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
-public class ProductServiceImpl implements ProductService {
+public class CategoryServiceImpl implements CategoryService {
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
-    private final ProductRepository productRepository;
+    private CategoryRepository categoryRepository;
     private final Gender gender;
 
-    public ProductServiceImpl(AccountRepository accountRepository,
-                              RoleRepository roleRepository,
-                              ProductRepository productRepository,
-                              Gender gender) {
+    public CategoryServiceImpl(AccountRepository accountRepository,
+                               RoleRepository roleRepository,
+                               CategoryRepository categoryRepository,
+                               Gender gender) {
         this.accountRepository = accountRepository;
         this.roleRepository = roleRepository;
-        this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
         this.gender = gender;
     }
 
     @Override
-    public String indexProduct(Model model, HttpSession session, String keyword) {
+    public String indexCategory(Model model, HttpSession session, String keyword) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -66,40 +67,40 @@ public class ProductServiceImpl implements ProductService {
                     model.addAttribute("checkMenuAdmin", false);
                 }
 
-                List<Product> itemsProduct = productRepository.getAllProductByStatus1();
+                List<Category> itemsCategory = categoryRepository.getAllCategoryByStatus1();
                 if (keyword != null) {
-                    itemsProduct = productRepository.searchProduct(keyword);
+                    itemsCategory = categoryRepository.searchCategory(keyword);
                     model.addAttribute("keyword", keyword);
                 }
-                model.addAttribute("listProduct", itemsProduct);
+                model.addAttribute("listCategory", itemsCategory);
 
-                List<Product> itemsProductInactive = productRepository.getAllProductByStatus0();
-                model.addAttribute("listProductInactive", itemsProductInactive);
+                List<Category> itemsCategoryInactive = categoryRepository.getAllCategoryByStatus0();
+                model.addAttribute("listCategoryInactive", itemsCategoryInactive);
 
-                model.addAttribute("addProduct", new Product());
-                return "admin/product/IndexProduct";
+                model.addAttribute("addCategory", new Category());
+                return "admin/category/IndexCategory";
             }
         }
     }
 
     @Override
-    public String addProduct(Product addProduct, BindingResult result, HttpSession session) {
+    public String addCategory(Category addCategory, BindingResult result, HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         Account detailAccount = accountRepository.detailAccountByEmail(email);
-        Product newProduct = new Product();
-        newProduct.setCodeProduct(gender.generateCode());
-        newProduct.setNameProduct(addProduct.getNameProduct());
-        newProduct.setNameUserCreate(detailAccount.getFullName());
-        newProduct.setNameUserUpdate(detailAccount.getFullName());
-        newProduct.setDateCreate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
-        newProduct.setDateUpdate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
-        newProduct.setStatus(1);
-        productRepository.save(newProduct);
-        return "redirect:/mangostore/admin/product";
+        Category newCategory = new Category();
+        newCategory.setCodeCategory(gender.generateCode());
+        newCategory.setNameCategory(addCategory.getNameCategory());
+        newCategory.setNameUserCreate(detailAccount.getFullName());
+        newCategory.setNameUserUpdate(detailAccount.getFullName());
+        newCategory.setDateCreate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
+        newCategory.setDateUpdate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
+        newCategory.setStatus(1);
+        categoryRepository.save(newCategory);
+        return "redirect:/mangostore/admin/category";
     }
 
     @Override
-    public String detailProduct(Model model, HttpSession session, Long idProduct) {
+    public String detailCategory(Model model, HttpSession session, Long idCategory) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -130,46 +131,47 @@ public class ProductServiceImpl implements ProductService {
                     model.addAttribute("checkMenuAdmin", false);
                 }
 
-                List<Product> itemsProductInactive = productRepository.getAllProductByStatus0();
-                model.addAttribute("listProductInactive", itemsProductInactive);
+                List<Category> itemsCategoryInactive = categoryRepository.getAllCategoryByStatus0();
+                model.addAttribute("listCategoryInactive", itemsCategoryInactive);
 
-                Product detailProduct = productRepository.findById(idProduct).orElse(null);
-                model.addAttribute("detailProduct", detailProduct);
-                return "admin/product/DetailProduct";
+                Category detailCategory = categoryRepository.findById(idCategory).orElse(null);
+                model.addAttribute("detailCategory", detailCategory);
+                return "admin/category/DetailCategory";
             }
         }
     }
 
     @Override
-    public String updateProduct(BindingResult result, HttpSession session, Product product) {
-        Product detailProduct = productRepository.findById(product.getId()).orElse(null);
-        detailProduct.setNameProduct(product.getNameProduct());
+    public String updateCategory(BindingResult result, HttpSession session, Category category) {
+        Category detailCategory = categoryRepository.findById(category.getId()).orElse(null);
+        assert detailCategory != null;
+        detailCategory.setNameCategory(category.getNameCategory());
 
         String email = (String) session.getAttribute("loginEmail");
         Account detailAccount = accountRepository.detailAccountByEmail(email);
-        detailProduct.setNameUserUpdate(detailAccount.getFullName());
-        detailProduct.setDateUpdate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
-        detailProduct.setStatus(product.getStatus());
+        detailCategory.setNameUserUpdate(detailAccount.getFullName());
+        detailCategory.setDateUpdate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
+        detailCategory.setStatus(category.getStatus());
 
-        productRepository.save(detailProduct);
-        return "redirect:/mangostore/admin/product";
+        categoryRepository.save(detailCategory);
+        return "redirect:/mangostore/admin/category";
     }
 
     @Override
-    public String deleteProduct(Long idProduct) {
-        Product detailProduct = productRepository.findById(idProduct).orElse(null);
-        assert detailProduct != null;
-        detailProduct.setStatus(0);
-        productRepository.save(detailProduct);
-        return "redirect:/mangostore/admin/product";
+    public String deleteCategory(Long idCategory) {
+        Category detailCategory = categoryRepository.findById(idCategory).orElse(null);
+        assert detailCategory != null;
+        detailCategory.setStatus(0);
+        categoryRepository.save(detailCategory);
+        return "redirect:/mangostore/admin/category";
     }
 
     @Override
-    public String restoreProduct(Long idProduct) {
-        Product detailProduct = productRepository.findById(idProduct).orElse(null);
-        assert detailProduct != null;
-        detailProduct.setStatus(1);
-        productRepository.save(detailProduct);
-        return "redirect:/mangostore/admin/product";
+    public String restoreCategory(Long idCategory) {
+        Category detailCategory = categoryRepository.findById(idCategory).orElse(null);
+        assert detailCategory != null;
+        detailCategory.setStatus(1);
+        categoryRepository.save(detailCategory);
+        return "redirect:/mangostore/admin/category";
     }
 }

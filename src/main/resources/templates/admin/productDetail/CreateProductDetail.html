@@ -101,6 +101,17 @@
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="form-group">
+                                                        <label class="form-label">Category: <span
+                                                                class="required">*</span></label>
+                                                        <select name="category" class="form-select" id="category">
+                                                            <option th:each="listCategory : ${listCategory}"
+                                                                    th:value="${listCategory.id}"
+                                                                    th:text="${listCategory.nameCategory}"></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
                                                         <label class="form-label">Describe:</label>
                                                         <textarea class="form-control" name="describe"
                                                                   id="describeInput"

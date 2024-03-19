@@ -19,6 +19,6 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
     @Query(value = "select * from material where name_material like %:searchMaterial and status= 1%", nativeQuery = true)
     List<Material> searchMaterial(@Param("searchMaterial") String searchMaterial);
 
-    @Query(value = "select * from material where id= :idMaterial", nativeQuery = true)
+    @Query(value = "select * from material where id= :idMaterial and status= 1", nativeQuery = true)
     Material findByMa(@Param("idMaterial") Long material);
 }
