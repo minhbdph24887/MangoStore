@@ -29,8 +29,7 @@ public class ClientServiceImpl implements ClientService {
                 session.invalidate();
                 return "redirect:/mangostore/home";
             } else {
-                model.addAttribute("nameAccount", detailAccount.getFullName());
-
+                model.addAttribute("profile", detailAccount);
                 Role detailRoleByEmail = roleRepository.getRoleByEmail(email);
                 if (detailRoleByEmail.getName().equals("ADMIN") || detailRoleByEmail.getName().equals("STAFF")) {
                     model.addAttribute("checkAuthentication", detailRoleByEmail);

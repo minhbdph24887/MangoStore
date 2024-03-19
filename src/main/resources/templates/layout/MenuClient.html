@@ -11,20 +11,25 @@
                     <th:block th:if="${checkAuthentication != null}">
                         <li><a th:href="@{/mangostore/admin/home}">Product Management</a></li>
                     </th:block>
-                    <li><a href="">Orders</a></li>
-                    <li class="dropdown-parent menu">
-                        <a href="#" th:if="${nameAccount != null}">Welcome To: [[${nameAccount}]]</a>
-                        <a href="#" th:unless="${nameAccount != null}">Welcome To: Guest</a>
-                        <ul class="dropdown">
-                            <li><a href="#">Account</a></li>
-                            <th:block th:unless="${session.loginEmail}">
-                                <li><a th:href="@{/mangostore/login/from}">Login</a></li>
-                            </th:block>
-                            <th:block th:if="${session.loginEmail}">
-                                <li><a th:href="@{/mangostore/login/clear}">Log Out</a></li>
-                            </th:block>
-                        </ul>
-                    </li>
+                    <th:block th:unless="${profile != null}">
+                        <li>
+                            <a type="button" th:href="@{/mangostore/login/from}" class="btn btn-info">Login</a>
+                        </li>
+                    </th:block>
+                    <th:block th:if="${profile != null}">
+                        <li><a href="">Orders</a></li>
+                        <li>
+                            <a th:href="@{/mangostore/account}">
+                                <img class="img-xs rounded-circle" th:if="${profile.getImages() != null}"
+                                     th:src="@{|/image/profile/${profile.getImages()}|}" alt="Profile image"
+                                     style="width: 36px; height: 36px; border-radius: 100%; margin-bottom: -13px;">
+                            </a>
+                        </li>
+                        <li>
+                            <a type="button" th:href="@{/mangostore/login/clear}" class="btn btn-danger"
+                               th:text="LogOut"></a>
+                        </li>
+                    </th:block>
                 </ul>
             </nav>
             <a th:href="@{/mangostore/cart}"><img th:src="@{|/image/cart.png|}" width="30px" height="30px" alt=""></a>

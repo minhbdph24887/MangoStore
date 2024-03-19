@@ -16,6 +16,7 @@ body {
 
 nav {
     flex: 1;
+    margin-top: -98px;
     text-align: right;
 }
 
