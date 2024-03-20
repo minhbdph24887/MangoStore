@@ -1,40 +1,49 @@
-<div class="header" xmlns:th="http://www.w3.org/1999/xhtml">
-    <div class="container">
-        <div class="navbar">
+<div xmlns:th="http://www.w3.org/1999/xhtml" style="background: radial-gradient(#fff, #fff);">
+    <div style="max-width: 1300px;margin: auto;padding-left: 25px;padding-right: 25px;">
+        <div style=" display: flex;align-items: center;padding: 20px;">
             <div class="logo">
-                <a th:href="@{/mangostore/home}"><img th:src="@{|/image/logoMangoStore1.png|}" width="125px" alt=""></a>
+                <a th:href="@{/mangostore/home}"><img th:src="@{|/image/logoMangoStore1.png|}" width="125px" alt=""
+                                                      style="text-decoration: none;color: #555;"></a>
             </div>
-            <nav>
-                <ul id="MenuItems">
-                    <li><a th:href="@{/mangostore/home}">Home</a></li>
-                    <li><a th:href="@{/mangostore/product}">Products</a></li>
+            <nav style="flex: 1;margin-top: -77px;text-align: right;">
+                <ul id="MenuItems" style="list-style-type: none;">
+                    <li><a th:href="@{/mangostore/home}" style="text-decoration: none;color: #555;">Home</a></li>
+                    <li><a th:href="@{/mangostore/product}" style="text-decoration: none;color: #555;">Products</a></li>
                     <th:block th:if="${checkAuthentication != null}">
-                        <li><a th:href="@{/mangostore/admin/home}">Product Management</a></li>
+                        <li><a th:href="@{/mangostore/admin/home}" style="text-decoration: none;color: #555;">Product
+                            Management</a></li>
                     </th:block>
                     <th:block th:unless="${profile != null}">
                         <li>
-                            <a th:href="@{/mangostore/login/from}" class="btn-info">Login</a>
+                            <a th:href="@{/mangostore/login/from}"
+                               style="display: inline-block;background: #2867b3;color: #fff;padding: 8px 30px;margin: 30px 0;border-radius: 30px;transition: background 0.5s; text-decoration: none;">Login</a>
                         </li>
                     </th:block>
                     <th:block th:if="${profile != null}">
-                        <li><a href="">Orders</a></li>
+                        <li><a href="" style="text-decoration: none;color: #555;">Orders</a></li>
                         <li>
-                            <a th:href="@{/mangostore/account}">
-                                <img class="img-xs rounded-circle" th:if="${profile.getImages() != null}"
-                                     th:src="@{|/image/profile/${profile.getImages()}|}" alt="Profile image"
-                                     style="width: 36px; height: 36px; border-radius: 100%; margin-bottom: -13px;">
+                            <a th:href="@{/mangostore/account}" style="text-decoration: none;color: #555;">
+                                <th:block th:if="${profile.getImages() != null}">
+                                    <img th:src="@{|/image/profile/${profile.getImages()}|}" alt="Profile image"
+                                         style="width: 36px; height: 36px; border-radius: 100%; margin-bottom: -3px;">
+                                </th:block>
+                                <th:block th:unless="${profile.getImages() != null}">
+                                    <i class="bi bi-person-circle" style="font-size: 34px; vertical-align: middle;"></i>
+                                </th:block>
                             </a>
                         </li>
                         <li>
-                            <a type="button" th:href="@{/mangostore/login/clear}" class="btn-danger"
-                               th:text="LogOut"></a>
+                            <a type="button" th:href="@{/mangostore/login/clear}"
+                               th:text="LogOut"
+                               style="display: inline-block;background: #d72d2d;color: #fff;padding: 8px 30px;margin: 30px 0;border-radius: 30px;transition: background 0.5s; text-decoration: none;"></a>
                         </li>
                     </th:block>
                 </ul>
             </nav>
-            <a th:href="@{/mangostore/cart}"><img th:src="@{|/image/cart.png|}" width="30px" height="30px" alt=""></a>
-            <img th:src="@{|/image/menu.png|}" class="menu-icon"
-                 onclick="menutoggle()" alt="">
+            <a th:href="@{/mangostore/cart}"><img th:src="@{|/image/cart.png|}" width="30px" height="30px" alt=""
+                                                  style="text-decoration: none;color: #555;"></a>
+            <img th:src="@{|/image/menu.png|}" onclick="menutoggle()" alt=""
+                 style="width: 28px;margin-left: 20px;display: none;">
         </div>
     </div>
 </div>
