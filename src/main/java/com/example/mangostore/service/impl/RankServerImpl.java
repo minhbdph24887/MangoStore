@@ -35,7 +35,9 @@ public class RankServerImpl implements RankService {
     }
 
     @Override
-    public String indexRank(Model model, HttpSession session, String keyword) {
+    public String indexRank(Model model,
+                            HttpSession session,
+                            String keyword) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -83,7 +85,9 @@ public class RankServerImpl implements RankService {
     }
 
     @Override
-    public String addRank(Rank addRank, BindingResult result, HttpSession session) {
+    public String addRank(Rank addRank,
+                          BindingResult result,
+                          HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         Account detailAccount = accountRepository.detailAccountByEmail(email);
         Rank newRank = new Rank();
@@ -101,7 +105,9 @@ public class RankServerImpl implements RankService {
     }
 
     @Override
-    public String detailRank(Model model, HttpSession session, Long idRank) {
+    public String detailRank(Model model,
+                             HttpSession session,
+                             Long idRank) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -143,7 +149,9 @@ public class RankServerImpl implements RankService {
     }
 
     @Override
-    public String updateRank(BindingResult result, HttpSession session, Rank rank) {
+    public String updateRank(BindingResult result,
+                             HttpSession session,
+                             Rank rank) {
         Rank detailRank = rankRepository.findById(rank.getId()).orElse(null);
         detailRank.setNameRank(rank.getNameRank());
         detailRank.setMinimumScore(rank.getMinimumScore());

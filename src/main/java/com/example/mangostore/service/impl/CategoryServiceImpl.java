@@ -36,7 +36,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public String indexCategory(Model model, HttpSession session, String keyword) {
+    public String indexCategory(Model model,
+                                HttpSession session,
+                                String keyword) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -84,7 +86,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public String addCategory(Category addCategory, BindingResult result, HttpSession session) {
+    public String addCategory(Category addCategory,
+                              BindingResult result,
+                              HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         Account detailAccount = accountRepository.detailAccountByEmail(email);
         Category newCategory = new Category();
@@ -100,7 +104,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public String detailCategory(Model model, HttpSession session, Long idCategory) {
+    public String detailCategory(Model model,
+                                 HttpSession session,
+                                 Long idCategory) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -142,7 +148,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public String updateCategory(BindingResult result, HttpSession session, Category category) {
+    public String updateCategory(BindingResult result,
+                                 HttpSession session,
+                                 Category category) {
         Category detailCategory = categoryRepository.findById(category.getId()).orElse(null);
         assert detailCategory != null;
         detailCategory.setNameCategory(category.getNameCategory());

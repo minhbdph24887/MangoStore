@@ -6,13 +6,21 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
 public interface RankService {
-    String indexRank(Model model, HttpSession session, String keyword);
+    String indexRank(Model model,
+                     HttpSession session,
+                     String keyword);
 
-    String addRank(Rank addRank, BindingResult result, HttpSession session);
+    String addRank(Rank addRank,
+                   BindingResult result,
+                   HttpSession session);
 
-    String detailRank(Model model, HttpSession session, Long idRank);
+    String detailRank(Model model,
+                      HttpSession session,
+                      Long idRank);
 
-    String updateRank(BindingResult result, HttpSession session, Rank rank);
+    String updateRank(BindingResult result,
+                      HttpSession session,
+                      Rank rank);
 
     String deleteRank(Long idRank);
 

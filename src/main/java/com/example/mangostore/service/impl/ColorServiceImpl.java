@@ -35,7 +35,9 @@ public class ColorServiceImpl implements ColorService {
     }
 
     @Override
-    public String indexColor(Model model, HttpSession session, String keyword) {
+    public String indexColor(Model model,
+                             HttpSession session,
+                             String keyword) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -83,7 +85,9 @@ public class ColorServiceImpl implements ColorService {
     }
 
     @Override
-    public String addColor(Color addColor, BindingResult result, HttpSession session) {
+    public String addColor(Color addColor,
+                           BindingResult result,
+                           HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         Account detailAccount = accountRepository.detailAccountByEmail(email);
         Color newColor = new Color();
@@ -99,7 +103,9 @@ public class ColorServiceImpl implements ColorService {
     }
 
     @Override
-    public String detailColor(Model model, HttpSession session, Long idColor) {
+    public String detailColor(Model model,
+                              HttpSession session,
+                              Long idColor) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -141,7 +147,9 @@ public class ColorServiceImpl implements ColorService {
     }
 
     @Override
-    public String updateColor(BindingResult result, HttpSession session, Color color) {
+    public String updateColor(BindingResult result,
+                              HttpSession session,
+                              Color color) {
         Color detailColor = colorRepository.findById(color.getId()).orElse(null);
         detailColor.setNameColor(color.getNameColor());
 

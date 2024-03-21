@@ -40,7 +40,8 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public String getAllAccountByStatus1(Model model, HttpSession session) {
+    public String getAllAccountByStatus1(Model model,
+                                         HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -94,7 +95,9 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public String detailAccount(Model model, HttpSession session, Long idAccount) {
+    public String detailAccount(Model model,
+                                HttpSession session,
+                                Long idAccount) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -138,7 +141,10 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public String updateAccount(BindingResult result, String newPassword, MultipartFile imageFile, Account account) {
+    public String updateAccount(BindingResult result,
+                                String newPassword,
+                                MultipartFile imageFile,
+                                Account account) {
         Account detailAccount = accountRepository.findById(account.getId()).orElse(null);
         detailAccount.setFullName(account.getFullName());
         detailAccount.setNumberPhone(account.getNumberPhone());
@@ -171,7 +177,8 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public String addAccount(BindingResult result, Account addProfile) {
+    public String addAccount(BindingResult result,
+                             Account addProfile) {
         Account newAccount = new Account();
         newAccount.setFullName(addProfile.getFullName());
         newAccount.setNumberPhone(addProfile.getNumberPhone());

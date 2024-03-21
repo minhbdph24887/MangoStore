@@ -2,14 +2,16 @@ package com.example.mangostore.config;
 
 import com.example.mangostore.entity.Account;
 import com.example.mangostore.entity.Invoice;
+import com.example.mangostore.entity.PriceRange;
+import com.example.mangostore.entity.ProductDetail;
 import com.example.mangostore.repository.AccountRepository;
 import com.example.mangostore.repository.InvoiceRepository;
+import com.example.mangostore.repository.ProductDetailRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -22,13 +24,16 @@ public class Gender {
     private final AccountRepository accountRepository;
     private final JavaMailSender mailSender;
     private final InvoiceRepository invoiceRepository;
+    private final ProductDetailRepository productDetailRepository;
 
     public Gender(AccountRepository accountRepository,
                   JavaMailSender mailSender,
-                  InvoiceRepository invoiceRepository) {
+                  InvoiceRepository invoiceRepository,
+                  ProductDetailRepository productDetailRepository) {
         this.accountRepository = accountRepository;
         this.mailSender = mailSender;
         this.invoiceRepository = invoiceRepository;
+        this.productDetailRepository = productDetailRepository;
     }
 
     public String generateVerificationCode() {
@@ -36,7 +41,8 @@ public class Gender {
         return String.valueOf(code);
     }
 
-    public void saveVerificationCode(String email, String verificationCode) {
+    public void saveVerificationCode(String email,
+                                     String verificationCode) {
         Account account = accountRepository.detailAccountByEmail(email);
         if (account != null) {
             account.setVeryCode(verificationCode);
@@ -44,7 +50,9 @@ public class Gender {
         }
     }
 
-    public void sendEmail(String to, String subject, String verificationCode) {
+    public void sendEmail(String to,
+                          String subject,
+                          String verificationCode) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject(subject);
@@ -85,7 +93,8 @@ public class Gender {
         return Math.toIntExact(Math.round(number));
     }
 
-    public String createPaymentVnPay(Invoice invoice, String vnPayUrl) {
+    public String createPaymentVnPay(Invoice invoice,
+                                     String vnPayUrl) {
         long amount = invoice.getTotalPayment() * 100;
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
@@ -177,5 +186,26 @@ public class Gender {
         } else {
             return -1;
         }
+    }
+
+    public PriceRange getPriceRangeByIdProduct(Long idProduct) {
+        List<Object[]> prices = productDetailRepository.findAllPriceByIdProduct(idProduct);
+        if (prices != null && !prices.isEmpty()) {
+            Object[] priceRangeArray = prices.get(0);
+            Integer priceMin = (Integer) priceRangeArray[0];
+            Integer priceMax = (Integer) priceRangeArray[1];
+            return new PriceRange(priceMin, priceMax);
+        }
+        return null;
+    }
+
+    public Map<Long, PriceRange> getPriceRangMap() {
+        Map<Long, PriceRange> priceRangeMap = new HashMap<>();
+        for (ProductDetail productDetail : productDetailRepository.findAll()) {
+            Long idProduct = productDetail.getProduct().getId();
+            PriceRange priceRange = getPriceRangeByIdProduct(idProduct);
+            priceRangeMap.put(idProduct, priceRange);
+        }
+        return priceRangeMap;
     }
 }

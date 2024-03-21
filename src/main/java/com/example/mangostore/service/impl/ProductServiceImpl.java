@@ -35,7 +35,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public String indexProduct(Model model, HttpSession session, String keyword) {
+    public String indexProduct(Model model,
+                               HttpSession session,
+                               String keyword) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -83,7 +85,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public String addProduct(Product addProduct, BindingResult result, HttpSession session) {
+    public String addProduct(Product addProduct,
+                             BindingResult result,
+                             HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         Account detailAccount = accountRepository.detailAccountByEmail(email);
         Product newProduct = new Product();
@@ -99,7 +103,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public String detailProduct(Model model, HttpSession session, Long idProduct) {
+    public String detailProduct(Model model,
+                                HttpSession session,
+                                Long idProduct) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -141,7 +147,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public String updateProduct(BindingResult result, HttpSession session, Product product) {
+    public String updateProduct(BindingResult result,
+                                HttpSession session,
+                                Product product) {
         Product detailProduct = productRepository.findById(product.getId()).orElse(null);
         detailProduct.setNameProduct(product.getNameProduct());
 

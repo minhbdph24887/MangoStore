@@ -23,7 +23,8 @@ public class ClientController {
     }
 
     @GetMapping(value = "product")
-    public String viewProductClient(Model model) {
-        return clientService.viewProductClient(model);
+    public String viewProductClient(Model model,
+                                    HttpSession session) {
+        return clientService.viewProductClient(model, session);
     }
 }

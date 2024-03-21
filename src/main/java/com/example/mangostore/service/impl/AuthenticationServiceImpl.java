@@ -29,7 +29,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public String getAllRole(Model model, HttpSession session) {
+    public String getAllRole(Model model,
+                             HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -63,7 +64,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public String detailAuthentication(Model model, HttpSession session, Long idAuthentication) {
+    public String detailAuthentication(Model model,
+                                       HttpSession session,
+                                       Long idAuthentication) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -100,7 +103,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public String updateAuthentication(Authentication updateAuthentication, Role roleSelect) {
+    public String updateAuthentication(Authentication updateAuthentication,
+                                       Role roleSelect) {
         Authentication update = authenticationRepository.findById(updateAuthentication.getId()).orElse(null);
         update.setRole(roleSelect);
         authenticationRepository.save(update);

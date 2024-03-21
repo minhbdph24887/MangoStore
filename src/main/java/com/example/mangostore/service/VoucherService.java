@@ -7,13 +7,21 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
 public interface VoucherService {
-    String indexVoucher(Model model, HttpSession session, String keyword);
+    String indexVoucher(Model model,
+                        HttpSession session,
+                        String keyword);
 
-    String addVoucher(Voucher addVoucher, BindingResult result, HttpSession session);
+    String addVoucher(Voucher addVoucher,
+                      BindingResult result,
+                      HttpSession session);
 
-    String detailVoucher(Model model, HttpSession session, Long idVoucher);
+    String detailVoucher(Model model,
+                         HttpSession session,
+                         Long idVoucher);
 
-    String updateVoucher(BindingResult result, HttpSession session, Voucher voucher);
+    String updateVoucher(BindingResult result,
+                         HttpSession session,
+                         Voucher voucher);
 
     String deleteVoucher(Long idVoucher);
 

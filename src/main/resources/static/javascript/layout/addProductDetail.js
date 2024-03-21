@@ -38,7 +38,7 @@ function generateVariants() {
             const importPriceInput = document.createElement("input");
             importPriceInput.type = "text";
             importPriceInput.id = "importPriceInput" + i + j;
-            importPriceInput.value = (1000).toLocaleString('vi-VN');
+            importPriceInput.placeholder = "Please Enter Import Price";
             importPriceInput.className = "form-control";
             importPriceInput.oninput = function () {
                 onInputImportPrice(this.value, this.id);
@@ -55,7 +55,7 @@ function generateVariants() {
             const priceInput = document.createElement("input");
             priceInput.type = "text";
             priceInput.id = "priceInput" + i + j;
-            priceInput.value = (1000).toLocaleString('vi-VN');
+            priceInput.placeholder = "Please Enter Price";
             priceInput.className = "form-control";
             priceInput.oninput = function () {
                 onInputPrice(this.value, this.id);

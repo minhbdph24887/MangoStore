@@ -6,13 +6,20 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
 public interface AddressClientService {
-    String indexAddressClient(Model model, HttpSession session, String keyword);
+    String indexAddressClient(Model model,
+                              HttpSession session,
+                              String keyword);
 
-    String addAddressClient(AddressClient addAddressClient, BindingResult result, HttpSession session);
+    String addAddressClient(AddressClient addAddressClient,
+                            BindingResult result,
+                            HttpSession session);
 
-    String editAddressClient(Long idAddressClient, Model model, HttpSession session);
+    String editAddressClient(Long idAddressClient,
+                             Model model,
+                             HttpSession session);
 
-    String updateAddressClient(AddressClient editAddressClient, BindingResult result);
+    String updateAddressClient(AddressClient editAddressClient,
+                               BindingResult result);
 
     String deleteAddressClient(Long idAddressClient);
 

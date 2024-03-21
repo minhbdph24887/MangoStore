@@ -24,7 +24,9 @@ public class SellOfflineController {
     }
 
     @GetMapping(value = "sell/edit")
-    public String editInvoice(@RequestParam("id") Long idInvoice, Model model, HttpSession session) {
+    public String editInvoice(@RequestParam("id") Long idInvoice,
+                              Model model,
+                              HttpSession session) {
         return sellOfflineService.editInvoice(idInvoice, model, session);
     }
 
@@ -81,7 +83,8 @@ public class SellOfflineController {
     }
 
     @GetMapping(value = "sell/banking/success")
-    public String bankingSuccess(HttpServletRequest request, HttpSession session) {
+    public String bankingSuccess(HttpServletRequest request,
+                                 HttpSession session) {
         return sellOfflineService.bankingSuccess(request, session);
     }
 }

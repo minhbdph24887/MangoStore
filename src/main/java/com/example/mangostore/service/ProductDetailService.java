@@ -12,17 +12,29 @@ import org.springframework.validation.BindingResult;
 import java.io.IOException;
 
 public interface ProductDetailService {
-    String indexProductDetail(Model model, HttpSession session, String keyword);
+    String indexProductDetail(Model model,
+                              HttpSession session,
+                              String keyword);
 
-    String viewCreateProductDetail(Model model, HttpSession session);
+    String viewCreateProductDetail(Model model,
+                                   HttpSession session);
 
-    String addProductDetail(ProductDetailRequest productDetailForm, BindingResult result, HttpSession session, Model model);
+    String addProductDetail(ProductDetailRequest productDetailForm,
+                            BindingResult result,
+                            HttpSession session,
+                            Model model);
 
-    boolean saveProductDetailAPI(CreateProductRequest request, HttpSession session, HttpServletResponse response) throws IOException;
+    boolean saveProductDetailAPI(CreateProductRequest request,
+                                 HttpSession session,
+                                 HttpServletResponse response) throws IOException;
 
-    String editProductDetail(Long idProductDetail, Model model, HttpSession session);
+    String editProductDetail(Long idProductDetail,
+                             Model model,
+                             HttpSession session);
 
-    String updateProductDetail(ProductDetail editProductDetail, BindingResult result, HttpSession session);
+    String updateProductDetail(ProductDetail editProductDetail,
+                               BindingResult result,
+                               HttpSession session);
 
     String deleteProductDetail(Long idProductDetail);
 

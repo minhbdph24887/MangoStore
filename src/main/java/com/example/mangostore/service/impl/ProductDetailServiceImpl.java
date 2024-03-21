@@ -56,7 +56,9 @@ public class ProductDetailServiceImpl implements ProductDetailService {
     }
 
     @Override
-    public String indexProductDetail(Model model, HttpSession session, String keyword) {
+    public String indexProductDetail(Model model,
+                                     HttpSession session,
+                                     String keyword) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -102,7 +104,8 @@ public class ProductDetailServiceImpl implements ProductDetailService {
     }
 
     @Override
-    public String viewCreateProductDetail(Model model, HttpSession session) {
+    public String viewCreateProductDetail(Model model,
+                                          HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -161,7 +164,10 @@ public class ProductDetailServiceImpl implements ProductDetailService {
     }
 
     @Override
-    public String addProductDetail(ProductDetailRequest productDetailForm, BindingResult result, HttpSession session, Model model) {
+    public String addProductDetail(ProductDetailRequest productDetailForm,
+                                   BindingResult result,
+                                   HttpSession session,
+                                   Model model) {
         List<Product> products = productRepository.getAllProductByStatus1();
         model.addAttribute("listProduct", products);
 
@@ -207,7 +213,9 @@ public class ProductDetailServiceImpl implements ProductDetailService {
     }
 
     @Override
-    public boolean saveProductDetailAPI(CreateProductRequest request, HttpSession session, HttpServletResponse response) throws IOException {
+    public boolean saveProductDetailAPI(CreateProductRequest request,
+                                        HttpSession session,
+                                        HttpServletResponse response) throws IOException {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             response.sendRedirect("/mangostore/home");
@@ -244,7 +252,9 @@ public class ProductDetailServiceImpl implements ProductDetailService {
     }
 
     @Override
-    public String editProductDetail(Long idProductDetail, Model model, HttpSession session) {
+    public String editProductDetail(Long idProductDetail,
+                                    Model model,
+                                    HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -287,7 +297,9 @@ public class ProductDetailServiceImpl implements ProductDetailService {
     }
 
     @Override
-    public String updateProductDetail(ProductDetail editProductDetail, BindingResult result, HttpSession session) {
+    public String updateProductDetail(ProductDetail editProductDetail,
+                                      BindingResult result,
+                                      HttpSession session) {
         ProductDetail productDetail = productDetailRepository.findById(editProductDetail.getId()).orElse(null);
 
         productDetail.setDescribe(editProductDetail.getDescribe());

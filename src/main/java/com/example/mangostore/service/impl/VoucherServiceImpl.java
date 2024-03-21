@@ -42,7 +42,9 @@ public class VoucherServiceImpl implements VoucherService {
     }
 
     @Override
-    public String indexVoucher(Model model, HttpSession session, String keyword) {
+    public String indexVoucher(Model model,
+                               HttpSession session,
+                               String keyword) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -93,7 +95,9 @@ public class VoucherServiceImpl implements VoucherService {
     }
 
     @Override
-    public String addVoucher(Voucher addVoucher, BindingResult result, HttpSession session) {
+    public String addVoucher(Voucher addVoucher,
+                             BindingResult result,
+                             HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         Account detailAccount = accountRepository.detailAccountByEmail(email);
 
@@ -123,7 +127,9 @@ public class VoucherServiceImpl implements VoucherService {
     }
 
     @Override
-    public String detailVoucher(Model model, HttpSession session, Long idVoucher) {
+    public String detailVoucher(Model model,
+                                HttpSession session,
+                                Long idVoucher) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -168,7 +174,9 @@ public class VoucherServiceImpl implements VoucherService {
     }
 
     @Override
-    public String updateVoucher(BindingResult result, HttpSession session, Voucher voucher) {
+    public String updateVoucher(BindingResult result,
+                                HttpSession session,
+                                Voucher voucher) {
         Voucher detailVoucher = voucherRepository.findById(voucher.getId()).orElse(null);
         detailVoucher.setNameVoucher(voucher.getNameVoucher());
         detailVoucher.setQuantity(voucher.getQuantity());

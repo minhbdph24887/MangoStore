@@ -35,7 +35,9 @@ public class AddressClientServiceImpl implements AddressClientService {
     }
 
     @Override
-    public String indexAddressClient(Model model, HttpSession session, String keyword) {
+    public String indexAddressClient(Model model,
+                                     HttpSession session,
+                                     String keyword) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -83,7 +85,9 @@ public class AddressClientServiceImpl implements AddressClientService {
     }
 
     @Override
-    public String addAddressClient(AddressClient addAddressClient, BindingResult result, HttpSession session) {
+    public String addAddressClient(AddressClient addAddressClient,
+                                   BindingResult result,
+                                   HttpSession session) {
         AddressClient newAddressClient = new AddressClient();
         newAddressClient.setCodeAddress(gender.generateCode());
         newAddressClient.setNameClient(addAddressClient.getNameClient());
@@ -103,7 +107,9 @@ public class AddressClientServiceImpl implements AddressClientService {
     }
 
     @Override
-    public String editAddressClient(Long idAddressClient, Model model, HttpSession session) {
+    public String editAddressClient(Long idAddressClient,
+                                    Model model,
+                                    HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -145,7 +151,8 @@ public class AddressClientServiceImpl implements AddressClientService {
     }
 
     @Override
-    public String updateAddressClient(AddressClient editAddressClient, BindingResult result) {
+    public String updateAddressClient(AddressClient editAddressClient,
+                                      BindingResult result) {
         AddressClient detailAddressClient = addressClientRepository.findById(editAddressClient.getId()).orElse(null);
 
         detailAddressClient.setNameClient(editAddressClient.getNameClient());

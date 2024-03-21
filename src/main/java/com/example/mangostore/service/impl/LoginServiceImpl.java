@@ -45,7 +45,9 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public String loginAccount(String email, String password, HttpSession session) throws IOException {
+    public String loginAccount(String email,
+                               String password,
+                               HttpSession session) throws IOException {
         Account detailAccount = accountRepository.detailAccountByEmail(email);
         if (detailAccount == null || !encoder.matches(password, detailAccount.getEncryptionPassword())) {
             return "redirect:/mangostore/login/from";
@@ -60,10 +62,9 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public void checkLoginGoogleAccount(HttpServletResponse response, Authentication authentication) throws IOException {
+    public void checkLoginGoogleAccount(HttpServletResponse response,
+                                        Authentication authentication) throws IOException {
         DefaultOidcUser oauthUser = (DefaultOidcUser) authentication.getPrincipal();
-        System.out.println("aaaaaaaaaaaaaaa " + oauthUser.getEmail());
-        System.out.println("ccccccccccccccc " + oauthUser.getFullName());
         String email = oauthUser.getEmail();
         String fullName = oauthUser.getFullName();
 
@@ -128,7 +129,8 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public String authenticationCode(String codeForgot, HttpSession session) {
+    public String authenticationCode(String codeForgot,
+                                     HttpSession session) {
         String email = (String) session.getAttribute("loginEmailForgot");
         if (email == null) {
             return "redirect:/mangostore/login/forgot";
@@ -143,7 +145,9 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public String refreshPassword(String email, String passwordRefresh, HttpSession session) {
+    public String refreshPassword(String email,
+                                  String passwordRefresh,
+                                  HttpSession session) {
         Account detailAccount = accountRepository.detailAccountByEmail(email);
         detailAccount.setEncryptionPassword(encoder.encode(passwordRefresh));
         accountRepository.save(detailAccount);
@@ -153,7 +157,9 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public String signUpAccount(String fullName, String email, String passwordRefresh) {
+    public String signUpAccount(String fullName,
+                                String email,
+                                String passwordRefresh) {
         Account detailAccount = accountRepository.detailAccountByEmail(email);
         if (detailAccount == null) {
             Account newAccount = new Account();

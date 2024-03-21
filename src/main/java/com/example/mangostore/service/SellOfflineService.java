@@ -8,21 +8,29 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 
 public interface SellOfflineService {
-    String indexSellOffline(Model model, HttpSession session);
+    String indexSellOffline(Model model,
+                            HttpSession session);
 
     ResponseEntity<String> createInvoiceAPI(HttpSession session);
 
-    String editInvoice(Long idInvoice, Model model, HttpSession session);
+    String editInvoice(Long idInvoice,
+                       Model model,
+                       HttpSession session);
 
-    String updateClient(Long idInvoice, String numberPhoneClient);
+    String updateClient(Long idInvoice,
+                        String numberPhoneClient);
 
-    String updatePoint(Long idInvoice, Integer pointClient);
+    String updatePoint(Long idInvoice,
+                       Integer pointClient);
 
-    String updateVoucher(Long idInvoice, Voucher voucher);
+    String updateVoucher(Long idInvoice,
+                         Voucher voucher);
 
     String cancelInvoice(Long idInvoice);
 
-    String addProduct(Long idInvoice, Long idProductDetail, Integer newQuantity);
+    String addProduct(Long idInvoice,
+                      Long idProductDetail,
+                      Integer newQuantity);
 
     String deleteProduct(Long idInvoiceDetail);
 
@@ -32,7 +40,10 @@ public interface SellOfflineService {
 
     String increaseQuantity(Long idInvoiceDetail);
 
-    String paymentVnPay(Long idInvoice, HttpServletRequest request, HttpSession session);
+    String paymentVnPay(Long idInvoice,
+                        HttpServletRequest request,
+                        HttpSession session);
 
-    String bankingSuccess(HttpServletRequest request, HttpSession session);
+    String bankingSuccess(HttpServletRequest request,
+                          HttpSession session);
 }

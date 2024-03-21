@@ -35,7 +35,9 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public String indexMaterial(Model model, HttpSession session, String keyword) {
+    public String indexMaterial(Model model,
+                                HttpSession session,
+                                String keyword) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -83,7 +85,9 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public String addMaterial(Material addMaterial, BindingResult result, HttpSession session) {
+    public String addMaterial(Material addMaterial,
+                              BindingResult result,
+                              HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         Account detailAccount = accountRepository.detailAccountByEmail(email);
 
@@ -100,7 +104,9 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public String detailMaterial(Model model, HttpSession session, Long idMaterial) {
+    public String detailMaterial(Model model,
+                                 HttpSession session,
+                                 Long idMaterial) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -142,7 +148,9 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public String updateMaterial(BindingResult result, HttpSession session, Material material) {
+    public String updateMaterial(BindingResult result,
+                                 HttpSession session,
+                                 Material material) {
         Material detailMaterial = materialRepository.findById(material.getId()).orElse(null);
         detailMaterial.setNameMaterial(material.getNameMaterial());
 

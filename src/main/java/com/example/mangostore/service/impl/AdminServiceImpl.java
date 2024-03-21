@@ -23,7 +23,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public String indexAdmin(Model model, HttpSession session) {
+    public String indexAdmin(Model model,
+                             HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";

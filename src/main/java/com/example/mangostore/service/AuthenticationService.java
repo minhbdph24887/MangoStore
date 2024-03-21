@@ -6,9 +6,13 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.ui.Model;
 
 public interface AuthenticationService {
-    String getAllRole(Model model, HttpSession session);
+    String getAllRole(Model model,
+                      HttpSession session);
 
-    String detailAuthentication(Model model, HttpSession session, Long idAuthentication);
+    String detailAuthentication(Model model,
+                                HttpSession session,
+                                Long idAuthentication);
 
-    String updateAuthentication(Authentication updateAuthentication, Role roleSelect);
+    String updateAuthentication(Authentication updateAuthentication,
+                                Role roleSelect);
 }

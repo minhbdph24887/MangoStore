@@ -1,163 +1,129 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+      th:replace="~{/layout/IndexClient :: dynamic(~{:: main})}">
 <body>
-<div class="small-container">
-    <h2 class="title">Featured Products</h2>
-    <div class="row">
-        <div class="col-4">
-            <a href="products_detal.html"><img src="images/product-1.jpg"></a>
-            <a href="products_detal.html"><h4>Red Printed T-Shirt</h4></a>
-            <div class="rating">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star-o"></i>
+<main>
+    <div class="container">
+        <div class="row">
+            <div style="width: 250px;">
+                <form>
+                    <h6>--filter by size--------</h6>
+                    <table>
+                        <tbody>
+                        <tr th:each="listSize : ${listSize}">
+                            <td style="width: 100px;">
+                                <label style="padding: 3px;">
+                                    <input type="checkbox" th:text="${' Size ' + listSize.nameSize}"/>
+                                </label>
+                            </td>
+                            <td style="width: 50px;">
+                                <span style="border: 1px solid #dee2e6 !important; font-weight: 400 !important; margin-left: 105px;"> 255 </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <h6>--filter by color--------</h6>
+                    <table>
+                        <tbody>
+                        <tr th:each="listColor : ${listColor}">
+                            <td style="min-width: 200px">
+                                <label style="padding: 3px;">
+                                    <input type="checkbox" th:text="${' Màu ' + listColor.nameColor}"/>
+                                </label>
+                            </td>
+                            <td style="width: 50px;">
+                                <span style="border: 1px solid #dee2e6 !important; font-weight: 400 !important; margin-left: -6px;"> 255 </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <div class="d-flex">
+                        <button type="reset" class="btn btn-outline-secondary me-2">Reset</button>
+                        <button type="submit" class="btn btn-outline-primary">Apply</button>
+                    </div>
+                </form>
             </div>
-            <p>$50.00</p>
-        </div>
-        <div class="col-4">
-            <img src="images/product-2.jpg">
-            <h4>Red Printed T-Shirt</h4>
-            <div class="rating">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star-half-o"></i>
-                <i class="fa fa-star-o"></i>
+            <div style="width: 1055px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <nav class="navbar navbar-expand-sm">
+                                <div class="container-fluid">
+                                    <div class="d-flex">
+                                        <div class="d-flex align-items-center">
+                                            <p style="width: 120px; margin-bottom: 1px;">Sorted by:</p>
+                                            <a class="btn btn-outline-secondary me-2" href="#" style="width: 98px;">Popular</a>
+                                            <a class="btn btn-outline-secondary me-2" href="#" style="width: 97px;">Latest</a>
+                                            <a class="btn btn-outline-secondary me-2" href="#" style="width: 108px;">Selling</a>
+                                            <label>
+                                                <select class="form-select me-2" style="width: 200px;">
+                                                    <option>Price: Low to High</option>
+                                                    <option>Price: High to Low</option>
+                                                </select>
+                                            </label>
+                                        </div>
+                                        <div class="ml-auto mt-3 mr-2" style="margin-left: 187px;">
+                                            <nav aria-label="Page navigation example">
+                                                <ul class="pagination">
+                                                    <li class="page-item" style="margin-right: 0;">
+                                                        <a class="page-link" href="#" aria-label="Previous">
+                                                            <span aria-hidden="true"
+                                                                  class="font-weight-bold">&lt;</span>
+                                                            <span class="sr-only">Previous</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="page-item active" style="margin-right: 0;">
+                                                        <a class="page-link" href="#">1</a>
+                                                    </li>
+                                                    <li class="page-item" style="margin-right: 0;">
+                                                        <a class="page-link" href="#">..</a>
+                                                    </li>
+                                                    <li class="page-item" style="margin-right: 0;">
+                                                        <a class="page-link" href="#">24</a>
+                                                    </li>
+                                                    <li class="page-item" style="margin-right: 0;">
+                                                        <a class="page-link" href="#" aria-label="Next">
+                                                            <span aria-hidden="true"
+                                                                  class="font-weight-bold">&gt;</span>
+                                                            <span class="sr-only">Next</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="row">
+                                <div th:each="productDetail : ${listProductDetail}" class="col-md-3 mb-4">
+                                    <div class="card" style="width: 228px; height: 320px; margin: 0.05rem;">
+                                        <div>
+                                            <img th:src="@{|/image/product/${productDetail.imagesProductDetail}|}"
+                                                 alt="" style="width: 208px;margin-top: 4px;margin-left: 8px;">
+                                        </div>
+                                        <div style="margin-top: 6px; margin-left: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            [[*{productDetail.getProduct().getNameProduct()}]]
+                                        </div>
+                                        <div th:with="priceRange=${priceRangeMap[productDetail.product.id]}"
+                                             style="color: red;margin-top: 14px;margin-left: 20px;">
+                                            <span th:if="${priceRange.priceMin.equals(priceRange.priceMax)}">[[${#numbers.formatDecimal(priceRange.priceMin, 0, 'COMMA', 0, 'POINT')} + ' VND']]</span>
+                                            <span th:unless="${priceRange.priceMin.equals(priceRange.priceMax)}">[[${#numbers.formatDecimal(priceRange.priceMin, 0, 'COMMA', 0, 'POINT')} + ' - ' +${#numbers.formatDecimal(priceRange.priceMax, 0, 'COMMA', 0, 'POINT')} + ' VND']]</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <p>$50.00</p>
-        </div>
-        <div class="col-4">
-            <img src="images/product-3.jpg">
-            <h4>Red Printed T-Shirt</h4>
-            <div class="rating">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star-half-o"></i>
-            </div>
-            <p>$50.00</p>
-        </div>
-        <div class="col-4">
-            <img src="images/product-4.jpg">
-            <h4>Red Printed T-Shirt</h4>
-            <div class="rating">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star-o"></i>
-            </div>
-            <p>$50.00</p>
-        </div>
-    </div>
-    <h2 class="title">Latest Products</h2>
-    <div class="row">
-        <div class="col-4">
-            <img src="images/product-5.jpg">
-            <h4>Red Printed T-Shirt</h4>
-            <div class="rating">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star-o"></i>
-            </div>
-            <p>$50.00</p>
-        </div>
-        <div class="col-4">
-            <img src="images/product-6.jpg">
-            <h4>Red Printed T-Shirt</h4>
-            <div class="rating">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star-half-o"></i>
-                <i class="fa fa-star-o"></i>
-            </div>
-            <p>$50.00</p>
-        </div>
-        <div class="col-4">
-            <img src="images/product-7.jpg">
-            <h4>Red Printed T-Shirt</h4>
-            <div class="rating">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star-half-o"></i>
-            </div>
-            <p>$50.00</p>
-        </div>
-        <div class="col-4">
-            <img src="images/product-8.jpg">
-            <h4>Red Printed T-Shirt</h4>
-            <div class="rating">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star-o"></i>
-            </div>
-            <p>$50.00</p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-4">
-            <img src="images/product-9.jpg">
-            <h4>Red Printed T-Shirt</h4>
-            <div class="rating">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star-o"></i>
-            </div>
-            <p>$50.00</p>
-        </div>
-        <div class="col-4">
-            <img src="images/product-10.jpg">
-            <h4>Red Printed T-Shirt</h4>
-            <div class="rating">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star-half-o"></i>
-                <i class="fa fa-star-o"></i>
-            </div>
-            <p>$50.00</p>
-        </div>
-        <div class="col-4">
-            <img src="images/product-11.jpg">
-            <h4>Red Printed T-Shirt</h4>
-            <div class="rating">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star-half-o"></i>
-            </div>
-            <p>$50.00</p>
-        </div>
-        <div class="col-4">
-            <img src="images/product-12.jpg">
-            <h4>Red Printed T-Shirt</h4>
-            <div class="rating">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star-o"></i>
-            </div>
-            <p>$50.00</p>
         </div>
     </div>
-</div>
+</main>
 </body>
 </html>

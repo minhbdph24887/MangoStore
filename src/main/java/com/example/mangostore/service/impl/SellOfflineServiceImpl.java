@@ -280,14 +280,6 @@ public class SellOfflineServiceImpl implements SellOfflineService {
         List<ProductDetail> getAllProductDetailItems = productDetailRepository.findProductDetailById(idProductDetail);
         List<Integer> listTotalInvoice = invoiceDetailRepository.capitalSumDetailInvoice(idInvoice);
         Integer totalInvoice = listTotalInvoice.get(0);
-
-        Integer nullTotal = 0;
-        if (String.valueOf(totalInvoice).equalsIgnoreCase("null")) {
-            nullTotal = 0;
-        } else {
-            nullTotal = totalInvoice;
-        }
-
         Integer reducedValueVoucher = 0;
         assert invoice != null;
         if (invoice.getVoucher() == null) {
@@ -305,10 +297,9 @@ public class SellOfflineServiceImpl implements SellOfflineService {
 
         for (ProductDetail detail : getAllProductDetailItems) {
             Integer sum = newQuantity * detail.getPrice();
-            Integer total = sum + nullTotal;
-
             InvoiceDetail invoiceDetail = invoiceDetailRepository.findAllByIdInvoiceAndProductDetails(detail.getId(), invoice.getId());
-            if (String.valueOf(invoiceDetail).equalsIgnoreCase("null")) {
+
+            if (invoiceDetail == null) {
                 InvoiceDetail newInvoiceDetail = new InvoiceDetail();
                 newInvoiceDetail.setInvoice(invoice);
                 newInvoiceDetail.setProductDetail(detail);
@@ -327,10 +318,26 @@ public class SellOfflineServiceImpl implements SellOfflineService {
                     newSum = detailInvoiceSet.getTotalInvoiceAmount() + sum;
                     detailInvoiceSet.setTotalInvoiceAmount(newSum);
                 }
-
                 int totalPayment = newSum - reducedValueVoucher - (customPoint * 1000);
                 detailInvoiceSet.setTotalPayment(Math.max(totalPayment, 0));
                 invoiceRepository.save(detailInvoiceSet);
+            } else {
+                Integer newQuantityUpdate = invoiceDetail.getQuantity() + newQuantity;
+                Integer newCapSum = newQuantityUpdate * invoiceDetail.getPrice();
+                invoiceDetail.setQuantity(newQuantityUpdate);
+                invoiceDetail.setCapitalSum(newCapSum);
+                invoiceDetailRepository.save(invoiceDetail);
+
+                Invoice detailInvoice = invoiceRepository.findById(invoice.getId()).orElse(null);
+                assert detailInvoice != null;
+                int totalInvoiceAmount = detailInvoice.getTotalInvoiceAmount() == null ? 0 : detailInvoice.getTotalInvoiceAmount();
+                totalInvoiceAmount += newQuantity * detail.getPrice();
+                detailInvoice.setTotalInvoiceAmount(totalInvoiceAmount);
+                int reducedValueVoucherUpdate = detailInvoice.getVoucher() == null ? 0 : detailInvoice.getVoucher().getReducedValue();
+                int customPointUpdate = detailInvoice.getCustomerPoints() == null ? 0 : detailInvoice.getCustomerPoints();
+                int totalPayment = totalInvoiceAmount - reducedValueVoucherUpdate - (customPointUpdate * 1000);
+                detailInvoice.setTotalPayment(Math.max(totalPayment, 0));
+                invoiceRepository.save(detailInvoice);
             }
         }
         return "redirect:/mangostore/admin/sell/edit?id=" + invoice.getId();
@@ -342,11 +349,9 @@ public class SellOfflineServiceImpl implements SellOfflineService {
         assert invoiceDetail != null;
         List<Invoice> itemsInvoice = invoiceRepository.getAllInvoiceById(invoiceDetail.getInvoice().getId());
         Invoice invoice = itemsInvoice.isEmpty() ? null : itemsInvoice.get(0);
-
         Integer totalSum = invoiceDetail.getQuantity() * invoiceDetail.getPrice();
         assert invoice != null;
         Integer totalCustomer = invoice.getTotalInvoiceAmount() - totalSum;
-
         Integer reducedValueVoucher = 0;
         if (invoice.getVoucher() == null) {
             reducedValueVoucher = 0;
@@ -360,11 +365,9 @@ public class SellOfflineServiceImpl implements SellOfflineService {
         } else {
             customPoint = invoice.getCustomerPoints();
         }
-
         int newTotalPayment = totalCustomer - reducedValueVoucher - (customPoint * 1000);
         invoice.setTotalInvoiceAmount(totalCustomer);
         invoice.setTotalPayment(Math.max(newTotalPayment, 0));
-
         invoiceRepository.save(invoice);
         invoiceDetailRepository.deleteById(idInvoiceDetail);
         return "redirect:/mangostore/admin/sell/edit?id=" + invoiceDetail.getInvoice().getId();

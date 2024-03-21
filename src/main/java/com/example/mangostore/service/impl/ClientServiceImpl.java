@@ -1,40 +1,48 @@
 package com.example.mangostore.service.impl;
 
-import com.example.mangostore.entity.Account;
-import com.example.mangostore.entity.ProductDetail;
-import com.example.mangostore.entity.Role;
-import com.example.mangostore.repository.AccountRepository;
-import com.example.mangostore.repository.ProductDetailRepository;
-import com.example.mangostore.repository.RoleRepository;
+import com.example.mangostore.config.Gender;
+import com.example.mangostore.entity.*;
+import com.example.mangostore.repository.*;
 import com.example.mangostore.service.ClientService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ClientServiceImpl implements ClientService {
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
     private final ProductDetailRepository productDetailRepository;
+    private final SizeRepository sizeRepository;
+    private final ColorRepository colorRepository;
+    private final Gender gender;
 
     public ClientServiceImpl(AccountRepository accountRepository,
                              RoleRepository roleRepository,
-                             ProductDetailRepository productDetailRepository) {
+                             ProductDetailRepository productDetailRepository,
+                             SizeRepository sizeRepository,
+                             ColorRepository colorRepository,
+                             Gender gender) {
         this.accountRepository = accountRepository;
         this.roleRepository = roleRepository;
         this.productDetailRepository = productDetailRepository;
+        this.sizeRepository = sizeRepository;
+        this.colorRepository = colorRepository;
+        this.gender = gender;
     }
 
     @Override
-    public String indexClient(Model model, HttpSession session) {
+    public String indexClient(Model model,
+                              HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         if (email != null) {
             Account detailAccount = accountRepository.detailAccountByEmail(email);
             if (detailAccount.getStatus() == 0) {
                 session.invalidate();
-                return "redirect:/mangostore/home";
             } else {
                 model.addAttribute("profile", detailAccount);
                 Role detailRoleByEmail = roleRepository.getRoleByEmail(email);
@@ -47,9 +55,33 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public String viewProductClient(Model model) {
-        List<ProductDetail> itemsAllProductDetail = productDetailRepository.findAll();
+    public String viewProductClient(Model model,
+                                    HttpSession session) {
+        String email = (String) session.getAttribute("loginEmail");
+        if (email != null) {
+            Account detailAccount = accountRepository.detailAccountByEmail(email);
+            if (detailAccount.getStatus() == 0) {
+                session.invalidate();
+            } else {
+                model.addAttribute("profile", detailAccount);
+                Role detailRoleByEmail = roleRepository.getRoleByEmail(email);
+                if (detailRoleByEmail.getName().equals("ADMIN") || detailRoleByEmail.getName().equals("STAFF")) {
+                    model.addAttribute("checkAuthentication", detailRoleByEmail);
+                }
+            }
+        }
+
+        List<Size> itemsSize = sizeRepository.getAllSizeByStatus1();
+        model.addAttribute("listSize", itemsSize);
+
+        List<Color> itemsColor = colorRepository.getAllColorByStatus1();
+        model.addAttribute("listColor", itemsColor);
+
+        List<ProductDetail> itemsAllProductDetail = productDetailRepository.getAllProductDetailByIdProduct();
         model.addAttribute("listProductDetail", itemsAllProductDetail);
+
+        Map<Long, PriceRange> priceRangeMap = gender.getPriceRangMap();
+        model.addAttribute("priceRangeMap", priceRangeMap);
         return "client/List";
     }
 }

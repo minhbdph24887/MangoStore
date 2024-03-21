@@ -35,7 +35,9 @@ public class OriginServiceImpl implements OriginService {
     }
 
     @Override
-    public String indexOrigin(Model model, HttpSession session, String keyword) {
+    public String indexOrigin(Model model,
+                              HttpSession session,
+                              String keyword) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -83,7 +85,9 @@ public class OriginServiceImpl implements OriginService {
     }
 
     @Override
-    public String addOrigin(Origin addOrigin, BindingResult result, HttpSession session) {
+    public String addOrigin(Origin addOrigin,
+                            BindingResult result,
+                            HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         Account detailAccount = accountRepository.detailAccountByEmail(email);
 
@@ -100,7 +104,9 @@ public class OriginServiceImpl implements OriginService {
     }
 
     @Override
-    public String detailOrigin(Model model, HttpSession session, Long idOrigin) {
+    public String detailOrigin(Model model,
+                               HttpSession session,
+                               Long idOrigin) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -142,7 +148,9 @@ public class OriginServiceImpl implements OriginService {
     }
 
     @Override
-    public String updateOrigin(BindingResult result, HttpSession session, Origin origin) {
+    public String updateOrigin(BindingResult result,
+                               HttpSession session,
+                               Origin origin) {
         Origin detailOrigin = originRepository.findById(origin.getId()).orElse(null);
         detailOrigin.setNameOrigin(origin.getNameOrigin());
 

@@ -35,7 +35,9 @@ public class SizeServiceImpl implements SizeService {
     }
 
     @Override
-    public String indexSize(Model model, HttpSession session, String keyword) {
+    public String indexSize(Model model,
+                            HttpSession session,
+                            String keyword) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -83,7 +85,9 @@ public class SizeServiceImpl implements SizeService {
     }
 
     @Override
-    public String addSize(Size addSize, BindingResult result, HttpSession session) {
+    public String addSize(Size addSize,
+                          BindingResult result,
+                          HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         Account detailAccount = accountRepository.detailAccountByEmail(email);
         if (result.hasErrors()) {
@@ -102,7 +106,9 @@ public class SizeServiceImpl implements SizeService {
     }
 
     @Override
-    public String detailSize(Model model, HttpSession session, Long idSize) {
+    public String detailSize(Model model,
+                             HttpSession session,
+                             Long idSize) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -144,7 +150,9 @@ public class SizeServiceImpl implements SizeService {
     }
 
     @Override
-    public String updateSize(BindingResult result, HttpSession session, Size size) {
+    public String updateSize(BindingResult result,
+                             HttpSession session,
+                             Size size) {
         Size detailSize = sizeRepository.findById(size.getId()).orElse(null);
         detailSize.setNameSize(size.getNameSize());
 

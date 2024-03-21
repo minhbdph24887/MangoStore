@@ -25,7 +25,8 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public String getAllRoleByStatus1(Model model, HttpSession session) {
+    public String getAllRoleByStatus1(Model model,
+                                      HttpSession session) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -73,7 +74,9 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public String detailRole(Model model, HttpSession session, Long idRole) {
+    public String detailRole(Model model,
+                             HttpSession session,
+                             Long idRole) {
         String email = (String) session.getAttribute("loginEmail");
         if (email == null) {
             return "redirect:/mangostore/home";
@@ -113,7 +116,9 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public String updateRole(BindingResult result, Long idRole, Role role) {
+    public String updateRole(BindingResult result,
+                             Long idRole,
+                             Role role) {
         Role detailRole = roleRepository.findById(role.getId()).orElse(null);
         detailRole.setNote(role.getNote());
         detailRole.setStatus(role.getStatus());
@@ -132,7 +137,8 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public String addRole(BindingResult result, Role addRole) {
+    public String addRole(BindingResult result,
+                          Role addRole) {
         Role newRole = new Role();
         newRole.setName(addRole.getName());
         newRole.setNote(addRole.getNote());
