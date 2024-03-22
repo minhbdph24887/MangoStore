@@ -4,6 +4,7 @@ import com.example.mangostore.entity.*;
 import com.example.mangostore.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.Page;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 

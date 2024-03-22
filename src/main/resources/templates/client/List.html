@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
       th:replace="~{/layout/IndexClient :: dynamic(~{:: main})}">
 <body>
-<main>
+<main class="productClientPage">
     <div class="container">
         <div class="row">
             <div style="width: 250px;">
@@ -60,9 +60,20 @@
                                             <a class="btn btn-outline-secondary me-2" href="#" style="width: 97px;">Latest</a>
                                             <a class="btn btn-outline-secondary me-2" href="#" style="width: 108px;">Selling</a>
                                             <label>
-                                                <select class="form-select me-2" style="width: 200px;">
-                                                    <option>Price: Low to High</option>
-                                                    <option>Price: High to Low</option>
+                                                <select class="form-select me-2" style="width: 200px;"
+                                                        id="priceSortSelect" onchange="sortProducts()">
+                                                    <option value="default" disabled selected>Sort By Price</option>
+                                                    <option value="" th:selected="${sortDirection == ''}">Default
+                                                        Price
+                                                    </option>
+                                                    <option value="LowToHigh"
+                                                            th:selected="${sortDirection == 'LowToHigh'}">Price: Low to
+                                                        High
+                                                    </option>
+                                                    <option value="HighToLow"
+                                                            th:selected="${sortDirection == 'HighToLow'}">Price: High to
+                                                        Low
+                                                    </option>
                                                 </select>
                                             </label>
                                         </div>
@@ -74,7 +85,7 @@
                                                         <li th:classappend="${currentPage > 1} ? '' : 'disabled'"
                                                             class="page-item" style="margin-right: 0;">
                                                             <a class="page-link"
-                                                               th:href="@{'?pageNo=' + ${currentPage - 1}}"
+                                                               th:href="@{${sortDirection != null && sortDirection!= '' ? '?sortDirection=' + sortDirection + '&' : '?'} + 'pageNo=' + ${currentPage - 1}}"
                                                                aria-label="Previous">
                                                             <span aria-hidden="true"
                                                                   class="font-weight-bold">&lt;</span>
@@ -84,7 +95,7 @@
                                                         <li th:classappend="${currentPage < totalPage} ? '' : 'disabled'"
                                                             class="page-item" style="margin-right: 0;">
                                                             <a class="page-link"
-                                                               th:href="@{'?pageNo=' + ${currentPage + 1}}"
+                                                               th:href="@{${sortDirection != null && sortDirection!= '' ? '?sortDirection=' + sortDirection + '&' : '?'} + 'pageNo=' + ${currentPage + 1}}"
                                                                aria-label="Next">
                                                             <span aria-hidden="true"
                                                                   class="font-weight-bold">&gt;</span>

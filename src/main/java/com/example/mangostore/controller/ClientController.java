@@ -2,6 +2,7 @@ package com.example.mangostore.controller;
 
 import com.example.mangostore.service.ClientService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,8 @@ public class ClientController {
     @GetMapping(value = "product")
     public String viewProductClient(Model model,
                                     HttpSession session,
+                                    @Param("sortDirection") String sortDirection,
                                     @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
-        return clientService.viewProductClient(model, session, pageNo);
+        return clientService.viewProductClient(model, session, sortDirection, pageNo);
     }
 }

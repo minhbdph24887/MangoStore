@@ -10,7 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +58,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public String viewProductClient(Model model,
                                     HttpSession session,
+                                    String sortDirection,
                                     Integer pageNo) {
         String email = (String) session.getAttribute("loginEmail");
         if (email != null) {
@@ -86,7 +86,17 @@ public class ClientServiceImpl implements ClientService {
         Map<String, Integer> productDetailCountByColor = gender.countProductsByColor();
         model.addAttribute("productDetailCountByColor", productDetailCountByColor);
 
+
         Page<ProductDetail> itemsAllProductDetail = productDetailRepository.getAllProductDetailByIdProduct(PageRequest.of(pageNo - 1, 8));
+        if ("LowToHigh".equals(sortDirection)) {
+            itemsAllProductDetail = productDetailRepository.sortProductDetailLowToHigh(PageRequest.of(pageNo - 1, 8));
+            model.addAttribute("sortDirection", "LowToHigh");
+        } else if ("HighToLow".equals(sortDirection)) {
+            itemsAllProductDetail = productDetailRepository.sortProductDetailHighToLow(PageRequest.of(pageNo - 1, 8));
+            model.addAttribute("sortDirection", "HighToLow");
+        } else {
+            model.addAttribute("sortDirection", "");
+        }
         model.addAttribute("listProductDetail", itemsAllProductDetail);
         model.addAttribute("totalPage", itemsAllProductDetail.getTotalPages());
         model.addAttribute("currentPage", pageNo);
