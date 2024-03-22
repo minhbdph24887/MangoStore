@@ -8,5 +8,6 @@ public interface ClientService {
                        HttpSession session);
 
     String viewProductClient(Model model,
-                             HttpSession session);
+                             HttpSession session,
+                             Integer pageNo);
 }

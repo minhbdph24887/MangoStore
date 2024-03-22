@@ -5,6 +5,8 @@ import com.example.mangostore.entity.*;
 import com.example.mangostore.repository.*;
 import com.example.mangostore.service.ClientService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -56,7 +58,8 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public String viewProductClient(Model model,
-                                    HttpSession session) {
+                                    HttpSession session,
+                                    Integer pageNo) {
         String email = (String) session.getAttribute("loginEmail");
         if (email != null) {
             Account detailAccount = accountRepository.detailAccountByEmail(email);
@@ -74,11 +77,19 @@ public class ClientServiceImpl implements ClientService {
         List<Size> itemsSize = sizeRepository.getAllSizeByStatus1();
         model.addAttribute("listSize", itemsSize);
 
+        Map<String, Integer> productDetailCountBySize = gender.countProductsBySize();
+        model.addAttribute("productDetailCountBySize", productDetailCountBySize);
+
         List<Color> itemsColor = colorRepository.getAllColorByStatus1();
         model.addAttribute("listColor", itemsColor);
 
-        List<ProductDetail> itemsAllProductDetail = productDetailRepository.getAllProductDetailByIdProduct();
+        Map<String, Integer> productDetailCountByColor = gender.countProductsByColor();
+        model.addAttribute("productDetailCountByColor", productDetailCountByColor);
+
+        Page<ProductDetail> itemsAllProductDetail = productDetailRepository.getAllProductDetailByIdProduct(PageRequest.of(pageNo - 1, 8));
         model.addAttribute("listProductDetail", itemsAllProductDetail);
+        model.addAttribute("totalPage", itemsAllProductDetail.getTotalPages());
+        model.addAttribute("currentPage", pageNo);
 
         Map<Long, PriceRange> priceRangeMap = gender.getPriceRangMap();
         model.addAttribute("priceRangeMap", priceRangeMap);

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping(value = "/mangostore/")
@@ -24,7 +25,8 @@ public class ClientController {
 
     @GetMapping(value = "product")
     public String viewProductClient(Model model,
-                                    HttpSession session) {
-        return clientService.viewProductClient(model, session);
+                                    HttpSession session,
+                                    @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
+        return clientService.viewProductClient(model, session, pageNo);
     }
 }

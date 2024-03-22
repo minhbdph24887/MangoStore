@@ -1,12 +1,7 @@
 package com.example.mangostore.config;
 
-import com.example.mangostore.entity.Account;
-import com.example.mangostore.entity.Invoice;
-import com.example.mangostore.entity.PriceRange;
-import com.example.mangostore.entity.ProductDetail;
-import com.example.mangostore.repository.AccountRepository;
-import com.example.mangostore.repository.InvoiceRepository;
-import com.example.mangostore.repository.ProductDetailRepository;
+import com.example.mangostore.entity.*;
+import com.example.mangostore.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.SimpleMailMessage;
@@ -25,15 +20,21 @@ public class Gender {
     private final JavaMailSender mailSender;
     private final InvoiceRepository invoiceRepository;
     private final ProductDetailRepository productDetailRepository;
+    private final SizeRepository sizeRepository;
+    private final ColorRepository colorRepository;
 
     public Gender(AccountRepository accountRepository,
                   JavaMailSender mailSender,
                   InvoiceRepository invoiceRepository,
-                  ProductDetailRepository productDetailRepository) {
+                  ProductDetailRepository productDetailRepository,
+                  SizeRepository sizeRepository,
+                  ColorRepository colorRepository) {
         this.accountRepository = accountRepository;
         this.mailSender = mailSender;
         this.invoiceRepository = invoiceRepository;
         this.productDetailRepository = productDetailRepository;
+        this.sizeRepository = sizeRepository;
+        this.colorRepository = colorRepository;
     }
 
     public String generateVerificationCode() {
@@ -207,5 +208,25 @@ public class Gender {
             priceRangeMap.put(idProduct, priceRange);
         }
         return priceRangeMap;
+    }
+
+    public Map<String, Integer> countProductsBySize() {
+        List<Size> sizes = sizeRepository.findAll();
+        Map<String, Integer> productDetailCountBySize = new HashMap<>();
+        for (Size size : sizes) {
+            Integer count = productDetailRepository.countProductDetailBySize(size.getId());
+            productDetailCountBySize.put(size.getNameSize(), count);
+        }
+        return productDetailCountBySize;
+    }
+
+    public Map<String, Integer> countProductsByColor() {
+        List<Color> colors = colorRepository.findAll();
+        Map<String, Integer> productDetailCountByColor = new HashMap<>();
+        for (Color color : colors) {
+            Integer count = productDetailRepository.countProductDetailByColor(color.getId());
+            productDetailCountByColor.put(color.getNameColor(), count);
+        }
+        return productDetailCountByColor;
     }
 }
