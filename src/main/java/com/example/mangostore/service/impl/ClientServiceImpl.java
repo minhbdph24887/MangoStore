@@ -60,9 +60,7 @@ public class ClientServiceImpl implements ClientService {
     public String viewProductClient(Model model,
                                     HttpSession session,
                                     String sortDirection,
-                                    Integer pageNo,
-                                    List<Long> sizes,
-                                    List<Long> colors) {
+                                    Integer pageNo) {
         String email = (String) session.getAttribute("loginEmail");
         if (email != null) {
             Account detailAccount = accountRepository.detailAccountByEmail(email);
@@ -90,27 +88,13 @@ public class ClientServiceImpl implements ClientService {
         model.addAttribute("productDetailCountByColor", productDetailCountByColor);
         Page<ProductDetail> itemsAllProductDetail;
         if ("LowToHigh".equals(sortDirection)) {
-            itemsAllProductDetail = productDetailRepository.sortProductDetailLowToHigh(PageRequest.of(pageNo - 1, 8));
+            itemsAllProductDetail = productDetailRepository.sortProductDetailLowToHigh(PageRequest.of(pageNo - 1, 10));
             model.addAttribute("sortDirection", "LowToHigh");
         } else if ("HighToLow".equals(sortDirection)) {
-            itemsAllProductDetail = productDetailRepository.sortProductDetailHighToLow(PageRequest.of(pageNo - 1, 8));
+            itemsAllProductDetail = productDetailRepository.sortProductDetailHighToLow(PageRequest.of(pageNo - 1, 10));
             model.addAttribute("sortDirection", "HighToLow");
         } else {
-            itemsAllProductDetail = productDetailRepository.getAllProductDetailByIdProduct(PageRequest.of(pageNo - 1, 8));
-        }
-
-        sizes = (sizes != null) ? sizes : new ArrayList<>();
-        colors = (colors != null) ? colors : new ArrayList<>();
-
-        if (!sizes.isEmpty() && !colors.isEmpty()) {
-            itemsAllProductDetail = productDetailRepository.filterProductBySizeAndColor(sizes, colors, PageRequest.of(pageNo - 1, 8));
-        } else if (!sizes.isEmpty()) {
-            itemsAllProductDetail = productDetailRepository.filterProductBySize(sizes, PageRequest.of(pageNo - 1, 8));
-        } else if (!colors.isEmpty()) {
-            itemsAllProductDetail = productDetailRepository.filterProductByColor(colors, PageRequest.of(pageNo - 1, 8));
-        } else {
-            // Nếu không có bộ lọc nào được áp dụng, hiển thị tất cả sản phẩm
-            itemsAllProductDetail = productDetailRepository.getAllProductDetailByIdProduct(PageRequest.of(pageNo - 1, 8));
+            itemsAllProductDetail = productDetailRepository.getAllProductDetailByIdProduct(PageRequest.of(pageNo - 1, 10));
         }
 
         model.addAttribute("listProductDetail", itemsAllProductDetail);
@@ -119,9 +103,6 @@ public class ClientServiceImpl implements ClientService {
 
         Map<Long, PriceRange> priceRangeMap = gender.getPriceRangMap();
         model.addAttribute("priceRangeMap", priceRangeMap);
-
-        model.addAttribute("selectedSizes", sizes);
-        model.addAttribute("selectedColors", colors);
         return "client/List";
     }
 }

@@ -12,7 +12,5 @@ public interface ClientService {
     String viewProductClient(Model model,
                              HttpSession session,
                              String sortDirection,
-                             Integer pageNo,
-                             List<Long> sizes,
-                             List<Long> colors);
+                             Integer pageNo);
 }

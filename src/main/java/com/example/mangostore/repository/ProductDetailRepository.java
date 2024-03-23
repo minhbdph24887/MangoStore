@@ -48,13 +48,4 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetail, Lo
             "from product_detail pd inner join (select id_product, max(id) as MaxId from product_detail group by id_product)\n" +
             "temp on pd.id_product = temp.id_product and pd.id = temp.MaxId inner join product p on pd.id_product = p.id order by pd.price desc", nativeQuery = true)
     Page<ProductDetail> sortProductDetailHighToLow(Pageable pageable);
-
-    @Query(value = "SELECT DISTINCT pd.* FROM product_detail pd WHERE pd.id IN (SELECT MAX(pd2.id) FROM product_detail pd2 WHERE pd2.id_size IN (:sizes) AND pd2.id_color IN (:colors) GROUP BY pd2.id_product) ORDER BY pd.price", nativeQuery = true)
-    Page<ProductDetail> filterProductBySizeAndColor(@Param("sizes") List<Long> sizes, @Param("colors") List<Long> colors, Pageable pageable);
-
-    @Query(value = "SELECT DISTINCT pd.* FROM product_detail pd WHERE pd.id IN (SELECT MAX(pd2.id) FROM product_detail pd2 WHERE pd2.id_size IN (:sizes) GROUP BY pd2.id_product) ORDER BY pd.price", nativeQuery = true)
-    Page<ProductDetail> filterProductBySize(@Param("sizes") List<Long> sizes, Pageable pageable);
-
-    @Query(value = "SELECT DISTINCT pd.* FROM product_detail pd WHERE pd.id IN (SELECT MAX(pd2.id) FROM product_detail pd2 WHERE pd2.id_color IN (:colors) GROUP BY pd2.id_product) ORDER BY pd.price", nativeQuery = true)
-    Page<ProductDetail> filterProductByColor(@Param("colors") List<Long> colors, Pageable pageable);
 }
