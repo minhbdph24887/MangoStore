@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -59,7 +60,9 @@ public class ClientServiceImpl implements ClientService {
     public String viewProductClient(Model model,
                                     HttpSession session,
                                     String sortDirection,
-                                    Integer pageNo) {
+                                    Integer pageNo,
+                                    List<Long> sizes,
+                                    List<Long> colors) {
         String email = (String) session.getAttribute("loginEmail");
         if (email != null) {
             Account detailAccount = accountRepository.detailAccountByEmail(email);
@@ -85,9 +88,7 @@ public class ClientServiceImpl implements ClientService {
 
         Map<String, Integer> productDetailCountByColor = gender.countProductsByColor();
         model.addAttribute("productDetailCountByColor", productDetailCountByColor);
-
-
-        Page<ProductDetail> itemsAllProductDetail = productDetailRepository.getAllProductDetailByIdProduct(PageRequest.of(pageNo - 1, 8));
+        Page<ProductDetail> itemsAllProductDetail;
         if ("LowToHigh".equals(sortDirection)) {
             itemsAllProductDetail = productDetailRepository.sortProductDetailLowToHigh(PageRequest.of(pageNo - 1, 8));
             model.addAttribute("sortDirection", "LowToHigh");
@@ -95,14 +96,32 @@ public class ClientServiceImpl implements ClientService {
             itemsAllProductDetail = productDetailRepository.sortProductDetailHighToLow(PageRequest.of(pageNo - 1, 8));
             model.addAttribute("sortDirection", "HighToLow");
         } else {
-            model.addAttribute("sortDirection", "");
+            itemsAllProductDetail = productDetailRepository.getAllProductDetailByIdProduct(PageRequest.of(pageNo - 1, 8));
         }
+
+        sizes = (sizes != null) ? sizes : new ArrayList<>();
+        colors = (colors != null) ? colors : new ArrayList<>();
+
+        if (!sizes.isEmpty() && !colors.isEmpty()) {
+            itemsAllProductDetail = productDetailRepository.filterProductBySizeAndColor(sizes, colors, PageRequest.of(pageNo - 1, 8));
+        } else if (!sizes.isEmpty()) {
+            itemsAllProductDetail = productDetailRepository.filterProductBySize(sizes, PageRequest.of(pageNo - 1, 8));
+        } else if (!colors.isEmpty()) {
+            itemsAllProductDetail = productDetailRepository.filterProductByColor(colors, PageRequest.of(pageNo - 1, 8));
+        } else {
+            // Nếu không có bộ lọc nào được áp dụng, hiển thị tất cả sản phẩm
+            itemsAllProductDetail = productDetailRepository.getAllProductDetailByIdProduct(PageRequest.of(pageNo - 1, 8));
+        }
+
         model.addAttribute("listProductDetail", itemsAllProductDetail);
         model.addAttribute("totalPage", itemsAllProductDetail.getTotalPages());
         model.addAttribute("currentPage", pageNo);
 
         Map<Long, PriceRange> priceRangeMap = gender.getPriceRangMap();
         model.addAttribute("priceRangeMap", priceRangeMap);
+
+        model.addAttribute("selectedSizes", sizes);
+        model.addAttribute("selectedColors", colors);
         return "client/List";
     }
 }

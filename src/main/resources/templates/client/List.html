@@ -2,18 +2,20 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
       th:replace="~{/layout/IndexClient :: dynamic(~{:: main})}">
 <body>
-<main class="productClientPage">
+<main class="productClientPage filterFromPage">
     <div class="container">
         <div class="row">
             <div style="width: 250px;">
-                <form>
+                <form id="filterForm" method="get">
                     <h6>--filter by size--------</h6>
                     <table>
                         <tbody>
                         <tr th:each="listSize : ${listSize}">
                             <td style="width: 100px;">
                                 <label style="padding: 3px;">
-                                    <input type="checkbox" th:text="${' Size ' + listSize.nameSize}"/>
+                                    <input type="checkbox" name="size" th:value="${listSize.id}"
+                                           th:text="${' Size ' + listSize.nameSize}"
+                                           th:checked="${selectedSizes.contains(listSize.id)}"/>
                                 </label>
                             </td>
                             <td style="width: 50px;">
@@ -30,7 +32,9 @@
                         <tr th:each="listColor : ${listColor}">
                             <td style="min-width: 200px">
                                 <label style="padding: 3px;">
-                                    <input type="checkbox" th:text="${' Màu ' + listColor.nameColor}"/>
+                                    <input type="checkbox" name="color" th:value="${listColor.id}"
+                                           th:text="${' Màu ' + listColor.nameColor}"
+                                           th:checked="${selectedColors.contains(listColor.id)}"/>
                                 </label>
                             </td>
                             <td style="width: 50px;">
@@ -42,7 +46,8 @@
                     </table>
                     <br>
                     <div class="d-flex">
-                        <button type="reset" class="btn btn-outline-secondary me-2">Reset</button>
+                        <a type="button" th:href="@{/mangostore/product}"
+                           class="btn btn-outline-secondary me-2">Clear</a>
                         <button type="submit" class="btn btn-outline-primary">Apply</button>
                     </div>
                 </form>

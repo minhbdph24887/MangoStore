@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 @RequestMapping(value = "/mangostore/")
 public class ClientController {
@@ -28,7 +30,9 @@ public class ClientController {
     public String viewProductClient(Model model,
                                     HttpSession session,
                                     @Param("sortDirection") String sortDirection,
-                                    @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
-        return clientService.viewProductClient(model, session, sortDirection, pageNo);
+                                    @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                                    @RequestParam(name = "size", required = false) List<Long> sizes,
+                                    @RequestParam(name = "color", required = false) List<Long> colors) {
+        return clientService.viewProductClient(model, session, sortDirection, pageNo, sizes, colors);
     }
 }
