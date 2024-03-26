@@ -11,8 +11,10 @@ import org.springframework.mail.javamail.JavaMailSender;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Configuration
@@ -23,19 +25,22 @@ public class Gender {
     private final ProductDetailRepository productDetailRepository;
     private final SizeRepository sizeRepository;
     private final ColorRepository colorRepository;
+    private final VoucherRepository voucherRepository;
 
     public Gender(AccountRepository accountRepository,
                   JavaMailSender mailSender,
                   InvoiceRepository invoiceRepository,
                   ProductDetailRepository productDetailRepository,
                   SizeRepository sizeRepository,
-                  ColorRepository colorRepository) {
+                  ColorRepository colorRepository,
+                  VoucherRepository voucherRepository) {
         this.accountRepository = accountRepository;
         this.mailSender = mailSender;
         this.invoiceRepository = invoiceRepository;
         this.productDetailRepository = productDetailRepository;
         this.sizeRepository = sizeRepository;
         this.colorRepository = colorRepository;
+        this.voucherRepository = voucherRepository;
     }
 
     public String generateVerificationCode() {
@@ -229,5 +234,24 @@ public class Gender {
             productDetailCountByColor.put(color.getNameColor(), count);
         }
         return productDetailCountByColor;
+    }
+
+    public String voucherValidity() {
+        String validity = null;
+        for (Voucher voucher : voucherRepository.getAllVoucherOnline()) {
+            LocalDate startDate = voucher.getStartDay();
+            LocalDate endDate = voucher.getEndDate();
+            LocalDate today = LocalDate.now();
+            if (today.isBefore(startDate)) {
+                long dayUntilStart = ChronoUnit.DAYS.between(today, startDate);
+                validity = "Sử dụng sau: " + dayUntilStart + " day";
+            } else if (!today.isAfter(endDate)) {
+                long daysOfValidity = ChronoUnit.DAYS.between(today, endDate) + 1;
+                validity = "Hạn sử dụng: " + daysOfValidity + " day";
+            } else {
+                validity = "Voucher has expired";
+            }
+        }
+        return validity;
     }
 }

@@ -43,14 +43,10 @@ public class ClientServiceImpl implements ClientService {
         String email = (String) session.getAttribute("loginEmail");
         if (email != null) {
             Account detailAccount = accountRepository.detailAccountByEmail(email);
-            if (detailAccount.getStatus() == 0) {
-                session.invalidate();
-            } else {
-                model.addAttribute("profile", detailAccount);
-                Role detailRoleByEmail = roleRepository.getRoleByEmail(email);
-                if (detailRoleByEmail.getName().equals("ADMIN") || detailRoleByEmail.getName().equals("STAFF")) {
-                    model.addAttribute("checkAuthentication", detailRoleByEmail);
-                }
+            model.addAttribute("profile", detailAccount);
+            Role detailRoleByEmail = roleRepository.getRoleByEmail(email);
+            if (detailRoleByEmail.getName().equals("ADMIN") || detailRoleByEmail.getName().equals("STAFF")) {
+                model.addAttribute("checkAuthentication", detailRoleByEmail);
             }
         }
         return "client/Home";
@@ -64,14 +60,10 @@ public class ClientServiceImpl implements ClientService {
         String email = (String) session.getAttribute("loginEmail");
         if (email != null) {
             Account detailAccount = accountRepository.detailAccountByEmail(email);
-            if (detailAccount.getStatus() == 0) {
-                session.invalidate();
-            } else {
-                model.addAttribute("profile", detailAccount);
-                Role detailRoleByEmail = roleRepository.getRoleByEmail(email);
-                if (detailRoleByEmail.getName().equals("ADMIN") || detailRoleByEmail.getName().equals("STAFF")) {
-                    model.addAttribute("checkAuthentication", detailRoleByEmail);
-                }
+            model.addAttribute("profile", detailAccount);
+            Role detailRoleByEmail = roleRepository.getRoleByEmail(email);
+            if (detailRoleByEmail.getName().equals("ADMIN") || detailRoleByEmail.getName().equals("STAFF")) {
+                model.addAttribute("checkAuthentication", detailRoleByEmail);
             }
         }
 

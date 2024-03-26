@@ -18,6 +18,10 @@ public class VoucherClient {
     @ManyToOne
     @JoinColumn(name = "idAccount")
     private Account account;
+
+    @ManyToOne
+    @JoinColumn(name = "idVoucher")
+    private Voucher voucher;
     @DateTimeFormat(pattern = "yyyy-MM-dd : HH:mm:ss")
     private LocalDateTime saveDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -32,6 +36,7 @@ public class VoucherClient {
                          String nameVoucher,
                          Integer reducedValue,
                          Account account,
+                         Voucher voucher,
                          LocalDateTime saveDate,
                          LocalDate startDay,
                          LocalDate endDate,
@@ -42,6 +47,7 @@ public class VoucherClient {
         this.nameVoucher = nameVoucher;
         this.reducedValue = reducedValue;
         this.account = account;
+        this.voucher = voucher;
         this.saveDate = saveDate;
         this.startDay = startDay;
         this.endDate = endDate;
@@ -90,6 +96,14 @@ public class VoucherClient {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public Voucher getVoucher() {
+        return voucher;
+    }
+
+    public void setVoucher(Voucher voucher) {
+        this.voucher = voucher;
     }
 
     public LocalDateTime getSaveDate() {

@@ -36,7 +36,7 @@ public class UpdateAuto {
                 voucher.setVoucherStatus(2);
             }
 
-            if (voucher.getQuantity() == 0) {
+            if (voucher.getQuantity() == 0 || voucher.getVoucherStatus() == 0) {
                 voucher.setStatus(0);
             } else {
                 voucher.setStatus(1);

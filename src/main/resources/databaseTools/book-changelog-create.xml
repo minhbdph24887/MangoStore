@@ -205,6 +205,9 @@
             <column name="id_account" type="bigint">
                 <constraints nullable="false"/>
             </column>
+            <column name="id_voucher" type="bigint">
+                <constraints nullable="false"/>
+            </column>
             <column name="save_date" type="datetime2(6)"/>
             <column name="start_day" type="date"/>
             <column name="end_date" type="date"/>
@@ -320,7 +323,10 @@
     </changeSet>
     <changeSet id="21" author="minhbdph24887">
         <addForeignKeyConstraint baseTableName="voucher_client" baseColumnNames="id_account"
-                                 constraintName="fk_voucher_client" referencedTableName="accounts"
+                                 constraintName="fk_voucher_client_account" referencedTableName="accounts"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="voucher_client" baseColumnNames="id_voucher"
+                                 constraintName="fk_voucher_client_voucher" referencedTableName="voucher"
                                  referencedColumnNames="id"/>
     </changeSet>
     <changeSet id="22" author="minhbdph24887">

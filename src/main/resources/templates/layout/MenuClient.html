@@ -13,6 +13,8 @@
                         <li><a th:href="@{/mangostore/admin/home}" style="text-decoration: none;color: #555;">Product
                             Management</a></li>
                     </th:block>
+                    <li><a th:href="@{/mangostore/voucher}" style="text-decoration: none;color: #555;">Voucher Shop</a>
+                    </li>
                     <th:block th:unless="${profile != null}">
                         <li>
                             <a th:href="@{/mangostore/login/from}"
@@ -20,9 +22,8 @@
                         </li>
                     </th:block>
                     <th:block th:if="${profile != null}">
-                        <li><a href="" style="text-decoration: none;color: #555;">Orders</a></li>
                         <li>
-                            <a th:href="@{/mangostore/account}" style="text-decoration: none;color: #555;">
+                            <a th:href="@{/mangostore/profile}" style="text-decoration: none;color: #555;">
                                 <th:block th:if="${profile.getImages() != null}">
                                     <img th:src="@{|/image/profile/${profile.getImages()}|}" alt="Profile image"
                                          style="width: 36px; height: 36px; border-radius: 100%; margin-bottom: -3px;">
