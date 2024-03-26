@@ -1,5 +1,5 @@
 function successAlert(message) {
-    Swal.fire({
+    return Swal.fire({
         title: "Successfully",
         text: message,
         icon: "success"
