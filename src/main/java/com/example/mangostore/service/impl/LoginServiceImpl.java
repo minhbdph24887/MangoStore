@@ -1,13 +1,8 @@
 package com.example.mangostore.service.impl;
 
 import com.example.mangostore.config.Gender;
-import com.example.mangostore.entity.Account;
-import com.example.mangostore.entity.Rank;
-import com.example.mangostore.entity.Role;
-import com.example.mangostore.repository.AccountRepository;
-import com.example.mangostore.repository.AuthenticationRepository;
-import com.example.mangostore.repository.RankRepository;
-import com.example.mangostore.repository.RoleRepository;
+import com.example.mangostore.entity.*;
+import com.example.mangostore.repository.*;
 import com.example.mangostore.service.LoginService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -29,19 +24,25 @@ public class LoginServiceImpl implements LoginService {
     private final AuthenticationRepository authenticationRepository;
     private final RankRepository rankRepository;
     private final Gender gender;
+    private final ShoppingCartRepository shoppingCartRepository;
+    private final FavouriteRepository favouriteRepository;
 
     public LoginServiceImpl(AccountRepository accountRepository,
                             PasswordEncoder encoder,
                             RoleRepository roleRepository,
                             AuthenticationRepository authenticationRepository,
                             RankRepository rankRepository,
-                            Gender gender) {
+                            Gender gender,
+                            ShoppingCartRepository shoppingCartRepository,
+                            FavouriteRepository favouriteRepository) {
         this.accountRepository = accountRepository;
         this.encoder = encoder;
         this.roleRepository = roleRepository;
         this.authenticationRepository = authenticationRepository;
         this.rankRepository = rankRepository;
         this.gender = gender;
+        this.shoppingCartRepository = shoppingCartRepository;
+        this.favouriteRepository = favouriteRepository;
     }
 
     @Override
@@ -86,6 +87,19 @@ public class LoginServiceImpl implements LoginService {
             newAuthentication.setAccount(newAccount);
             newAuthentication.setRole(roleUser);
             authenticationRepository.save(newAuthentication);
+
+            ShoppingCart newShoppingCart = new ShoppingCart();
+            newShoppingCart.setCodeShoppingCart(gender.generateCode());
+            newShoppingCart.setAccount(newAccount);
+            newShoppingCart.setTotalShoppingCart(0);
+            newShoppingCart.setStatus(1);
+            shoppingCartRepository.save(newShoppingCart);
+
+            Favourite newFavourite = new Favourite();
+            newFavourite.setCodeFavourite(gender.generateCode());
+            newFavourite.setAccount(newAccount);
+            newFavourite.setStatus(1);
+            favouriteRepository.save(newFavourite);
 
             existUser = newAccount;
 
@@ -179,6 +193,19 @@ public class LoginServiceImpl implements LoginService {
             newAuthentication.setAccount(newAccount);
             newAuthentication.setRole(roleUser);
             authenticationRepository.save(newAuthentication);
+
+            ShoppingCart newShoppingCart = new ShoppingCart();
+            newShoppingCart.setCodeShoppingCart(gender.generateCode());
+            newShoppingCart.setAccount(newAccount);
+            newShoppingCart.setTotalShoppingCart(0);
+            newShoppingCart.setStatus(1);
+            shoppingCartRepository.save(newShoppingCart);
+
+            Favourite newFavourite = new Favourite();
+            newFavourite.setCodeFavourite(gender.generateCode());
+            newFavourite.setAccount(newAccount);
+            newFavourite.setStatus(1);
+            favouriteRepository.save(newFavourite);
 
             return "redirect:/mangostore/login/from";
         } else {

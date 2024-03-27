@@ -1,0 +1,12 @@
+.quantity-selector {
+    display: flex;
+    align-items: center;
+}
+
+.quantity-selector input[type='number'] {
+    text-align: center;
+}
+
+.quantity-selector .input-group-text {
+    padding: .375rem .75rem;
+}

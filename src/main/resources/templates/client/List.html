@@ -70,12 +70,14 @@
             <div class="col-md-12" style="height: 687px;">
                 <div class="form-group">
                     <div class="row">
-                        <div th:each="productDetail : ${listProductDetail}" class="mb-4"
+                        <div th:each="productDetail : ${listProductDetail}" class="mb-4 me-2"
                              style="flex: 0 0 20%; max-width: 20%;">
-                            <div class="card" style="width: 228px; height: 320px; margin: 0.05rem;">
+                            <div class="card" style="width: 228px; height: 320px; margin: 0.05rem 0.05rem 0.05rem 50px;">
                                 <div>
-                                    <img th:src="@{|/image/product/${productDetail.imagesProductDetail}|}"
-                                         alt="" style="width: 208px;margin-top: 4px;margin-left: 8px;">
+                                    <a th:href="@{/mangostore/product/detail/{id} (id= ${productDetail.id})}">
+                                        <img th:src="@{|/image/product/${productDetail.imagesProductDetail}|}"
+                                             alt="" style="width: 208px;margin-top: 4px;margin-left: 8px;">
+                                    </a>
                                 </div>
                                 <div style="margin-top: 6px; margin-left: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                     [[*{productDetail.getProduct().getNameProduct()}]]

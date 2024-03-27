@@ -15,7 +15,7 @@ function dangerAlert(message) {
 }
 
 function errorAlert(message) {
-    Swal.fire({
+    return Swal.fire({
         title: "Error!",
         text: message,
         icon: "error"

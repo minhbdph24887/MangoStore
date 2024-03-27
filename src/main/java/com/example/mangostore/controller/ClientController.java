@@ -10,10 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -78,5 +75,12 @@ public class ClientController {
     public String changePassword(@Valid Account profile,
                                  HttpSession session) {
         return passwordChangeService.updateChangePassword(profile, session);
+    }
+
+    @GetMapping(value = "product/detail/{id}")
+    public String detailProductClient(@PathVariable("id") Long idProductDetail,
+                                      Model model,
+                                      HttpSession session){
+        return clientService.detailProductClient(idProductDetail, model, session);
     }
 }

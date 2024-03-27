@@ -26,6 +26,8 @@ public class Gender {
     private final SizeRepository sizeRepository;
     private final ColorRepository colorRepository;
     private final VoucherRepository voucherRepository;
+    private final ShoppingCartRepository shoppingCartRepository;
+    private final ShoppingCartDetailRepository shoppingCartDetailRepository;
 
     public Gender(AccountRepository accountRepository,
                   JavaMailSender mailSender,
@@ -33,7 +35,9 @@ public class Gender {
                   ProductDetailRepository productDetailRepository,
                   SizeRepository sizeRepository,
                   ColorRepository colorRepository,
-                  VoucherRepository voucherRepository) {
+                  VoucherRepository voucherRepository,
+                  ShoppingCartRepository shoppingCartRepository,
+                  ShoppingCartDetailRepository shoppingCartDetailRepository) {
         this.accountRepository = accountRepository;
         this.mailSender = mailSender;
         this.invoiceRepository = invoiceRepository;
@@ -41,6 +45,8 @@ public class Gender {
         this.sizeRepository = sizeRepository;
         this.colorRepository = colorRepository;
         this.voucherRepository = voucherRepository;
+        this.shoppingCartRepository = shoppingCartRepository;
+        this.shoppingCartDetailRepository = shoppingCartDetailRepository;
     }
 
     public String generateVerificationCode() {
@@ -253,5 +259,14 @@ public class Gender {
             }
         }
         return validity;
+    }
+
+    public void updateTotalShoppingCart(ShoppingCart shoppingCart) {
+        List<ShoppingCartDetail> shoppingCartDetails = shoppingCartDetailRepository.getAllShoppingCart(shoppingCart.getId());
+        Integer total = shoppingCartDetails.stream()
+                .mapToInt(ShoppingCartDetail::getCapitalSum)
+                .sum();
+        shoppingCart.setTotalShoppingCart(total);
+        shoppingCartRepository.save(shoppingCart);
     }
 }

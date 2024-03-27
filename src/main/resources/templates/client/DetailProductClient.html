@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+      th:replace="~{/layout/IndexClient :: dynamic(~{:: main})}">
+<body>
+<main class="detailProductClientPage addToFavouritePage">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="card">
+                        <div class="container-fliud">
+                            <div class="wrapper row">
+                                <div class="preview col-md-6">
+                                    <div class="preview-pic tab-content">
+                                        <div class="tab-pane active" id="pic-1">
+                                            <img th:src="@{|/image/product/${detailProductClient.imagesProductDetail}|}"
+                                                 style="width: 401px; margin-left: 50px; margin-top: 15px;" alt=""/>
+                                        </div>
+                                        <div class="tab-pane" id="pic-2">
+                                            <img th:src="@{|/image/product/${detailProductClient.imagesProductDetail}|}"
+                                                 alt=""/>
+                                        </div>
+                                        <div class="tab-pane" id="pic-3">
+                                            <img th:src="@{|/image/product/${detailProductClient.imagesProductDetail}|}"
+                                                 alt=""/>
+                                        </div>
+                                        <div class="tab-pane" id="pic-4">
+                                            <img th:src="@{|/image/product/${detailProductClient.imagesProductDetail}|}"
+                                                 alt=""/>
+                                        </div>
+                                        <div class="tab-pane" id="pic-5">
+                                            <img th:src="@{|/image/product/${detailProductClient.imagesProductDetail}|}"
+                                                 alt=""/>
+                                        </div>
+                                    </div>
+                                    <ul class="preview-thumbnail nav nav-tabs">
+                                        <li class="active">
+                                            <a data-target="#pic-1" data-toggle="tab">
+                                                <img th:src="@{|/image/product/${detailProductClient.imagesProductDetail}|}"
+                                                     alt="" style="width: 65px;"/>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-target="#pic-2" data-toggle="tab">
+                                                <img th:src="@{|/image/product/${detailProductClient.imagesProductDetail}|}"
+                                                     alt="" style="width: 65px;"/>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-target="#pic-3" data-toggle="tab">
+                                                <img th:src="@{|/image/product/${detailProductClient.imagesProductDetail}|}"
+                                                     alt="" style="width: 65px;"/>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-target="#pic-4" data-toggle="tab">
+                                                <img th:src="@{|/image/product/${detailProductClient.imagesProductDetail}|}"
+                                                     alt="" style="width: 65px;"/>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-target="#pic-5" data-toggle="tab">
+                                                <img th:src="@{|/image/product/${detailProductClient.imagesProductDetail}|}"
+                                                     alt="" style="width: 65px;"/>
+                                            </a>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                                <div class="details col-md-6">
+                                    <h3 class="product-title">
+                                        [[*{detailProductClient.getProduct().getNameProduct()}]]</h3>
+                                    <div class="rating">
+                                        <div class="stars">
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star"></span>
+                                            <span class="fa fa-star"></span>
+                                        </div>
+                                    </div>
+                                    <p class="product-description">[[*{detailProductClient.getDescribe()}]]</p>
+                                    <h4 class="price"
+                                        th:with="priceRange=${priceRangeMap[detailProductClient.product.id]}"
+                                        style="color: red;margin-top: 14px;">
+                                        <span th:if="${priceRange.priceMin.equals(priceRange.priceMax)}">[[${#numbers.formatDecimal(priceRange.priceMin, 0, 'COMMA', 0, 'POINT')} + ' VND']]</span>
+                                        <span th:unless="${priceRange.priceMin.equals(priceRange.priceMax)}">[[${#numbers.formatDecimal(priceRange.priceMin, 0, 'COMMA', 0, 'POINT')} + ' - ' +${#numbers.formatDecimal(priceRange.priceMax, 0, 'COMMA', 0, 'POINT')} + ' VND']]</span>
+                                    </h4>
+                                    <p class="vote"><strong>91%</strong> of buyers enjoyed this product! <strong>(87
+                                        votes)</strong>
+                                    </p>
+                                    <div class="action">
+                                        <input type="hidden" id="checkLogin"
+                                               th:value="${profile != null ? 'profile' : 'null'}">
+                                        <button class="add-to-cart btn btn-outline-info" data-bs-toggle="modal"
+                                                data-bs-target="#addToCart" type="button">
+                                            <i class="bi bi-cart2"></i> Add To Cart
+                                        </button>
+                                        <button class="like btn btn-outline-secondary" data-bs-toggle="modal"
+                                                data-bs-target="#addToFavourite" type="button">
+                                            <span class="fa fa-heart"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="addToCart">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Please enter product attributes</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="hidden" id="idProduct" th:value="${detailProductClient.product.id}">
+                                <input type="hidden" id="productDetailClient" th:value="${detailProductClient.id}">
+                                <label for="size" class="form-label">Name Size: </label>
+                                <select class="form-select" name="size" id="size">
+                                    <option th:each="listSize : ${listSize}" th:value="${listSize.id}"
+                                            th:text="${'Size ' + listSize.nameSize}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="color" class="form-label">Name Color: </label>
+                                <select class="form-select" name="color" id="color">
+                                    <option th:each="listColor : ${listColor}" th:value="${listColor.id}"
+                                            th:text="${'Màu ' + listColor.nameColor}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Quantity: </label>
+                            <div class="container py-1">
+                                <div class="row align-items-center">
+                                    <div class="col-md-7">
+                                        <div class="quantity-selector input-group">
+                                            <button class="btn btn-outline-primary" type="button" id="button-minus"
+                                                    style="height: 38px;">
+                                                <span style="margin-bottom: 1px;">-</span>
+                                            </button>
+                                            <input type="number" class="form-control" value="1" min="1"
+                                                   aria-label="Số lượng"
+                                                   readonly style="height: 38px; width: 80px;">
+                                            <button class="btn btn-outline-primary" type="button" id="button-plus"
+                                                    style="height: 38px;">+
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5" style="margin-bottom: 18px;">
+                                        <span id="showQuantity"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="buttonCheck" class="btn btn-info" onclick="AddToCart()">Add To Cart
+                    </button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addToFavourite">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Please enter product attributes</h4>
+                </div>
+                <div class="modal-body addToFavourite">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="hidden" id="idProduct1" th:value="${detailProductClient.product.id}">
+                                <input type="hidden" id="productDetailClient1" th:value="${detailProductClient.id}">
+                                <label for="size1" class="form-label">Name Size: </label>
+                                <select class="form-select" name="size1" id="size1">
+                                    <option th:each="listSize : ${listSize}" th:value="${listSize.id}"
+                                            th:text="${'Size ' + listSize.nameSize}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="color1" class="form-label">Name Color: </label>
+                                <select class="form-select" name="color1" id="color1">
+                                    <option th:each="listColor : ${listColor}" th:value="${listColor.id}"
+                                            th:text="${'Màu ' + listColor.nameColor}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Quantity: </label>
+                            <div style="margin-bottom: 18px;">
+                                <span id="showQuantity1"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="buttonCheck1" class="btn btn-info" onclick="AddToFavourite()">Add To Favourite
+                    </button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

@@ -48,4 +48,7 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetail, Lo
             "from product_detail pd inner join (select id_product, max(id) as MaxId from product_detail group by id_product)\n" +
             "temp on pd.id_product = temp.id_product and pd.id = temp.MaxId inner join product p on pd.id_product = p.id order by pd.price desc", nativeQuery = true)
     Page<ProductDetail> sortProductDetailHighToLow(Pageable pageable);
+
+    @Query(value = "select * from product_detail where id_product= :idProduct and id_size= :idSize and id_color= :idColor", nativeQuery = true)
+    ProductDetail getQuantityProductDetail(@Param("idProduct") Long idProduct, @Param("idSize") Long idSize, @Param("idColor") Long idColor);
 }
