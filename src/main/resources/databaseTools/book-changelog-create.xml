@@ -312,7 +312,7 @@
             </column>
             <column name="quantity" type="integer"/>
             <column name="price" type="integer"/>
-            <column name="capital_sum" type="bigint"/>
+            <column name="capital_sum" type="integer"/>
             <column name="date_create" type="datetime2(6)"/>
             <column name="status" type="integer"/>
         </createTable>
