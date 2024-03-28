@@ -141,6 +141,10 @@ public class ClientServiceImpl implements ClientService {
 
         List<Color> itemsColor = colorRepository.findAll();
         model.addAttribute("listColor", itemsColor);
+
+        assert detailProductClient != null;
+        List<ProductDetail> getAllProductDetailByCategory = productDetailRepository.findAllByIdCategory(detailProductClient.getCategory().getId());
+        model.addAttribute("listProductDetailByCategory", getAllProductDetailByCategory);
         return "client/DetailProductClient";
     }
 

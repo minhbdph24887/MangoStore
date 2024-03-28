@@ -1,11 +1,11 @@
-<div xmlns:th="http://www.w3.org/1999/xhtml" style="background: radial-gradient(#fff, #fff);">
+<div class="checkCartPage" xmlns:th="http://www.w3.org/1999/xhtml" style="background: radial-gradient(#fff, #fff);">
     <div style="max-width: 1300px;margin: auto;padding-left: 25px;padding-right: 25px;">
-        <div style=" display: flex;align-items: center;padding: 20px;">
+        <div style=" display: flex;align-items: center;padding: 20px;max-height: 82px;">
             <div class="logo">
                 <a th:href="@{/mangostore/home}"><img th:src="@{|/image/logoMangoStore1.png|}" width="125px" alt=""
                                                       style="text-decoration: none;color: #555;"></a>
             </div>
-            <nav style="flex: 1;margin-top: -77px;text-align: right;">
+            <nav style="flex: 1;margin-top: 16px;text-align: right;">
                 <ul id="MenuItems" style="list-style-type: none;">
                     <li><a th:href="@{/mangostore/home}" style="text-decoration: none;color: #555;">Home</a></li>
                     <li><a th:href="@{/mangostore/product}" style="text-decoration: none;color: #555;">Products</a></li>
@@ -41,10 +41,12 @@
                     </th:block>
                 </ul>
             </nav>
-            <a th:href="@{/mangostore/cart}"><img th:src="@{|/image/cart.png|}" width="30px" height="30px" alt=""
-                                                  style="text-decoration: none;color: #555;"></a>
-            <img th:src="@{|/image/menu.png|}" onclick="menutoggle()" alt=""
-                 style="width: 28px;margin-left: 20px;display: none;">
+            <input type="hidden" id="checkLogin"
+                   th:value="${profile != null ? 'profile' : 'null'}">
+            <a onclick="checkCartIndex()">
+                <img th:src="@{|/image/cart.png|}" width="30px" height="30px" alt=""
+                     style="text-decoration: none;color: #555;">
+            </a>
         </div>
     </div>
 </div>

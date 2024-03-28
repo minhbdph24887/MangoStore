@@ -6,66 +6,17 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="form-group">
-                    <div class="card">
+                <div class="form-group" style="height: 415px;">
+                    <div class="card" style="height: 437px;">
                         <div class="container-fliud">
-                            <div class="wrapper row">
+                            <div class="wrapper row" style="height: 447px;">
                                 <div class="preview col-md-6">
                                     <div class="preview-pic tab-content">
                                         <div class="tab-pane active" id="pic-1">
                                             <img th:src="@{|/image/product/${detailProductClient.imagesProductDetail}|}"
                                                  style="width: 401px; margin-left: 50px; margin-top: 15px;" alt=""/>
                                         </div>
-                                        <div class="tab-pane" id="pic-2">
-                                            <img th:src="@{|/image/product/${detailProductClient.imagesProductDetail}|}"
-                                                 alt=""/>
-                                        </div>
-                                        <div class="tab-pane" id="pic-3">
-                                            <img th:src="@{|/image/product/${detailProductClient.imagesProductDetail}|}"
-                                                 alt=""/>
-                                        </div>
-                                        <div class="tab-pane" id="pic-4">
-                                            <img th:src="@{|/image/product/${detailProductClient.imagesProductDetail}|}"
-                                                 alt=""/>
-                                        </div>
-                                        <div class="tab-pane" id="pic-5">
-                                            <img th:src="@{|/image/product/${detailProductClient.imagesProductDetail}|}"
-                                                 alt=""/>
-                                        </div>
                                     </div>
-                                    <ul class="preview-thumbnail nav nav-tabs">
-                                        <li class="active">
-                                            <a data-target="#pic-1" data-toggle="tab">
-                                                <img th:src="@{|/image/product/${detailProductClient.imagesProductDetail}|}"
-                                                     alt="" style="width: 65px;"/>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a data-target="#pic-2" data-toggle="tab">
-                                                <img th:src="@{|/image/product/${detailProductClient.imagesProductDetail}|}"
-                                                     alt="" style="width: 65px;"/>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a data-target="#pic-3" data-toggle="tab">
-                                                <img th:src="@{|/image/product/${detailProductClient.imagesProductDetail}|}"
-                                                     alt="" style="width: 65px;"/>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a data-target="#pic-4" data-toggle="tab">
-                                                <img th:src="@{|/image/product/${detailProductClient.imagesProductDetail}|}"
-                                                     alt="" style="width: 65px;"/>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a data-target="#pic-5" data-toggle="tab">
-                                                <img th:src="@{|/image/product/${detailProductClient.imagesProductDetail}|}"
-                                                     alt="" style="width: 65px;"/>
-                                            </a>
-                                        </li>
-                                    </ul>
-
                                 </div>
                                 <div class="details col-md-6">
                                     <h3 class="product-title">
@@ -107,9 +58,32 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12">
+            <br>
+            <div class="col-md-12" style="margin-top: 24px;">
+                <h4> List Product Detail By Category</h4>
                 <div class="form-group">
-
+                    <div class="row">
+                        <div th:each="listProductDetailByCategory : ${listProductDetailByCategory}" class="mb-4 me-2"
+                             style="flex: 0 0 20%; max-width: 20%;">
+                            <div class="card"
+                                 style="width: 228px; height: 320px; margin: 0.05rem 0.05rem 0.05rem 50px;">
+                                <div>
+                                    <a th:href="@{/mangostore/product/detail/{id} (id= ${listProductDetailByCategory.id})}">
+                                        <img th:src="@{|/image/product/${listProductDetailByCategory.imagesProductDetail}|}"
+                                             alt="" style="width: 208px;margin-top: 4px;margin-left: 8px;">
+                                    </a>
+                                </div>
+                                <div style="margin-top: 6px; margin-left: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    [[*{listProductDetailByCategory.getProduct().getNameProduct()}]]
+                                </div>
+                                <div th:with="priceRange=${priceRangeMap[listProductDetailByCategory.product.id]}"
+                                     style="color: red;margin-top: 14px;margin-left: 20px;">
+                                    <span th:if="${priceRange.priceMin.equals(priceRange.priceMax)}">[[${#numbers.formatDecimal(priceRange.priceMin, 0, 'COMMA', 0, 'POINT')} + ' VND']]</span>
+                                    <span th:unless="${priceRange.priceMin.equals(priceRange.priceMax)}">[[${#numbers.formatDecimal(priceRange.priceMin, 0, 'COMMA', 0, 'POINT')} + ' - ' +${#numbers.formatDecimal(priceRange.priceMax, 0, 'COMMA', 0, 'POINT')} + ' VND']]</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -214,7 +188,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="buttonCheck1" class="btn btn-info" onclick="AddToFavourite()">Add To Favourite
+                    <button type="button" id="buttonCheck1" class="btn btn-info" onclick="AddToFavourite()">Add To
+                        Favourite
                     </button>
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 </div>

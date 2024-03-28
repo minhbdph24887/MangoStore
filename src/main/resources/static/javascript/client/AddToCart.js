@@ -1,6 +1,8 @@
 const checkDetailProductClient = document.querySelector(".detailProductClientPage");
 if (checkDetailProductClient) {
     let availableQuantity = 0;
+    const checkButton = document.getElementById("buttonCheck");
+    checkButton.disabled = true;
 
     function AddToCart() {
         const checkLogin = document.getElementById("checkLogin").value;
@@ -81,8 +83,6 @@ if (checkDetailProductClient) {
     });
 
     function GetQuantityProductDetail(idProduct, idSize, idColor) {
-        const checkButton = document.getElementById("buttonCheck");
-        checkButton.disabled = true;
         const data = {
             idProduct: idProduct,
             idSize: idSize,
@@ -124,6 +124,9 @@ if (checkDetailProductClient) {
 
 const checkAddToFavourite = document.querySelector(".addToFavouritePage");
 if (checkAddToFavourite) {
+    const checkButton1 = document.getElementById("buttonCheck1");
+    checkButton1.disabled = true;
+
     function AddToFavourite() {
         const checkLogin = document.getElementById("checkLogin").value;
         if (checkLogin === "null") {
@@ -143,6 +146,7 @@ if (checkAddToFavourite) {
             idSize: idSize1,
             idColor: idColor1,
         }
+
         $.ajax({
             type: "POST",
             url: "http://localhost:8080" + "/api/mangostore/add-to-favourite/client",
@@ -183,8 +187,6 @@ if (checkAddToFavourite) {
     });
 
     function GetQuantityProductDetail1(idProduct1, idSize1, idColor1) {
-        const checkButton1 = document.getElementById("buttonCheck1");
-        checkButton1.disabled = true;
         const data = {
             idProduct: idProduct1,
             idSize: idSize1,

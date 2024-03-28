@@ -13,6 +13,6 @@ import java.util.List;
 
 @Repository
 public interface ShoppingCartDetailRepository extends JpaRepository<ShoppingCartDetail, Long> {
-    @Query(value = "select * from shopping_cart_detail where id_shopping_cart= :shoppingCart", nativeQuery = true)
+    @Query(value = "select * from shopping_cart_detail where id_shopping_cart= :shoppingCart and status= 1", nativeQuery = true)
     List<ShoppingCartDetail> getAllShoppingCart(@Param("shoppingCart") Long idDetailShoppingCart);
 }

@@ -17,13 +17,13 @@
     <link rel="stylesheet" th:href="@{|/css/client/QuantitySelector.css|}">
     <link rel="stylesheet" th:href="@{|/css/admin/detailAccount.css|}">
     <link rel="stylesheet" th:href="@{|/css/admin/cssViewAdd.css|}">
+    <link rel="stylesheet" th:href="@{|/css/client/Cart.css|}">
     <title>Mango Store</title>
 </head>
 <body style="font-family: 'Poppins', sans-serif;">
 <div th:replace="/layout/MenuClient.html"></div>
 <div th:replace="${main}"></div>
 <div th:replace="/layout/Footer.html"></div>
-<script th:src="@{|/javascript/IndexClient.js|}"></script>
 <script th:src="@{|/javascript/client/ClickOptionSelect.js|}"></script>
 <script th:src="@{|/javascript/client/AddVoucher.js|}"></script>
 <script th:src="@{|/javascript/message/Alert.js|}"></script>
@@ -32,5 +32,6 @@
 <script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
 <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
 <script th:src="@{|/javascript/client/AddToCart.js|}"></script>
+<script th:src="@{|/javascript/layout/CheckCart.js|}"></script>
 </body>
 </html>
