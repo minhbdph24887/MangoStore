@@ -5,87 +5,96 @@
 <main>
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
-                <h2 class="text-center">Shopping Cart Home Page</h2>
-                <table id="cart" class="table table-hover table-condensed">
-                    <thead>
-                    <tr>
-                        <th style="width:50%">Tên sản phẩm</th>
-                        <th style="width:10%">Giá</th>
-                        <th style="width:8%">Số lượng</th>
-                        <th style="width:22%" class="text-center">Thành tiền</th>
-                        <th style="width:10%"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td data-th="Product">
-                            <div class="row">
-                                <div class="col-sm-2 hidden-xs"><img
-                                        src="http://hocwebgiare.com/thiet_ke_web_chuan_demo/shopping_cart/images/090.jpg"
-                                        alt="Sản phẩm 1" class="img-responsive" width="100">
-                                </div>
-                                <div class="col-sm-10">
-                                    <h4 class="nomargin">Sản phẩm 1</h4>
-                                    <p>Mô tả của sản phẩm 1</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td data-th="Price">200.000 đ</td>
-                        <td data-th="Quantity"><input class="form-control text-center" value="1" type="number">
-                        </td>
-                        <td data-th="Subtotal" class="text-center">200.000 đ</td>
-                        <td class="actions" data-th="">
-                            <button class="btn btn-info btn-sm"><i class="fa fa-edit"></i>
-                            </button>
-                            <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td data-th="Product">
-                            <div class="row">
-                                <div class="col-sm-2 hidden-xs"><img
-                                        src="http://hocwebgiare.com/thiet_ke_web_chuan_demo/shopping_cart/images/174.jpg"
-                                        alt="Sản phẩm 1" class="img-responsive" width="100">
-                                </div>
-                                <div class="col-sm-10">
-                                    <h4 class="nomargin">Sản phẩm 2</h4>
-                                    <p>Mô tả của sản phẩm 2</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td data-th="Price">300.000 đ</td>
-                        <td data-th="Quantity"><input class="form-control text-center" value="1" type="number">
-                        </td>
-                        <td data-th="Subtotal" class="text-center">300.000 đ</td>
-                        <td class="actions" data-th="">
-                            <button class="btn btn-info btn-sm"><i class="fa fa-edit"></i>
-                            </button>
-                            <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    </tbody>
-                    <tfoot>
-                    <tr class="visible-xs">
-                        <td class="text-center"><strong>Tổng 200.000 đ</strong>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><a href="http://hocwebgiare.com/" class="btn btn-warning"><i class="fa fa-angle-left"></i>
-                            Tiếp
-                            tục mua hàng</a>
-                        </td>
-                        <td colspan="2" class="hidden-xs"></td>
-                        <td class="hidden-xs text-center"><strong>Tổng tiền 500.000 đ</strong>
-                        </td>
-                        <td><a href="http://hocwebgiare.com/" class="btn btn-success btn-block">Thanh toán <i
-                                class="fa fa-angle-right"></i></a>
-                        </td>
-                    </tr>
-                    </tfoot>
-                </table>
+            <div class="col-md-12"><h2>Shopping Cart Home Page</h2>
+                <div class="table-responsive">
+                    <div class="header">
+                        <table class="table table-hover table-condensed">
+                            <thead>
+                            <tr>
+                                <th style="width:35%">Product's name</th>
+                                <th style="width:11%">Price</th>
+                                <th style="width:17%">Quantity</th>
+                                <th style="width:12%" class="text-center">Into Money</th>
+                                <th style="width:10%"></th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="content" style="height: 418px">
+                        <table class="table table-hover">
+                            <tbody>
+                            <tr th:each="listShoppingCartByAccount : ${listShoppingCartByAccount}">
+                                <td data-th="Product" style="width: 35%">
+                                    <div class="row">
+                                        <div class="col-sm-2 hidden-xs">
+                                            <img th:src="@{|/image/product/${listShoppingCartByAccount.productDetail.imagesProductDetail}|}"
+                                                 alt="Product 1" class="img-responsive" width="100">
+                                        </div>
+                                        <div class="col-sm-1"></div>
+                                        <div class="col-sm-9">
+                                            <h4 class="nomargin"
+                                                style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                [[*{listShoppingCartByAccount.productDetail.product.nameProduct}]]</h4>
+                                            <p th:utext="('Size ' + ${listShoppingCartByAccount.productDetail.size.nameSize} + ', Màu ' + ${listShoppingCartByAccount.productDetail.color.nameColor})"></p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-th="Price" style="width: 11%">
+                                    [[${#numbers.formatDecimal(listShoppingCartByAccount.productDetail.price, 0,
+                                    'COMMA', 0, 'POINT')} + ' VND']]
+                                </td>
+                                <td data-th="Quantity" style="width: 17%">
+                                    <div class="quantity-selector input-group">
+                                        <form th:action="@{/mangostore/cart/reduce(id=${listShoppingCartByAccount.id})}"
+                                              method="post">
+                                            <button class="btn btn-outline-primary" type="submit" style="height: 38px;">
+                                                <span style="margin-bottom: 1px;">-</span></button>
+                                        </form>
+                                        <input type="number" class="form-control"
+                                               th:value="${listShoppingCartByAccount.quantity}" min="0"
+                                               aria-label="Số lượng" readonly style="height: 38px; width: 80px;">
+                                        <form th:action="@{/mangostore/cart/increase(id=${listShoppingCartByAccount.id})}"
+                                              method="post">
+                                            <button class="btn btn-outline-primary" type="submit" style="height: 38px;">
+                                                +
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td data-th="Subtotal" class="text-center" style="width: 12%">
+                                    [[${#numbers.formatDecimal(listShoppingCartByAccount.capitalSum, 0, 'COMMA', 0,
+                                    'POINT')} + ' VND']]
+                                </td>
+                                <td class="actions" data-th="" style="width: 10%">
+                                    <a type="bottom"
+                                       th:href="@{/mangostore/cart/delete(id=${listShoppingCartByAccount.id})}"
+                                       class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <table>
+                            <tfoot>
+                            <tr>
+                                <td style="width: 40%">
+                                    <a th:href="@{/mangostore/product}" class="btn btn-warning"><i
+                                            class="fa fa-angle-left"></i> Continue shopping</a>
+                                </td>
+                                <td style="width: 40%" class="hidden-xs text-center">
+                                    <strong style="margin-left: 50px;">TotalAmount: [[*{totalShoppingCart}]]</strong>
+                                </td>
+                                <td style="width: 30%">
+                                    <a th:href="@{/mangostore/cart/checkout}" class="btn btn-success btn-block"
+                                       style="width: 119px; margin-left: 115px;">Check Out <i
+                                            class="fa fa-angle-right"></i></a>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -7,7 +7,7 @@ function successAlert(message) {
 }
 
 function dangerAlert(message) {
-    Swal.fire({
+    return Swal.fire({
         title: "Warning",
         text: message,
         icon: "info"
