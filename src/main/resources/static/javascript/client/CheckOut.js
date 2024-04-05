@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         function checkInvoiceExpiry() {
             const now = moment();
-            if (now.diff(invoiceCreationMoment, 'minutes') >= 1) {
+            if (now.diff(invoiceCreationMoment, 'minutes') >= 30) {
                 if (!alertShown) {
                     alertShown = true;
                     dangerAlert('The invoice has expired, please create a new invoice.').then((result) => {
@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 clearInterval(intervalId);
             }
         }
+
         const intervalId = setInterval(checkInvoiceExpiry, 1000);
     }
 });

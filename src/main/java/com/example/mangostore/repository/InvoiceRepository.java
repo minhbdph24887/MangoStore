@@ -19,6 +19,6 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     @Query(value = "select * from invoice where id= :idInvoice", nativeQuery = true)
     List<Invoice> getAllInvoiceById(@Param("idInvoice") Long idInvoice);
 
-    @Query(value = "select * from invoice where id_customer= :idCustomer and invoice_form= 'paying' and invoice_status= 1", nativeQuery = true)
+    @Query(value = "select * from invoice where id_customer= :idCustomer and invoice_form= 'paying' and invoice_status= 0", nativeQuery = true)
     Invoice findInvoiceByIdAccount(@Param("idCustomer") Long idCustomer);
 }

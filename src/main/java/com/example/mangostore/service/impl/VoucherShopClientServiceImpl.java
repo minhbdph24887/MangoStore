@@ -68,7 +68,7 @@ public class VoucherShopClientServiceImpl implements VoucherShopClientService {
             return false;
         } else {
             VoucherClient voucherClient = new VoucherClient();
-            voucherClient.setCodeVoucher(voucher.getCodeVoucher());
+            voucherClient.setCodeVoucher(gender.generateCode());
             voucherClient.setNameVoucher(voucher.getNameVoucher());
             voucherClient.setReducedValue(voucher.getReducedValue());
             voucherClient.setAccount(detailAccount);

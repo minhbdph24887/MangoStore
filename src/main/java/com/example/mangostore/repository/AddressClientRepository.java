@@ -18,4 +18,13 @@ public interface AddressClientRepository extends JpaRepository<AddressClient, Lo
 
     @Query(value = "select * from address_client where name_client like %:searchNameClient% and status= 1", nativeQuery = true)
     List<AddressClient> searchNameClient(@Param("searchNameClient") String searchClient);
+
+    @Query(value = "select distinct addres.* from address_client addres inner join  accounts client on addres.id_account = client.id where client.id = :idAccount and addres.status= 1", nativeQuery = true)
+    List<AddressClient> findAllByIdAccountAndStatus(@Param("idAccount") Long idAccount);
+
+    @Query(value = "select * from address_client where id_account= :idAccount", nativeQuery = true)
+    List<AddressClient> findAllByAccount(@Param("idAccount") Long id);
+
+    @Query(value = "select * from address_client where id_account= :idAccount and status= 1", nativeQuery = true)
+    AddressClient addressClientDefault(@Param("idAccount") Long idAccount);
 }

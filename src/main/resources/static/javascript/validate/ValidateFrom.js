@@ -98,3 +98,37 @@ if (showPassWord) {
         togglePasswordButton.addEventListener('click', togglePassword);
     });
 }
+
+const addAddressClient = document.querySelector(".addAddressClient");
+if (addAddressClient) {
+    function AddAddressClient() {
+        const nameClient = document.getElementById("nameClientInput").value;
+        const numberPhone = document.getElementById("numberPhoneInput").value;
+        const city = document.getElementById("city").value;
+        const district = document.getElementById("district").value;
+        const ward = document.getElementById("ward").value;
+        const specificAddress = document.getElementById("specificAddress").value;
+
+        const phonePattern = /^0\d{9}$/;
+        if (!nameClient.trim()) {
+            dangerAlert("Customer name cannot be empty");
+            return false;
+        } else if (!phonePattern.test(numberPhone) || isNaN(numberPhone)) {
+            dangerAlert("This is not a valid phone number");
+            return false;
+        } else if (!city.trim()) {
+            dangerAlert("City cannot be empty");
+            return false;
+        } else if (!district.trim()) {
+            dangerAlert("District cannot be empty");
+            return false;
+        } else if (!ward.trim()) {
+            dangerAlert("Commune cannot be empty");
+            return false;
+        } else if (!specificAddress.trim()) {
+            dangerAlert("Specific Address cannot be empty");
+            return false;
+        } else {
+        }
+    }
+}

@@ -43,3 +43,11 @@ function confirmUpdateAlert(message1, message2) {
         }
     });
 }
+
+function addAlert(message1, message2) {
+    if (!confirm(message1)) {
+        return false;
+    } else {
+        alert(message2);
+    }
+}

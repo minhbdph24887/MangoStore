@@ -35,6 +35,7 @@ public class Invoice {
     private Integer totalInvoiceAmount;
     private String payments;
     private Integer returnClientMoney;
+    private Integer shippingMoney;
     private Integer leftoverMoney;
     private Integer totalPayment;
     private Integer invoiceStatus;
@@ -54,6 +55,7 @@ public class Invoice {
                    Integer totalInvoiceAmount,
                    String payments,
                    Integer returnClientMoney,
+                   Integer shippingMoney,
                    Integer leftoverMoney,
                    Integer totalPayment,
                    Integer invoiceStatus) {
@@ -72,6 +74,7 @@ public class Invoice {
         this.totalInvoiceAmount = totalInvoiceAmount;
         this.payments = payments;
         this.returnClientMoney = returnClientMoney;
+        this.shippingMoney = shippingMoney;
         this.leftoverMoney = leftoverMoney;
         this.totalPayment = totalPayment;
         this.invoiceStatus = invoiceStatus;
@@ -190,6 +193,14 @@ public class Invoice {
 
     public void setReturnClientMoney(Integer returnClientMoney) {
         this.returnClientMoney = returnClientMoney;
+    }
+
+    public Integer getShippingMoney() {
+        return shippingMoney;
+    }
+
+    public void setShippingMoney(Integer shippingMoney) {
+        this.shippingMoney = shippingMoney;
     }
 
     public Integer getLeftoverMoney() {

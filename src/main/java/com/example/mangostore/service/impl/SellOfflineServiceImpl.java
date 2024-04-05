@@ -143,13 +143,14 @@ public class SellOfflineServiceImpl implements SellOfflineService {
                 model.addAttribute("detailInvoice", detailInvoice);
 
                 assert detailInvoice != null;
+
                 if (detailInvoice.getIdCustomer() != null) {
                     Account detailAccountByIdAccount = accountRepository.findById(detailInvoice.getIdCustomer()).orElse(null);
                     assert detailAccountByIdAccount != null;
                     model.addAttribute("nameClient", detailAccountByIdAccount.getFullName());
                     model.addAttribute("pointClient", detailAccountByIdAccount.getAccumulatedPoints());
 
-                    List<Voucher> itemsVoucherOffline = voucherRepository.findVoucherByVoucherFrom(detailAccount.getRank().getId());
+                    List<Voucher> itemsVoucherOffline = voucherRepository.findVoucherByVoucherFrom(detailAccountByIdAccount.getRank().getId());
                     model.addAttribute("listVoucherClient", itemsVoucherOffline);
                 } else {
                     List<Voucher> itemsVoucherOffline = voucherRepository.getAllVoucherByStatus1();
@@ -253,7 +254,7 @@ public class SellOfflineServiceImpl implements SellOfflineService {
     public String cancelInvoice(Long idInvoice) {
         Invoice invoice = invoiceRepository.findById(idInvoice).orElse(null);
         assert invoice != null;
-        invoice.setInvoiceStatus(6);
+        invoice.setInvoiceStatus(5);
         invoiceRepository.save(invoice);
 
         if (invoice.getVoucher() != null) {
@@ -305,6 +306,7 @@ public class SellOfflineServiceImpl implements SellOfflineService {
                 newInvoiceDetail.setProductDetail(detail);
                 newInvoiceDetail.setQuantity(newQuantity);
                 newInvoiceDetail.setPrice(detail.getPrice());
+                newInvoiceDetail.setForm("offline");
                 newInvoiceDetail.setCapitalSum(sum);
                 invoiceDetailRepository.save(newInvoiceDetail);
 
@@ -382,10 +384,10 @@ public class SellOfflineServiceImpl implements SellOfflineService {
         invoice.setPayments("cash");
         Integer leftoverMoney = request.getReturnClientMoney() - invoice.getTotalPayment();
         invoice.setLeftoverMoney(leftoverMoney);
-        invoice.setInvoiceStatus(5);
+        invoice.setInvoiceStatus(6);
         invoiceRepository.save(invoice);
 
-        List<InvoiceDetail> getAllInvoiceDetail = invoiceDetailRepository.findAllByIdInvoice(request.getIdInvoice());
+        List<InvoiceDetail> getAllInvoiceDetail = invoiceDetailRepository.getAllInvoiceDetailByIdInvoice(request.getIdInvoice());
         for (InvoiceDetail detail : getAllInvoiceDetail) {
             ProductDetail productDetail = productDetailRepository.findById(detail.getProductDetail().getId()).orElse(null);
             assert productDetail != null;
@@ -503,58 +505,5 @@ public class SellOfflineServiceImpl implements SellOfflineService {
         String vnPayUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
         assert invoice != null;
         return "redirect:" + gender.createPaymentVnPay(invoice, vnPayUrl);
-    }
-
-    @Override
-    public String bankingSuccess(HttpServletRequest request, HttpSession session) {
-        int paymentStatus = gender.orderReturn(request);
-        Long idInvoice = (Long) session.getAttribute("idInvoice");
-        if (paymentStatus == 1) {
-            Invoice invoice = invoiceRepository.findById(idInvoice).orElse(null);
-            assert invoice != null;
-            invoice.setInvoicePaymentDate(LocalDateTime.parse(gender.getCurrentDateTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd : HH:mm:ss")));
-            invoice.setReturnClientMoney(invoice.getTotalPayment());
-            invoice.setPayments("banking");
-            invoice.setLeftoverMoney(0);
-            invoice.setInvoiceStatus(5);
-            invoiceRepository.save(invoice);
-
-            List<InvoiceDetail> getAllInvoiceDetail = invoiceDetailRepository.findAllByIdInvoice(idInvoice);
-            for (InvoiceDetail detail : getAllInvoiceDetail) {
-                ProductDetail productDetail = productDetailRepository.findById(detail.getProductDetail().getId()).orElse(null);
-                assert productDetail != null;
-                Integer quantityNew = productDetail.getQuantity() - detail.getQuantity();
-                productDetail.setQuantity(quantityNew);
-                productDetailRepository.save(productDetail);
-            }
-
-            if (invoice.getIdCustomer() != null) {
-                Double rewardPoints = invoice.getTotalInvoiceAmount().doubleValue() / 12500;
-                Integer addPoints = gender.roundingNumber(rewardPoints);
-                Account detailAccount = accountRepository.findById(invoice.getIdCustomer()).orElse(null);
-                assert detailAccount != null;
-                Integer points = detailAccount.getAccumulatedPoints() + addPoints;
-                detailAccount.setAccumulatedPoints(points);
-                accountRepository.save(detailAccount);
-
-                List<Rank> itemsRank = rankRepository.getAllRankByStatus1();
-                itemsRank.sort((rank1, rank2) -> rank2.getMaximumScore().compareTo(rank1.getMaximumScore()));
-                for (Rank rank : itemsRank) {
-                    if (detailAccount.getAccumulatedPoints() >= rank.getMinimumScore() && detailAccount.getAccumulatedPoints() < rank.getMaximumScore()) {
-                        detailAccount.setRank(rank);
-                        break;
-                    } else if (detailAccount.getAccumulatedPoints() >= rank.getMaximumScore()) {
-                        detailAccount.setRank(itemsRank.get(0));
-                        break;
-                    }
-                }
-                accountRepository.save(detailAccount);
-            }
-            System.out.println("Thanh Toan Thanh Cong");
-            return "redirect:/mangostore/admin/sell";
-        } else {
-            System.out.println("Thanh Toan That Bai");
-            return "redirect:/mangostore/admin/sell/edit?id=" + idInvoice;
-        }
     }
 }

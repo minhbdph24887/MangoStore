@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
       th:replace="~{/layout/IndexClient :: dynamic(~{:: main})}">
 <body>
-<main class="checkOutPage checkOutPage">
+<main class="checkOutPage apiAddress addAddressClient checkButtonCheckOut">
     <div class="container">
         <h2 class="title">View Checkout</h2>
         <div class="row" style="--bs-gutter-y: -3rem;">
@@ -28,182 +28,361 @@
                     </li>
                     <li class="list-group-item d-flex justify-content-between lh-sm">
                         <div>
-                            <h6 class="my-0">Focut shirt </h6>
-                            <small class="text-muted">Ladki pat jayegi</small>
+                            <h6 class="my-0">Conversion Point:</h6>
                         </div>
-                        <span class="text-muted">₹500</span>
+                        <th:block th:if="${conversionPoint != null}">
+                            <span class="text-muted"
+                                  th:text="${#numbers.formatDecimal(conversionPoint, 0, 'COMMA', 0, 'POINT') + ' VND'}"></span>
+                        </th:block>
+                        <th:block th:unless="${conversionPoint != null}">
+                            <span class="text-muted">No Data</span>
+                        </th:block>
                     </li>
-                    <li class="list-group-item d-flex justify-content-between bg-light">
-                        <div class="text-success">
-                            <h6 class="my-0">Promo code</h6>
-                            <small>SALE500</small>
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">Shipping Money:</h6>
                         </div>
-                        <span class="text-success">−₹500</span>
+                        <span class="text-muted"
+                              th:text="${#numbers.formatDecimal(shoppingCart.getShippingMoney(), 0, 'COMMA', 0, 'POINT') + ' VND'}"></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">Reduced Voucher:</h6>
+                        </div>
+                        <th:block th:if="${shoppingCart.getVoucherClient() != null}">
+                            <span class="text-muted"
+                                  th:text="${#numbers.formatDecimal(shoppingCart.getVoucherClient().getReducedValue(), 0, 'COMMA', 0, 'POINT') + ' VND'}"></span>
+                        </th:block>
+                        <th:block th:unless="${shoppingCart.getVoucherClient() != null}">
+                            <span class="text-muted">No Data</span>
+                        </th:block>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
-                        <span>Total (Rupee)</span>
-                        <strong>₹1500</strong>
+                        <span>Total Payment:</span>
+                        <strong th:text="${#numbers.formatDecimal(shoppingCart.getTotalPayment(), 0, 'COMMA', 0, 'POINT') + ' VND'}"></strong>
                     </li>
                 </ul>
 
-                <form class="card p-2">
+                <div class="card p-2 mb-3">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Promo code">
-                        <button type="submit" class="btn btn-danger">Redeem</button>
+                        <th:block th:if="${shoppingCart.getVoucherClient() != null}">
+                            <label>
+                                <input type="text" class="form-control"
+                                       th:value="${shoppingCart.getVoucherClient().getCodeVoucher()}"
+                                       style="width: 240px; height: 47px;" readonly>
+                            </label>
+                        </th:block>
+                        <th:block th:unless="${shoppingCart.getVoucherClient() != null}">
+                            <label>
+                                <input type="text" class="form-control" value="No use voucher"
+                                       style="width: 240px; height: 47px;" readonly>
+                            </label>
+                        </th:block>
+                        <button type="submit" class="btn btn-info" data-bs-toggle="modal"
+                                data-bs-target="#addVoucher">Choose
+                        </button>
                     </div>
-                </form>
+                </div>
+
+                <div class="card p-2">
+                    <h5>Payment Methods</h5>
+                    <div class="form-check">
+                        <input type="radio" name="payment" class="form-check-input" id="cod">
+                        <label class="form-check-label" for="cod">Pay After Recieve</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input type="radio" name="payment" class="form-check-input" id="banking">
+                        <label class="form-check-label" for="banking">Always transfer money</label>
+                    </div>
+                </div>
             </div>
             <div class="col-md-7 col-lg-8">
                 <h4 class="mb-3">Invoice Information</h4>
-                <form class="needs-validation" novalidate>
-                    <div class="row g-3">
-                        <div class="col-sm-6">
-                            <label for="firstName" class="form-label">First name</label>
-                            <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
-                            <div class="invalid-feedback">
-                                Valid first name is required.
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <label for="lastName" class="form-label">Last name</label>
-                            <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
-                            <div class="invalid-feedback">
-                                Valid last name is required.
-                            </div>
-                        </div>
-
-
-                        <div class="col-12">
-                            <label for="email" class="form-label">Email <span
-                                    class="text-muted">(Optional)</span></label>
-                            <input type="email" class="form-control" id="email" placeholder="you@example.com">
-                            <div class="invalid-feedback">
-                                Please enter a valid email address for shipping updates.
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <label for="address" class="form-label">Address</label>
-                            <input type="text" class="form-control" id="address" placeholder="Plaza street" required>
-                            <div class="invalid-feedback">
-                                Please enter your shipping address.
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <label for="address2" class="form-label">Address 2 <span
-                                    class="text-muted">(Optional)</span></label>
-                            <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
-                        </div>
-
-                        <div class="col-md-5">
-                            <label for="country" class="form-label">Country</label>
-                            <select class="form-select" id="country" required>
-                                <option value="">Choose...</option>
-                                <option>India</option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Please select a valid country.
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <label for="state" class="form-label">State</label>
-                            <select class="form-select" id="state" required>
-                                <option value="">Choose...</option>
-                                <option>Delhi</option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Please provide a valid state.
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="zip" class="form-label">Zip</label>
-                            <input type="text" class="form-control" id="zip" placeholder="" required>
-                            <div class="invalid-feedback">
-                                Zip code required.
-                            </div>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label">Delivery Address:</label>
+                        <div class="input-group">
+                            <th:block th:if="${shoppingCart.getAddressClient() != null}">
+                                <th:block th:each="addressClientStatus : ${addressClientStatus}">
+                                    <table style="width: 552px;">
+                                        <tr>
+                                            <td th:text="${addressClientStatus.nameClient + ', ' + addressClientStatus.phoneNumber}"></td>
+                                        </tr>
+                                        <tr>
+                                            <td th:text="${addressClientStatus.specificAddress + ', ' + addressClientStatus.commune + ', ' +
+                                            addressClientStatus.district + ', ' + addressClientStatus.province}"></td>
+                                        </tr>
+                                    </table>
+                                </th:block>
+                            </th:block>
+                            <th:block th:unless="${shoppingCart.getAddressClient() != null}">
+                                <table style="width: 552px;">
+                                    <tr>
+                                        <td>No Address</td>
+                                    </tr>
+                                </table>
+                            </th:block>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#myModal1" style="margin-left: 40px;">
+                                Select Address
+                            </button>
                         </div>
                     </div>
-
-                    <hr class="my-4">
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="same-address">
-                        <label class="form-check-label" for="same-address">Shipping address is the same as my billing
-                            address</label>
+                </div>
+                <br>
+                <form th:action="@{/mangostore/cart/client-point/add}" method="post">
+                    <label class="form-label">Customer Points:</label>
+                    <div class="d-flex">
+                        <label>
+                            <input type="text" class="form-control me-2" th:value="${pointClient + ' point'}"
+                                   style="width: 275px;height: 48px;"
+                                   readonly>
+                        </label>
+                        <button type="submit" class="btn btn-secondary">Apply</button>
                     </div>
-
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="save-info">
-                        <label class="form-check-label" for="save-info">Save this information for next time</label>
-                    </div>
-
-                    <hr class="my-4">
-
-                    <h4 class="mb-3">Payment</h4>
-
-                    <div class="my-3">
-                        <div class="form-check">
-                            <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked
-                                   required>
-                            <label class="form-check-label" for="credit">Credit card</label>
-                        </div>
-                        <div class="form-check">
-                            <input id="debit" name="paymentMethod" type="radio" class="form-check-input" required>
-                            <label class="form-check-label" for="debit">Debit card</label>
-                        </div>
-                        <div class="form-check">
-                            <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required>
-                            <label class="form-check-label" for="paypal">Paytm</label>
-                        </div>
-                        <div class="form-check">
-                            <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required>
-                            <label class="form-check-label" for="paypal">Phonepe</label>
-                        </div>
-                    </div>
-
-                    <div class="row gy-3">
-                        <div class="col-md-6">
-                            <label for="cc-name" class="form-label">Name on card</label>
-                            <input type="text" class="form-control" id="cc-name" placeholder="" required>
-                            <small class="text-muted">Full name as displayed on card</small>
-                            <div class="invalid-feedback">
-                                Name on card is required
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="cc-number" class="form-label">Credit card number</label>
-                            <input type="text" class="form-control" id="cc-number" placeholder="" required>
-                            <div class="invalid-feedback">
-                                Credit card number is required
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="cc-expiration" class="form-label">Expiration</label>
-                            <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
-                            <div class="invalid-feedback">
-                                Expiration date required
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="cc-cvv" class="form-label">CVV</label>
-                            <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
-                            <div class="invalid-feedback">
-                                Security code required
-                            </div>
-                        </div>
-                    </div>
-
-                    <hr class="my-4">
-
-                    <button class="w-100 btn btn-danger btn-lg" type="submit">Continue to checkout</button>
+                    <span>* 1 point = 1,000 VND</span>
                 </form>
+                <br>
+                <h5>List of products in the invoice</h5>
+                <div class="content" style="height: 418px">
+                    <th:block th:each="listProductByIdInvoice : ${listProductByIdInvoice}">
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td style="padding-bottom: 22px;">
+                                    <img th:src="@{|/image/product/${listProductByIdInvoice.productDetail.imagesProductDetail}|}"
+                                         alt="" style="width: 85px;height: 89px;">
+                                </td>
+                                <td>
+                                    <div class="me-5">
+                                        <h6 style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 298px;margin-left: 18px;">
+                                            [[*{listProductByIdInvoice.productDetail.product.nameProduct}]]</h6>
+                                        <div class="d-flex">
+                                            <p th:utext="('Size ' + ${listProductByIdInvoice.productDetail.size.nameSize} + ', Màu ' + ${listProductByIdInvoice.productDetail.color.nameColor})"
+                                               class="me-2" style="margin-left: 17px"></p>
+                                            <span th:text="${'x' + listProductByIdInvoice.quantity}"></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td th:text="${#numbers.formatDecimal(listProductByIdInvoice.price, 0, 'COMMA', 0, 'POINT') + ' VND'}"
+                                    class="text-end pe-4"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </th:block>
+                </div>
+                <div class="row gy-3 d-flex justify-content-between">
+                    <div class="col-md-6">
+                        <a href="@{/mangostore/cart}" class="btn btn-default btn-lg me-2" style="width: 315px;">Back To
+                            Cart</a>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-success btn-lg" type="submit" style="width: 353px;"
+                                th:data-invoice-id="${shoppingCart.getId()}" onclick="handlePaymentSelection()">Continue
+                            to checkout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">List Address Client</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/mangostore/cart/client-address/update-status}" method="post">
+                        <div th:if="${listAddressClient.empty}">
+                            <h5>No customer address</h5>
+                        </div>
+                        <div th:unless="${listAddressClient.empty}">
+                            <h5>List Address</h5>
+                            <div class="content" style="height: 418px">
+                                <th:block th:each="getAllAddressClient : ${listAddressClient}">
+                                    <table>
+                                        <tbody>
+                                        <tr>
+                                            <td class="d-flex">
+                                                <label>
+                                                    <input type="radio" name="id" th:value="${getAllAddressClient.id}"
+                                                           th:checked="${getAllAddressClient.status == 1}">
+                                                    <span th:text="${getAllAddressClient.nameClient + ' || ' + getAllAddressClient.phoneNumber}"></span>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td th:text="${getAllAddressClient.specificAddress + ', ' + getAllAddressClient.commune + ', ' +
+                                            getAllAddressClient.district + ', ' + getAllAddressClient.province}"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-bottom: 22px;">
+                                                <th:block th:if="${getAllAddressClient.status == 1}">
+                                                    <span style="margin-right: 434px;color: red;font-size: 20px;border: 1px solid red;">Default</span>
+                                                </th:block>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </th:block>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Apply</button>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#myModal2">
+                                + Add address
+                            </button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal2" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Address</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/mangostore/cart/address-client/create}" th:object="${newAddressClient}"
+                          method="post">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="nameClientInput" class="form-label">Name Client:</label>
+                                    <input type="text" id="nameClientInput" class="form-control" name="nameClient"
+                                           placeholder="Enter Name Client">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="numberPhoneInput" class="form-label">Number Phone:</label>
+                                    <input type="text" id="numberPhoneInput" class="form-control" name="phoneNumber"
+                                           placeholder="Enter Phone Number">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <span>what is your address?</span>
+                                <div class="col-md-4">
+                                    <label class="form-label">Province:</label>
+                                    <select name="province" class="form-select form-select-sm mb-3" id="city"
+                                            aria-label=".form-select-sm">
+                                        <option value="" selected>Chọn tỉnh thành</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">District:</label>
+                                    <select name="district" class="form-select form-select-sm mb-3" id="district"
+                                            aria-label=".form-select-sm">
+                                        <option value="" selected>Chọn quận huyện</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Commune:</label>
+                                    <select name="commune" class="form-select form-select-sm" id="ward"
+                                            aria-label=".form-select-sm">
+                                        <option value="" selected>Chọn phường xã</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="specificAddress" class="form-label">Specific Address:</label>
+                                    <textarea id="specificAddress" class="form-control" name="specificAddress"
+                                              placeholder="Enter a specific address"></textarea>
+                                </div>
+                                <div class="col-md-12">
+                                    <br>
+                                    <label><input type="radio" name="status" value="1" checked/> set as default address</label>
+                                    <br>
+                                    <label><input type="radio" name="status" value="0"/> do not select as default
+                                        address</label>
+                                    <br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" onclick="return AddAddressClient()">Save
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addVoucher">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">List Voucher</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/mangostore/cart/client-voucher/add}" method="post">
+                        <div th:if="${listVoucherClient.empty}">
+                            <h5>No customer voucher</h5>
+                        </div>
+                        <div th:unless="${listVoucherClient.empty}">
+                            <h5>List Address</h5>
+                            <div class="content" style="height: 418px">
+                                <th:block th:each="getAllVoucherClient : ${listVoucherClient}">
+                                    <table>
+                                        <tbody>
+                                        <tr>
+                                            <td style="padding-bottom: 22px;">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="card mb-4" style="width: 750px;">
+                                                            <div class="row g-0">
+                                                                <div class="col-md-3">
+                                                                    <i class="bi bi-receipt-cutoff"
+                                                                       style="font-size: 81px; margin-left: 12px;"></i>
+                                                                </div>
+                                                                <div class="col-md-7">
+                                                                    <div class="card-body">
+                                                                        <h5 class="card-title"
+                                                                            th:text="${getAllVoucherClient.nameVoucher}"
+                                                                            style="margin-right: 293px;"></h5>
+                                                                        <p class="card-text"
+                                                                           th:text="${'Decrease to: ' + #numbers.formatDecimal(getAllVoucherClient.reducedValue, 0, 'COMMA', 0, 'POINT') + ' VND'}"
+                                                                           style="margin-right: 184px; white-space: nowrap;"></p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2 d-flex align-items-center justify-content-center">
+                                                                    <label>
+                                                                        <input type="checkbox" name="id"
+                                                                               style="transform: scale(1.5);"
+                                                                               th:value="${getAllVoucherClient.id}">
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </th:block>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Apply</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

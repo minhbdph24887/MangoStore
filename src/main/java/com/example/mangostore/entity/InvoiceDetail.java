@@ -16,6 +16,7 @@ public class InvoiceDetail {
     private Invoice invoice;
     private Integer quantity;
     private Integer price;
+    private String form;
     private Integer capitalSum;
 
     public InvoiceDetail(Long id,
@@ -23,12 +24,14 @@ public class InvoiceDetail {
                          Invoice invoice,
                          Integer quantity,
                          Integer price,
+                         String form,
                          Integer capitalSum) {
         this.id = id;
         this.productDetail = productDetail;
         this.invoice = invoice;
         this.quantity = quantity;
         this.price = price;
+        this.form = form;
         this.capitalSum = capitalSum;
     }
 
@@ -73,6 +76,14 @@ public class InvoiceDetail {
 
     public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    public String getForm() {
+        return form;
+    }
+
+    public void setForm(String form) {
+        this.form = form;
     }
 
     public Integer getCapitalSum() {

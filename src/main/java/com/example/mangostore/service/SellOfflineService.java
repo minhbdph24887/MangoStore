@@ -43,7 +43,4 @@ public interface SellOfflineService {
     String paymentVnPay(Long idInvoice,
                         HttpServletRequest request,
                         HttpSession session);
-
-    String bankingSuccess(HttpServletRequest request,
-                          HttpSession session);
 }

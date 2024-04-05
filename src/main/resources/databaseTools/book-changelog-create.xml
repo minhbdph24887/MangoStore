@@ -250,6 +250,7 @@
             <column name="customer_points" type="integer"/>
             <column name="total_invoice_amount" type="integer"/>
             <column name="return_client_money" type="integer"/>
+            <column name="shipping_money" type="integer"/>
             <column name="leftover_money" type="integer"/>
             <column name="payments" type="varchar(255)"/>
             <column name="total_payment" type="integer"/>
@@ -269,6 +270,7 @@
             </column>
             <column name="quantity" type="integer"/>
             <column name="price" type="integer"/>
+            <column name="form" type="varchar(255)"/>
             <column name="capital_sum" type="integer"/>
         </createTable>
     </changeSet>

@@ -81,10 +81,4 @@ public class SellOfflineController {
                                HttpSession session) {
         return sellOfflineService.paymentVnPay(idInvoice, request, session);
     }
-
-    @GetMapping(value = "sell/banking/success")
-    public String bankingSuccess(HttpServletRequest request,
-                                 HttpSession session) {
-        return sellOfflineService.bankingSuccess(request, session);
-    }
 }
