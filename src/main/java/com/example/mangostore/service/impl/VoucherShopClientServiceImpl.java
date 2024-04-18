@@ -53,7 +53,6 @@ public class VoucherShopClientServiceImpl implements VoucherShopClientService {
 
         List<Voucher> getAllVoucher = voucherRepository.getAllVoucherOnline();
         model.addAttribute("listVoucher", getAllVoucher);
-        model.addAttribute("voucherValidity", gender.voucherValidity());
         return "client/VoucherShop";
     }
 

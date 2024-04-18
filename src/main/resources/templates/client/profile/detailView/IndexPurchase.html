@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+      th:replace="~{/layout/IndexClient :: dynamic(~{:: main})}">
+<body>
+<main class="IndexPurchasePage CancelPurchasePage">
+    <div class="container">
+        <div style="height: 568px;">
+            <div class="row">
+                <div class="col-md-3" th:replace="~{/client/profile/IndexProfile :: detailView}"></div>
+                <div class="col-md-9">
+                    <h4>Purchase Order</h4>
+                    <p>Customer invoice information</p>
+                    <hr>
+                    <div class="d-flex">
+                        <div class="d-flex align-items-center">
+                            <input type="submit" name="all" class="btn btn-outline-secondary me-2" style="width: 47px;"
+                                   value="All" onclick="changeStatus('all')"
+                                   th:classappend="${status == 'all' ? 'active' : ''}"/>
+                            <input type="submit" name="waitForConfirmation" class="btn btn-outline-secondary me-2"
+                                   style="width: 133px;" value="Chờ Xác Nhận"
+                                   onclick="changeStatus('waitForConfirmation')"
+                                   th:classappend="${status == 'waitForConfirmation' ? 'active' : ''}"/>
+                            <input type="submit" name="waitingForGoods" class="btn btn-outline-secondary me-2"
+                                   style="width: 130px;" value="Đã Giao ĐVCC"
+                                   onclick="changeStatus('waitingForGoods')"
+                                   th:classappend="${status == 'waitingForGoods' ? 'active' : ''}"/>
+                            <input type="submit" name="areDelivering" class="btn btn-outline-secondary me-2"
+                                   style="width: 130px;" value="areDelivering"
+                                   onclick="changeStatus('areDelivering')"
+                                   th:classappend="${status == 'areDelivering' ? 'active' : ''}"/>
+                            <input type="submit" name="success" class="btn btn-outline-secondary me-2"
+                                   style="width: 115px;" value="thành công" onclick="changeStatus('success')"
+                                   th:classappend="${status == 'success' ? 'active' : ''}"/>
+                            <input type="submit" name="cancelled" class="btn btn-outline-secondary me-2"
+                                   style="width: 81px;" value="đã hủy" onclick="changeStatus('cancelled')"
+                                   th:classappend="${status == 'cancelled' ? 'active' : ''}"/>
+                        </div>
+                        <div class="ml-auto mr-2" style="margin-left: 76px;">
+                            <div class="d-flex">
+                                <span style="margin-top: 9px; width: 147px; margin-left: 29px;">[[*{currentPage}]] of [[*{totalPage}]] pages</span>
+                                <nav aria-label="Page navigation example" style="margin-left: -30px;">
+                                    <ul class="pagination">
+                                        <li th:classappend="${currentPage > 1} ? '' : 'disabled'"
+                                            class="page-item" style="margin-right: 0;">
+                                            <a class="page-link"
+                                               th:href="@{${status != null && status!= '' ? '?status=' + status + '&' : '?'} + 'pageNo=' + ${currentPage - 1}}"
+                                               aria-label="Previous">
+                                                                                    <span aria-hidden="true"
+                                                                                          class="font-weight-bold">&lt;</span>
+                                                <span class="sr-only">Previous</span>
+                                            </a>
+                                        </li>
+                                        <li th:classappend="${currentPage < totalPage} ? '' : 'disabled'"
+                                            class="page-item" style="margin-right: 0;">
+                                            <a class="page-link"
+                                               th:href="@{${status != null && status!= '' ? '?status=' + status + '&' : '?'} + 'pageNo=' + ${currentPage + 1}}"
+                                               aria-label="Next">
+                                                                                    <span aria-hidden="true"
+                                                                                          class="font-weight-bold">&gt;</span>
+                                                <span class="sr-only">Next</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="max-width: 100%">
+                        <h5>List Invoice</h5>
+                        <table>
+                            <tr th:each="listInvoice, iterStat : ${listInvoice}">
+                                <td class="d-flex">
+                                    <div style="margin-bottom: 10px; width: 40px; margin-top: 8px;" class="me-2"
+                                         th:text="${startCount + iterStat.index + 1}"></div>
+                                    <div class="me-2" style="width: 100px; margin-top: 8px;"
+                                         th:text="${listInvoice.nameInvoice}"></div>
+                                    <div class="me-2" style="width: 180px; margin-top: 8px;"
+                                         th:text="${#temporals.format(listInvoice.invoiceCreationDate, 'HH:mm:ss : dd/MM/yyyy')}"></div>
+                                    <div class="me-2" style="width: 180px; margin-top: 8px;"
+                                         th:text="${#temporals.format(listInvoice.invoicePaymentDate, 'HH:mm:ss : dd/MM/yyyy')}"></div>
+                                    <div class="me-2" style="width: 120px; margin-top: 8px;"
+                                         th:text="${#numbers.formatDecimal(listInvoice.totalPayment, 0, 'COMMA', 0, 'POINT') + ' VND'}"></div>
+                                    <div class="me-2" style="width: 122px; margin-top: 8px;"
+                                         th:if="${listInvoice.invoiceStatus == 1}">
+                                        <label class="badge badge-success">chờ xác nhận</label>
+                                    </div>
+                                    <div class="me-2" style="width: 122px; margin-top: 8px;"
+                                         th:if="${listInvoice.invoiceStatus == 2}">
+                                        <label class="badge badge-success">đã giao ĐVCC</label>
+                                    </div>
+                                    <div class="me-2" style="width: 122px; margin-top: 8px;"
+                                         th:if="${listInvoice.invoiceStatus == 3}">
+                                        <label class="badge badge-success">đang giao hàng</label>
+                                    </div>
+                                    <div class="me-2" style="width: 122px; margin-top: 8px;"
+                                         th:if="${listInvoice.invoiceStatus == 4}">
+                                        <label class="badge badge-success">giao hàng thành công</label>
+                                    </div>
+                                    <div class="me-2" style="width: 122px; margin-top: 8px;"
+                                         th:if="${listInvoice.invoiceStatus == 5}">
+                                        <label class="badge badge-danger">đã hủy</label>
+                                    </div>
+                                    <div style="width: 100px;">
+                                        <button type="button" class="btn btn-outline-danger"
+                                                th:onclick="'confirmCancelPurchaseClient(' + ${listInvoice.id} + ')'">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

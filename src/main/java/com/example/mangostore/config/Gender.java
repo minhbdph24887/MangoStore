@@ -242,25 +242,6 @@ public class Gender {
         return productDetailCountByColor;
     }
 
-    public String voucherValidity() {
-        String validity = null;
-        for (Voucher voucher : voucherRepository.getAllVoucherOnline()) {
-            LocalDate startDate = voucher.getStartDay();
-            LocalDate endDate = voucher.getEndDate();
-            LocalDate today = LocalDate.now();
-            if (today.isBefore(startDate)) {
-                long dayUntilStart = ChronoUnit.DAYS.between(today, startDate);
-                validity = "Sử dụng sau: " + dayUntilStart + " day";
-            } else if (!today.isAfter(endDate)) {
-                long daysOfValidity = ChronoUnit.DAYS.between(today, endDate) + 1;
-                validity = "Hạn sử dụng: " + daysOfValidity + " day";
-            } else {
-                validity = "Voucher has expired";
-            }
-        }
-        return validity;
-    }
-
     public void updateTotalShoppingCart(ShoppingCart shoppingCart) {
         List<ShoppingCartDetail> shoppingCartDetails = shoppingCartDetailRepository.getAllShoppingCart(shoppingCart.getId());
         Integer total = shoppingCartDetails.stream()

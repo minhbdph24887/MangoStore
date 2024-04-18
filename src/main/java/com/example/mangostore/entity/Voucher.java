@@ -31,6 +31,7 @@ public class Voucher {
     @DateTimeFormat(pattern = "yyyy-MM-dd : HH:mm:ss")
     private LocalDateTime dateUpdate;
     private Integer voucherStatus;
+    private String validity;
     private Integer status;
 
     public Voucher(Long id,
@@ -47,6 +48,7 @@ public class Voucher {
                    LocalDateTime dateCreate,
                    LocalDateTime dateUpdate,
                    Integer voucherStatus,
+                   String validity,
                    Integer status) {
         this.id = id;
         this.codeVoucher = codeVoucher;
@@ -62,6 +64,7 @@ public class Voucher {
         this.dateCreate = dateCreate;
         this.dateUpdate = dateUpdate;
         this.voucherStatus = voucherStatus;
+        this.validity = validity;
         this.status = status;
     }
 
@@ -178,6 +181,14 @@ public class Voucher {
 
     public void setVoucherStatus(Integer voucherStatus) {
         this.voucherStatus = voucherStatus;
+    }
+
+    public String getValidity() {
+        return validity;
+    }
+
+    public void setValidity(String validity) {
+        this.validity = validity;
     }
 
     public Integer getStatus() {

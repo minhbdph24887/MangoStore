@@ -191,6 +191,7 @@
             <column name="date_create" type="datetime2(6)"/>
             <column name="date_update" type="datetime2(6)"/>
             <column name="voucher_status" type="integer"/>
+            <column name="validity" type="nvarchar(255)"/>
             <column name="status" type="integer"/>
         </createTable>
     </changeSet>
@@ -212,6 +213,7 @@
             <column name="start_day" type="date"/>
             <column name="end_date" type="date"/>
             <column name="voucher_status" type="integer"/>
+            <column name="validity" type="nvarchar(255)"/>
             <column name="status" type="integer"/>
         </createTable>
     </changeSet>

@@ -44,6 +44,28 @@ function confirmUpdateAlert(message1, message2) {
     });
 }
 
+function confirmAlertLink(message1, message2, url) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: message1,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, update it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: "Successfully!",
+                text: message2,
+                icon: "success"
+            }).then(() => {
+                window.location.href = url;
+            });
+        }
+    });
+}
+
 function addAlert(message1, message2) {
     if (!confirm(message1)) {
         return false;

@@ -132,3 +132,11 @@ if (addAddressClient) {
         }
     }
 }
+
+const voucherClientPage = document.querySelector(".voucherClientPage");
+if (voucherClientPage) {
+    function confirmVoucherClient(id) {
+        const url = `http://localhost:8080/mangostore/voucher-wallet/remove?id=${id}`;
+        confirmAlertLink("Bạn có chắc chắn muốn xóa voucher này không?", "Voucher đã được xóa thành công!", url);
+    }
+}

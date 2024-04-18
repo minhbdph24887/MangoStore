@@ -16,4 +16,7 @@ public interface VoucherClientRepository extends JpaRepository<VoucherClient, Lo
 
     @Query(value = "select vc.* from voucher_client vc join accounts a on vc.id_account = a.id where a.id_rank = :rankAccount and vc.voucher_status= 1 and vc.status= 1", nativeQuery = true)
     List<VoucherClient> findAllVoucherStatusVoucher1(@Param("rankAccount") Long rankAccount);
+
+    @Query(value = "select vc.* from voucher_client vc join accounts a on vc.id_account = a.id where a.id_rank = :rankAccount and vc.voucher_status in (1, 2) and vc.status= 1 and vc.id_account= :idAccount", nativeQuery = true)
+    List<VoucherClient> findAllVoucherForClient(@Param("rankAccount") Long rankAccount, @Param("idAccount") Long idAccount);
 }

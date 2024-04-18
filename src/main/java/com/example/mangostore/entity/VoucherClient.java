@@ -29,6 +29,7 @@ public class VoucherClient {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
     private Integer voucherStatus;
+    private String validity;
     private Integer status;
 
     public VoucherClient(Long id,
@@ -41,6 +42,7 @@ public class VoucherClient {
                          LocalDate startDay,
                          LocalDate endDate,
                          Integer voucherStatus,
+                         String validity,
                          Integer status) {
         this.id = id;
         this.codeVoucher = codeVoucher;
@@ -52,6 +54,7 @@ public class VoucherClient {
         this.startDay = startDay;
         this.endDate = endDate;
         this.voucherStatus = voucherStatus;
+        this.validity = validity;
         this.status = status;
     }
 
@@ -136,6 +139,14 @@ public class VoucherClient {
 
     public void setVoucherStatus(Integer voucherStatus) {
         this.voucherStatus = voucherStatus;
+    }
+
+    public String getValidity() {
+        return validity;
+    }
+
+    public void setValidity(String validity) {
+        this.validity = validity;
     }
 
     public Integer getStatus() {

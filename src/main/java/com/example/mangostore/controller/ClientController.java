@@ -1,10 +1,7 @@
 package com.example.mangostore.controller;
 
 import com.example.mangostore.entity.Account;
-import com.example.mangostore.service.ClientService;
-import com.example.mangostore.service.PasswordChangeService;
-import com.example.mangostore.service.VoucherShopClientService;
-import com.example.mangostore.service.ProfileClientService;
+import com.example.mangostore.service.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.data.repository.query.Param;
@@ -21,15 +18,21 @@ public class ClientController {
     private final VoucherShopClientService voucherShopClientService;
     private final ProfileClientService profileClientService;
     private final PasswordChangeService passwordChangeService;
+    private final VoucherClientService voucherClientService;
+    private final PurchaseService purchaseService;
 
     public ClientController(ClientService clientService,
                             VoucherShopClientService voucherShopClientService,
                             ProfileClientService profileClientService,
-                            PasswordChangeService passwordChangeService) {
+                            PasswordChangeService passwordChangeService,
+                            VoucherClientService voucherClientService,
+                            PurchaseService purchaseService) {
         this.clientService = clientService;
         this.voucherShopClientService = voucherShopClientService;
         this.profileClientService = profileClientService;
         this.passwordChangeService = passwordChangeService;
+        this.voucherClientService = voucherClientService;
+        this.purchaseService = purchaseService;
     }
 
     @GetMapping(value = "home")
@@ -80,7 +83,32 @@ public class ClientController {
     @GetMapping(value = "product/detail/{id}")
     public String detailProductClient(@PathVariable("id") Long idProductDetail,
                                       Model model,
-                                      HttpSession session){
+                                      HttpSession session) {
         return clientService.detailProductClient(idProductDetail, model, session);
+    }
+
+    @GetMapping(value = "voucher-wallet")
+    public String viewVoucherClient(HttpSession session,
+                                    Model model) {
+        return voucherClientService.indexVoucherClient(model, session);
+    }
+
+    @GetMapping(value = "voucher-wallet/remove")
+    public String removeVoucherClient(@RequestParam("id") Long idVoucherClient) {
+        return voucherClientService.removeVoucherClient(idVoucherClient);
+    }
+
+    @GetMapping(value = "purchase")
+    public String viewPurchase(Model model,
+                               HttpSession session,
+                               @RequestParam(name = "status", defaultValue = "all") String status,
+                               @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                               @RequestParam(name = "pageSize", defaultValue = "5") Integer pageSize) {
+        return purchaseService.indexViewPurchase(model, session, status, pageNo, pageSize);
+    }
+
+    @GetMapping(value = "purchase/remove")
+    public String cancelPurchase(@RequestParam("id") Long idInvoice) {
+        return purchaseService.cancelPurchase(idInvoice);
     }
 }

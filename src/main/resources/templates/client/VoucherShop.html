@@ -25,7 +25,7 @@
                                                    th:text="${'Decrease to: ' + #numbers.formatDecimal(listVoucher.reducedValue, 0, 'COMMA', 0, 'POINT') + ' VND'}"
                                                    style="margin-right: 83px; white-space: nowrap;"></p>
                                                 <p class="card-text">
-                                                    <small class="text-muted" th:text="${voucherValidity}"
+                                                    <small class="text-muted" th:text="${listVoucher.validity}"
                                                            style="margin-right: 131px;"></small>
                                                 </p>
                                             </div>
